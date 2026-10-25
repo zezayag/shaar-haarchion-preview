@@ -1,0 +1,438 @@
+/* שער הארכיון · עמוד הבית v2 · מבנה ועיצוב (טעם)
+   סדר השכבות: base ← components ← polish (polish.css) ← motion (motion.css). כל מאפיין בבעלות שכבה אחת.
+   COLBO נטען ב-<link> ב-index.html. */
+@layer base, components, polish, motion; /* motion אחרון: מעבר הכניסה (.im-r) גובר על מעברי הריחוף של polish רק בזמן הכניסה */
+
+@layer base {
+
+:root {
+  /* פלטת הסטייל גייד בלבד */
+  --blue: #11769C;
+  --ink: #1F134A;
+  --paper: #F4F2EC;
+  --sand: #DED6C4;
+  --sky: #B3E0EB;
+  --gold: #EBAD29;
+  --green-dark: #195B4C; /* "מותר" בסטייל גייד: תיבה ירוקה כהה */
+  --white: #FFFFFF;
+  --ink-soft: rgba(31, 19, 74, .78); /* דיו מוחלש, ≥ 7:1 על נייר */
+
+  --display: "COLBO", "Heebo", sans-serif;
+  --text: "Heebo", system-ui, sans-serif;
+
+  /* חמש מדרגות גודל */
+  --fs-hero: clamp(120px, 11vw, 168px);
+  --fs-h2: 48px;
+  --fs-h3: 26px;
+  --fs-body: 18px;
+  --fs-small: 15px;
+
+  --content: 1200px;
+  --gutter: max(32px, calc((100vw - var(--content)) / 2));
+  --header-h: 76px;
+  --tl-year-col: 150px; --tl-gap: 24px; /* עמודת השנה בציר הזמן */
+  --section-y: 128px; /* ריווח אנכי אחיד לכל הסקשנים (spacing-scale, 8px) */
+  --focus: var(--blue);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-padding-top: calc(var(--header-h) + 16px); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.1; letter-spacing: -0.01em; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+figure { margin: 0; }
+[hidden] { display: none !important; } /* hidden תמיד מנצח פריסה של רכיב */
+
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.on-dark { --focus: var(--gold); }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+.skip-link {
+  position: fixed; top: 8px; right: 8px; z-index: 100;
+  background: var(--ink); color: var(--white); padding: 12px 20px;
+  font-size: var(--fs-small); text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+main:focus { outline: none; }
+
+}
+
+@layer components {
+
+.wrap { width: 100%; padding-inline: var(--gutter); }
+
+/* כפתורים: צורה אחת, פינות ישרות, מילוי שטוח */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 48px; padding: 0 22px;
+  font-family: var(--text); font-size: var(--fs-small); font-weight: 500;
+  text-decoration: none; border: 0; border-radius: 0; cursor: pointer;
+  background: var(--blue); color: var(--white);
+}
+.btn:hover { background: var(--ink); }
+.btn--light { background: var(--white); color: var(--ink); }
+.btn--light:hover { background: var(--sky); color: var(--ink); } /* דיו על תכלת 11.8:1 */
+.btn .arr { font-family: var(--text); }
+.link-arrow {
+  font-size: var(--fs-small); font-weight: 500; color: var(--blue);
+  text-decoration: underline; text-underline-offset: 4px;
+}
+.link-arrow:hover { color: var(--ink); }
+
+/* ---------- 1. כותרת עליונה ---------- */
+.site-header {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between; gap: 32px;
+  padding-inline: var(--gutter);
+  background: transparent; color: var(--ink);
+  isolation: isolate;
+  --focus: var(--blue);
+}
+/* רקע הכותרת: שכבה נפרדת שנכנסת מלמעלה יחד עם הלוגו והחיפוש */
+.site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--paper); }
+.site-header.is-over::before { transform: translateY(-101%); }
+/* שקופה רק כש-JS מאשר שהכותרת מעל ההירו ולפני פס היישובים */
+.site-header.is-over { background: transparent; color: var(--white); --focus: var(--gold); }
+.site-header__logo { display: block; width: 142px; } /* "שער הארכיון" + תת-הכותרת, בלי הסמל */
+.site-header__logo img { width: 100%; height: auto; }
+.site-header nav ul { display: flex; gap: 36px; list-style: none; margin: 0; padding: 0; }
+.site-header nav a { display: inline-block; font-family: var(--display); font-size: 17px; font-weight: 400; padding: 12px 0; }
+.site-header .btn--search { font-family: var(--display); height: 48px; min-height: 48px; padding: 0 24px; border-radius: 24px; background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink-soft); } /* כפתור מתאר-גלולה של מטריאל, כמו ב-v21 */
+.site-header .btn--search:hover { background: transparent; }
+.icon { width: 18px; height: 18px; flex: none; }
+
+/* ---------- 2. הירו ---------- */
+.hero {
+  position: relative; min-height: max(100vh, 780px);
+  display: flex; flex-direction: column; color: var(--white);
+  background: var(--ink); overflow: hidden;
+}
+/* צילומי ההירו במתכון הספיה של ספר המותג (עמ׳ 62–64): חול מתחת, הצילום בשחור-לבן ב-multiply 89% */
+.hero__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: grayscale(1) contrast(1.35) brightness(var(--hero-dim, .52)); mix-blend-mode: multiply; opacity: .89; }
+.hero__bed { position: absolute; inset: 0; background: var(--sand); }
+.hero__scrim { display: none; } /* הוסר: שכבה כהה בגוון שאינו בפלטה. ההכהיה נעשית בצילום עצמו (מתכון עמ׳ 62) */
+.hero__inner {
+  position: relative; flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: calc(var(--header-h) + 8px) var(--gutter) 40px; text-align: center;
+}
+.hero h1 { margin: 0; }
+.hero__logo { width: min(600px, 46vw); height: auto; }
+.hero__lead { max-width: 28em; /* ≈ 70 תווים ב-20px */ margin-top: 28px; font-size: 20px; line-height: 1.55; }
+
+.search { width: min(720px, 100%); margin-top: 32px; text-align: start; position: relative; }
+.search label { display: block; font-size: var(--fs-small); font-weight: 500; margin-bottom: 8px; text-align: center; }
+/* שדה החיפוש בסגנון גוגל (מטריאל, כמו ב-v21): גלולה לבנה מורמת, אייקון, כפתור גלולה מלא בתוכה */
+.search__row {
+  display: flex; align-items: center; gap: 12px; height: 64px;
+  padding-inline: 24px 8px; border-radius: 999px; background: var(--white); color: var(--ink);
+  box-shadow: 0 4px 8px 3px rgba(31, 19, 74, .08), 0 1px 3px rgba(31, 19, 74, .14);
+  transition: border-radius 200ms cubic-bezier(.2, 0, 0, 1);
+}
+.search__row:focus-within { border-radius: 28px; outline: 3px solid var(--sky); outline-offset: 3px; }
+.search__field { position: relative; flex: 1; display: flex; align-items: center; gap: 12px; height: 100%; }
+.search__field .icon { flex: none; color: var(--ink-soft); }
+.search input {
+  flex: 1; min-width: 0; height: 100%; border: 0; border-radius: 0; padding: 0;
+  font: inherit; font-size: 18px; color: var(--ink); background: transparent; outline: none;
+}
+.search input::placeholder { color: var(--ink-soft); opacity: 1; }
+.search input:focus-visible { outline: none; } /* המיקוד מסומן על הגלולה כולה */
+.search .btn { height: 48px; min-height: 48px; padding: 0 24px; border-radius: 24px; font-size: 16px; }
+/* שכבת מצב (state layer) של מטריאל: גוון בצבע הטקסט, בלי צבע חדש */
+.search .btn, .search__examples a, .site-header .btn--search { position: relative; isolation: isolate; overflow: hidden; }
+.search .btn::before, .search__examples a::before, .site-header .btn--search::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+  background: currentColor; opacity: 0; transition: opacity 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.search .btn:hover::before, .search__examples a:hover::before, .site-header .btn--search:hover::before { opacity: .08; }
+.search .btn:active::before, .search__examples a:active::before, .site-header .btn--search:active::before { opacity: .10; }
+.search .btn:active { border-radius: 12px; }
+.search .btn:hover { background: var(--blue); }
+.search__list {
+  position: absolute; inset-inline: 0; top: calc(100% + 4px); z-index: 20;
+  margin: 0; padding: 6px 0; list-style: none; background: var(--white); color: var(--ink);
+  box-shadow: 0 12px 32px rgba(31, 19, 74, .28); /* צל רק לרכיב צף */
+}
+.search__list[hidden] { display: none; }
+.search__list li { padding: 10px 18px; font-size: 16px; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; }
+.search__list li .kind { color: var(--ink-soft); font-size: var(--fs-small); }
+.search__list li[aria-selected="true"], .search__list li:hover { background: var(--paper); }
+.search__empty { position: absolute; inset-inline: 0; top: calc(100% + 4px); z-index: 20; padding: 14px 18px; font-size: 16px; background: var(--white); color: var(--ink); box-shadow: 0 12px 32px rgba(31, 19, 74, .28); }
+/* הדוגמאות: צ'יפי הצעת חיפוש בסגנון גוגל — גלולה בהירה עם זכוכית מגדלת, טקסט דיו (16.6:1), שורה אחת */
+.search__examples { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; font-size: 15px; font-weight: 500; }
+.search__examples span { color: var(--sky); margin-inline-end: 4px; }
+.search__examples a {
+  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding-inline: 14px 18px; border-radius: 20px;
+  background: var(--white); color: var(--ink); text-decoration: none; white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(31, 19, 74, .18);
+  transition: box-shadow 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.search__examples a .icon { width: 16px; height: 16px; flex: none; color: var(--ink-soft); }
+.search__examples a:hover { box-shadow: 0 1px 3px rgba(31, 19, 74, .24), 0 4px 8px 3px rgba(31, 19, 74, .12); }
+.search__examples a:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+/* פס היישובים: נקודה קטנה מעל היישוב במעבר עכבר ובמיקוד */
+.place a { position: relative; }
+.place:not(.place--council) a::after {
+  content: ""; position: absolute; top: 14px; left: 50%; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold); transform: translateX(-50%) scale(0); transition: transform 220ms cubic-bezier(.2, 0, 0, 1);
+}
+.place:not(.place--council) a:hover::after, .place:not(.place--council) a:focus-visible::after { transform: translateX(-50%) scale(1); }
+
+/* החלפת צילום הרקע בהירו: שכבת חול נחשפת ואז הצילום (כמו "עשור בפוקוס") */
+.hero__swap { position: absolute; inset: 0; background: var(--sand); }
+.hero__swap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: grayscale(1) contrast(1.35) brightness(var(--hero-dim, .52)); mix-blend-mode: multiply; opacity: .89; }
+.hero__swap { isolation: isolate; }
+
+/* פס היישובים · עמ' 62 · כחול 65% */
+.places { position: relative; padding-inline: var(--gutter); }
+.places__band { position: absolute; inset: 34px 0 0 0; background: rgba(17, 118, 156, .65); }
+.places__axis { position: absolute; inset-inline: 0; top: 80px; height: 1px; background: rgba(179, 224, 235, .55); }
+.places ol {
+  position: relative; list-style: none; margin: 0 auto; padding: 0; max-width: var(--content);
+  display: grid; grid-template-columns: repeat(6, 1fr) 150px repeat(6, 1fr); align-items: start; /* שם בלי שנה (איבים) נשאר בקו השמות */
+}
+.place a {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 46px 2px 18px; text-decoration: none; text-align: center;
+}
+.place .emblem {
+  width: 46px; height: 46px; background: var(--sky);
+  -webkit-mask: url("img/emblem-mask.png") center / contain no-repeat;
+  mask: url("img/emblem-mask.png") center / contain no-repeat;
+}
+.place a:hover .emblem, .place a:focus-visible .emblem { background: var(--gold); }
+.place .name { font-family: var(--display); font-size: 17px; line-height: 1.2; margin-top: 6px; white-space: nowrap; }
+.place .year { font-size: var(--fs-small); line-height: 1.2; }
+.place a { min-height: 100%; }
+.place--council { align-self: stretch; }
+.place--council a {
+  height: 100%; padding: 22px 8px 18px; background: var(--blue); justify-content: flex-end;
+  border-radius: 16px 16px 0 0; /* פינות מעוגלות למעלה */
+  isolation: isolate; overflow: hidden;
+}
+.place--council .sun {
+  display: block; width: 70px; aspect-ratio: 400 / 392; background: var(--white);
+  -webkit-mask: url("img/sun.png") center / contain no-repeat; mask: url("img/sun.png") center / contain no-repeat;
+  transition: transform 600ms cubic-bezier(.16, 1, .3, 1), background-color 240ms ease-out;
+}
+.place--council .name { font-weight: 700; font-size: 20px; }
+/* מעבר עכבר עדין: שכבת אור לבנה 8% (במקום מילוי דיו) והשמש מסתובבת לאט */
+.place--council a::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--white); opacity: 0; transition: opacity 200ms cubic-bezier(.2, 0, 0, 1); }
+.place--council a:hover::before { opacity: .08; }
+.place--council a:hover .sun, .place--council a:focus-visible .sun { transform: rotate(45deg); background: var(--gold); } /* השמש מסתובבת ונצבעת בזהב, כמו סמלי היישובים */
+
+/* ---------- כותרות סקשנים ---------- */
+.section { padding-block: var(--section-y); }
+.section__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; max-width: var(--content); margin: 0 auto 56px; }
+.section__head h2 { font-size: var(--fs-h2); }
+.section__head p { margin-top: 12px; color: var(--ink-soft); }
+
+/* ---------- 3. אוצרות הארכיון ---------- */
+.treasures { background: var(--white); overflow: hidden; }
+.treasures__controls { display: flex; align-items: center; gap: 20px; }
+.counter { font-size: var(--fs-small); color: var(--ink-soft); min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
+.icon-btn {
+  width: 52px; height: 52px; display: grid; place-items: center; cursor: pointer;
+  border: 0; border-radius: 0; background: var(--paper); color: var(--ink);
+}
+.icon-btn:hover:not(:disabled) { background: var(--blue); color: var(--white); }
+.icon-btn:disabled { cursor: default; color: rgba(31, 19, 74, .45); }
+.treasures__stage {
+  --tr-gap: 56px;
+  max-width: var(--content); margin: 0 auto; position: relative;
+  display: grid; grid-template-columns: 372px 1fr; gap: var(--tr-gap); align-items: stretch;
+}
+.treasure__text { position: relative; display: flex; flex-direction: column; }
+/* קו דק מהצילום אל השנה (v18): עובר מפינת הצילום לאורך ראש העמודה, ויורד אל השנה */
+.treasure__text::before, .treasure__text::after { content: ""; position: absolute; top: 0; inset-inline-start: 0; background: var(--blue); }
+.treasure__text::before { width: calc(100% + var(--tr-gap)); height: 1px; }
+.treasure__text::after { width: 1px; height: 16px; }
+/* השנה ממלאת את רוחב העמודה (v3): "השנה מהותית וברורה" */
+.treasure__year { font-family: var(--display); font-weight: 300; font-size: 232px; line-height: .8; color: var(--blue); letter-spacing: -0.045em; margin-top: -12px; padding-inline-start: .045em; /* הריווח השלילי אחרי הספרה האחרונה לא דוחף אותה מחוץ לעמודה */ }
+.treasure__title { font-size: 34px; margin-top: auto; padding-top: 24px; line-height: 1.2; }
+.treasure__place { margin-top: 10px; font-size: var(--fs-small); color: var(--ink-soft); }
+.treasure__link { display: inline-block; margin-top: 28px; }
+.treasure__frame { position: relative; aspect-ratio: 4 / 3; background: var(--sand); }
+.treasure__frame img { width: 100%; height: 100%; object-fit: cover; }
+.treasure__peek {
+  position: absolute; top: 0; bottom: 0; inset-inline-start: calc(100% + 24px); width: 400px;
+  background: var(--sand);
+}
+.treasure__peek img { width: 100%; height: 100%; object-fit: cover; object-position: right center; }
+/* דף מגע (v3): תמונה קטנה לכל אוצר, לחיצה בוחרת אותו (בנוסף לחצים) */
+.treasure__sheet { margin: auto 0 0; padding: 28px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; list-style: none; }
+.treasure__sheet button { display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; border: 0; border-radius: 0; cursor: pointer; background: var(--sand); position: relative; }
+.treasure__sheet img { width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+.treasure__sheet button[aria-current="true"] img { opacity: 1; }
+.treasure__sheet button[aria-current="true"]::after { content: ""; position: absolute; inset-inline: 0; bottom: -8px; height: 4px; background: var(--blue); }
+.treasure-more { max-width: var(--content); margin: 48px auto 0; }
+.treasure-more h3 { font-size: var(--fs-h3); margin-bottom: 12px; }
+.treasure-more ol { margin: 0; padding-inline-start: 24px; }
+.treasure-more a { display: inline-block; padding-block: 10px; color: var(--blue); }
+.js .treasure-more { display: none; }
+html:not(.js) .treasures__controls .counter, html:not(.js) .treasures__controls .icon-btn { display: none; }
+
+/* ---------- 4. ציר הזמן ---------- */
+.timeline { background: var(--paper); overflow-x: clip; } /* ההדפסה יוצאת מקצה המסך בלי גלילה לצדדים */
+/* קו הציר (v9 + סקיצה 4): קו נקודות דק, עיגול דיו לכל עשור, והנבחר בעיגול זהב גדול */
+.decades-nav { position: relative; max-width: var(--content); margin: 0 auto; padding-top: 44px; --axis-y: 16px; }
+.decades-nav::before {
+  content: ""; position: absolute; top: calc(var(--axis-y) - 1px); inset-inline: 0; height: 2px;
+  background: radial-gradient(circle, var(--ink) 1px, transparent 1.5px) 0 50% / 10px 2px repeat-x;
+  transform-origin: right center; /* RTL: הציר נמתח מתחילת השורה */
+}
+.decades__ind { /* העיגול הזהב: אחד, נע על הציר אל העשור הנבחר (transform בלבד) */
+  position: absolute; left: 0; top: calc(var(--axis-y) - 13px); width: 26px; height: 26px; border-radius: 50%;
+  background: var(--gold); pointer-events: none;
+}
+/* לשוניות העשורים (v7): לחצנים אמיתיים, מסגרת דיו ובסיס דיו קטן שיורד בלחיצה */
+.decades { display: grid; grid-template-columns: repeat(9, 1fr); gap: 10px; }
+.decade {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 12px 4px 14px; border: 2px solid var(--ink); border-radius: 14px; cursor: pointer;
+  background: var(--paper); color: var(--ink);
+  font: inherit; box-shadow: 0 var(--dc-lift, 3px) 0 var(--ink);
+}
+.decade::before { /* העיגול של העשור על הציר */
+  content: ""; position: absolute; top: calc(var(--axis-y) - 44px - 2px - 6px); inset-inline-start: calc(50% - 6px);
+  width: 12px; height: 12px; border-radius: 50%; background: var(--ink); pointer-events: none;
+}
+html:not(.js) .decade[aria-current="true"]::before { width: 26px; height: 26px; top: calc(var(--axis-y) - 44px - 2px - 13px); inset-inline-start: calc(50% - 13px); background: var(--gold); }
+.decade small { font-family: var(--text); font-size: var(--fs-small); font-weight: 500; line-height: 1.2; }
+a.decade { text-decoration: none; }
+.decade b { font-family: var(--display); font-weight: 400; font-size: 40px; line-height: 1.05; letter-spacing: -0.02em; }
+.decade[aria-selected="true"], .decade[aria-current="true"] { background: var(--blue); border-color: var(--blue); color: var(--white); }
+.decade[aria-selected="true"] b, .decade[aria-current="true"] b { font-weight: 700; }
+
+.tl-body {
+  max-width: var(--content); margin: 64px auto 0;
+  display: grid; grid-template-columns: 1fr 460px; gap: 72px; align-items: start;
+}
+.tl-list { list-style: none; margin: 0; padding: 0; }
+.tl-item { padding: 22px 24px; }
+.tl-item + .tl-item { margin-top: 4px; }
+.tl-item__head { font: inherit; }
+.tl-item__row { width: 100%; display: grid; grid-template-columns: var(--tl-year-col) 1fr; align-items: baseline; gap: var(--tl-gap); }
+.tl-item__btn { border: 0; background: none; padding: 0; text-align: start; cursor: pointer; }
+.tl-item__year { font-family: var(--display); font-weight: 300; font-size: 44px; line-height: 1; color: var(--blue); font-variant-numeric: tabular-nums; }
+.tl-item__year--range { font-size: 36px; } /* פריט שמתפרס על כמה עשורים: הטווח מהמטא */
+.tl-item__title { font-family: var(--display); font-size: var(--fs-h3); line-height: 1.25; }
+.tl-item__body { margin-inline-start: calc(var(--tl-year-col) + var(--tl-gap)); margin-top: 14px; max-width: 34em; } /* ≈ 70 תווים */
+.tl-item__body p { color: var(--ink); }
+.tl-item__body .meta { font-size: var(--fs-small); color: var(--ink-soft); margin-bottom: 8px; }
+.tl-item__body .btn { margin-top: 20px; }
+.tl-item.is-active { background: var(--white); }
+.tl-empty { padding: 32px 24px; max-width: 34em; }
+.tl-empty h3 { font-size: var(--fs-h3); margin-bottom: 10px; }
+/* הצילום (v7) יוצא מקצה המסך משמאל, כהדפסה אמיתית (v15): שוליים לבנים, כיתוב, הטיה קלה וצל */
+.tl-photo {
+  position: sticky; top: calc(var(--header-h) + 32px);
+  margin-inline-end: calc(-1 * var(--gutter) - 40px);
+  padding: 16px 16px 0; background: var(--white);
+  box-shadow: 0 1px 0 rgba(31, 19, 74, .10), 0 30px 50px -26px rgba(31, 19, 74, .55);
+  transform: rotate(-1.6deg); transform-origin: 50% 0;
+}
+.tl-photo__frame { height: 560px; background: var(--sand); }
+.tl-photo.is-empty .tl-photo__frame { outline: 1.5px dashed rgba(31, 19, 74, .38); outline-offset: -16px; } /* עשור ריק: הדפסה ריקה (v15) */
+.tl-photo.is-empty .tl-photo__frame img { visibility: hidden; }
+.tl-photo__frame img { width: 100%; height: 100%; object-fit: cover; }
+.tl-photo__cap { font-family: var(--display); font-size: 28px; line-height: 1; padding: 18px 4px 22px; color: var(--ink); }
+/* הוקמו בעשור הזה (v19) */
+.founded { margin-top: 24px; padding: 24px 28px; border-radius: 14px; background: var(--white); display: flex; align-items: baseline; flex-wrap: wrap; gap: 12px 32px; }
+.founded__label { font-size: var(--fs-small); font-weight: 500; color: var(--ink-soft); }
+.founded ul { display: flex; flex-wrap: wrap; gap: 10px 28px; list-style: none; margin: 0; padding: 0; }
+.founded li { display: flex; align-items: baseline; gap: 8px; }
+.founded li span { font-family: var(--display); font-size: 19px; }
+.founded li b { font-family: var(--display); font-weight: 300; font-size: 19px; color: var(--blue); font-variant-numeric: tabular-nums; }
+.tl-all { max-width: var(--content); margin: 56px auto 0; }
+
+/* ---------- 5. אירוע בפוקוס: 7 באוקטובר (v20) ---------- */
+.oct7 { background: var(--white); padding: 40px 40px var(--section-y); } /* שוליים לבנים: לוח מוצג ולא רצועה. מתחת: מרווח סקשן מלא לפני רצועת העשור בפוקוס */
+.oct7__board { display: grid; grid-template-columns: 1fr 42%; min-height: 620px; background: var(--ink); color: var(--white); }
+.oct7__photo { position: relative; overflow: hidden; background: var(--sand); order: 2; }
+.oct7__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(.8); mix-blend-mode: multiply; opacity: .89; }
+.oct7__photo figcaption { position: absolute; bottom: 14px; left: 16px; font-size: 14px; color: var(--white); text-shadow: 0 1px 6px rgba(31, 19, 74, .6); }
+.oct7__field { position: relative; overflow: hidden; display: flex; align-items: center; padding: 96px 96px 96px 80px; }
+.oct7__mark { /* סמל המועצה גדול וחתוך בקצה השדה, טון על טון (v18): מרקם, לא לוגו */
+  position: absolute; width: 600px; aspect-ratio: 232 / 200; inset-inline-end: -170px; top: 50%; transform: translateY(-50%);
+  background: var(--sky); opacity: .07; pointer-events: none;
+  -webkit-mask: url("img/emblem-mark.png") center / contain no-repeat; mask: url("img/emblem-mark.png") center / contain no-repeat;
+}
+.oct7__text { position: relative; max-width: 600px; }
+.oct7__date { font-family: var(--display); font-size: 18px; color: var(--sky); margin-bottom: 22px; }
+.oct7 h2 { font-weight: 300; font-size: 58px; line-height: 1.12; letter-spacing: -0.01em; }
+.oct7__lead { margin-top: 30px; font-size: 20px; line-height: 1.7; max-width: 30em; }
+.oct7 .btn { margin-top: 36px; }
+
+/* ---------- 6. עשור בפוקוס ---------- */
+.focus-decade { display: grid; grid-template-columns: 1fr 1fr; min-height: 760px; background: var(--blue); color: var(--white); --focus: var(--white); } /* לבן על כחול 5.13:1 */
+.focus-decade__card { padding-block: var(--section-y); padding-inline: var(--gutter) 80px; display: flex; flex-direction: column; justify-content: center; }
+.focus-decade__label { font-family: var(--display); font-size: var(--fs-h3); }
+.focus-decade__year { font-family: var(--display); font-weight: 300; font-size: var(--fs-hero); line-height: .9; letter-spacing: -0.03em; margin-top: 8px; }
+.focus-decade .meta { margin-top: 48px; font-size: var(--fs-small); }
+.focus-decade h3 { font-size: 34px; margin-top: 10px; line-height: 1.2; }
+.focus-decade p.body { margin-top: 18px; max-width: 34em; }
+.focus-decade .btn { margin-top: 32px; align-self: flex-start; }
+.focus-decade .btn--light:not(:hover):not(:focus-visible) { color: var(--blue); }
+.focus-decade__photo { background: var(--sand); position: relative; }
+.focus-decade__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+
+/* ---------- 7. פרסומים אחרונים ---------- */
+.recent { background: var(--paper); }
+.recent__body { max-width: var(--content); margin: 0 auto; display: grid; grid-template-columns: 1fr 440px; gap: 80px; align-items: stretch; }
+.ledger { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: space-between; }
+.ledger a {
+  display: grid; grid-template-columns: 1fr 130px 150px; align-items: baseline; gap: 24px;
+  padding: 26px 20px; text-decoration: none;
+}
+.ledger .t { font-family: var(--display); font-size: 24px; line-height: 1.3; }
+.ledger .k { font-size: var(--fs-small); color: var(--ink-soft); }
+.ledger .y { font-size: var(--fs-small); text-align: end; font-variant-numeric: tabular-nums; }
+.ledger a.is-active .t { color: var(--blue); }
+@media (hover: hover) and (pointer: fine) { .ledger a:hover .t { color: var(--blue); } }
+.ledger a.is-active { background: var(--white); }
+.preview { align-self: start; }
+.preview__frame { aspect-ratio: 1 / 1; background: var(--sand); }
+.preview__frame img { width: 100%; height: 100%; object-fit: cover; }
+.preview p { margin-top: 18px; font-size: 17px; }
+.preview .meta { margin-top: 16px; font-size: var(--fs-small); color: var(--ink-soft); }
+
+/* ---------- 8. פוטר ---------- */
+.site-footer { display: grid; grid-template-columns: 1fr 1fr; background: var(--green-dark); color: var(--white); min-height: 100vh; }
+.site-footer__field { padding-block: var(--section-y) 40px; padding-inline: var(--gutter) 80px; display: flex; flex-direction: column; }
+.site-footer__logo { width: 280px; height: auto; }
+.site-footer__about { margin-top: 24px; max-width: 34em; font-size: 17px; }
+.footer-menu { list-style: none; margin: 48px 0 0; padding: 0; display: grid; gap: 4px; }
+.footer-menu a { display: inline-block; padding-block: 4px; font-family: var(--display); font-size: 34px; line-height: 1.2; }
+.footer-cols { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; margin-top: 56px; font-size: var(--fs-small); }
+.footer-cols h2 { font-family: var(--text); font-size: var(--fs-small); font-weight: 700; margin-bottom: 10px; }
+.footer-cols ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.footer-cols ul a { display: inline-block; padding-block: 10px; }
+.footer-cols .btn { margin-top: 16px; }
+.footer-places { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 0 8px; list-style: none; padding: 0; font-size: var(--fs-small); }
+.footer-places a { display: inline-block; min-width: 24px; padding: 10px 6px; text-align: center; color: var(--sky); }
+.footer-legal { margin-top: auto; padding-top: 32px; display: flex; justify-content: space-between; align-items: center; font-size: var(--fs-small); }
+.footer-legal a { display: inline-block; padding-block: 10px; }
+.site-footer__photo { background: var(--sand); position: relative; }
+.site-footer__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+}

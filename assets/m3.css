@@ -1,0 +1,1263 @@
+/* ==========================================================================
+   v34 · הכותרת וההירו ב-Material 3 (Expressive), בפלטת המותג בלבד.
+   נטען אחרון — דורס רק את הכותרת ואת ההירו. המבנה, ה-HTML וההתנהגות לא השתנו.
+   מקורות ההחלטות: ui-ux-pro-max (סגנון material-you-md3 + כללי UX) — ראו M3.md.
+   ========================================================================== */
+
+:root {
+  /* תפקידי צבע של M3, ממופים לפלטת הסטייל גייד (בלי הסגול של מטריאל) */
+  --md-primary: var(--blue);               /* #11769C */
+  --md-on-primary: var(--white);
+  --md-secondary-container: var(--sky);    /* #B3E0EB */
+  --md-on-secondary-container: var(--ink); /* 11.8:1 */
+  --md-surface: var(--paper);              /* "בלי לבן טהור" — נייר */
+  --md-on-surface: var(--ink);
+  --md-on-surface-variant: var(--ink-soft);
+  --md-outline: rgba(31, 19, 74, .38);
+  /* צורה */
+  --md-shape-xs: 4px; --md-shape-sm: 8px; --md-shape-md: 12px; --md-shape-lg: 16px; --md-shape-xl: 28px; --md-shape-full: 999px;
+  /* גובה (צללים סביבתיים בלבד, בגוון הדיו) */
+  --md-elev-1: 0 1px 2px rgba(31, 19, 74, .18), 0 1px 3px 1px rgba(31, 19, 74, .08);
+  --md-elev-2: 0 1px 2px rgba(31, 19, 74, .18), 0 2px 6px 2px rgba(31, 19, 74, .10);
+  --md-elev-3: 0 1px 3px rgba(31, 19, 74, .18), 0 4px 8px 3px rgba(31, 19, 74, .10);
+  /* מצבים (state layers) */
+  --md-state-hover: .08; --md-state-focus: .10; --md-state-pressed: .10;
+  /* תנועה */
+  --md-ease: cubic-bezier(.2, 0, 0, 1);              /* emphasized / standard */
+  --md-ease-decel: cubic-bezier(.05, .7, .1, 1);      /* emphasized decelerate */
+  --md-ease-spring: cubic-bezier(.34, 1.4, .64, 1);   /* expressive: קפיץ רך */
+  --md-short: 150ms; --md-medium: 300ms; --md-long: 500ms;
+}
+
+/* שכבת מצב משותפת: currentColor מתחת לתוכן, שקופה עד ריחוף/מיקוד/לחיצה */
+.site-header nav a, .site-header .btn--search, .hero .search .btn, .search__examples a, .place a {
+  position: relative; isolation: isolate;
+}
+.site-header nav a::before, .site-header .btn--search::before, .hero .search .btn::before, .search__examples a::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+  background: currentColor; opacity: 0; transition: opacity var(--md-short) var(--md-ease);
+}
+.site-header nav a:hover::before, .site-header .btn--search:hover::before, .hero .search .btn:hover::before, .search__examples a:hover::before { opacity: var(--md-state-hover); }
+.site-header nav a:focus-visible::before, .site-header .btn--search:focus-visible::before, .hero .search .btn:focus-visible::before, .search__examples a:focus-visible::before { opacity: var(--md-state-focus); }
+.site-header nav a:active::before, .site-header .btn--search:active::before, .hero .search .btn:active::before, .search__examples a:active::before { opacity: var(--md-state-pressed); }
+
+/* ---------- 1. Top app bar ---------- */
+:root { --header-h: 64px; } /* M3 small top app bar */
+.site-header::before { box-shadow: var(--md-elev-2); } /* "scrolled-under": משטח מורם מעל התוכן */
+.site-header.is-over::before { box-shadow: none; }
+/* קישורי הניווט: כפתורי טקסט של M3 — גלולה 40px, שכבת מצב במקום קו תחתון */
+.site-header nav ul { gap: 4px; }
+.site-header nav a {
+  height: 40px; display: inline-flex; align-items: center; padding: 0 16px;
+  border-radius: var(--md-shape-full); text-decoration: none !important;
+}
+.site-header nav a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+/* חיפוש: Filled tonal button של M3 (מיכל משני = תכלת, טקסט דיו) */
+.site-header .btn--search {
+  height: 40px; min-height: 40px; padding: 0 24px 0 16px; gap: 8px; border-radius: var(--md-shape-full);
+  background: var(--md-secondary-container); color: var(--md-on-secondary-container); box-shadow: none;
+  transition: border-radius var(--md-medium) var(--md-ease-spring), opacity 360ms var(--im-ease) 140ms, transform 420ms var(--im-ease) 140ms, visibility 0s;
+}
+.site-header .btn--search .icon { width: 18px; height: 18px; }
+.site-header .btn--search:hover { background: var(--md-secondary-container); box-shadow: var(--md-elev-1); }
+.site-header .btn--search:active { border-radius: var(--md-shape-md); } /* expressive: הצורה מתכווצת בלחיצה */
+.site-header .btn--search:focus-visible { box-shadow: none; outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- 2. Search bar (M3) ---------- */
+.hero .search__row {
+  height: 56px; padding-inline: 16px 4px; gap: 16px;
+  border-radius: var(--md-shape-full); background: var(--md-surface); box-shadow: var(--md-elev-3);
+}
+.hero .search__row:focus-within { border-radius: var(--md-shape-xl); outline: 3px solid var(--sky); outline-offset: 3px; }
+.hero .search__field { gap: 16px; }
+.hero .search__field .icon { width: 24px; height: 24px; color: var(--md-on-surface-variant); }
+.hero .search input { font-size: 17px; }
+.hero .search input::placeholder { color: var(--md-on-surface-variant); }
+/* כפתור החיפוש: Filled button של M3, 48px בתוך הסרגל */
+.hero .search .btn {
+  height: 48px; min-height: 48px; padding: 0 24px; border-radius: var(--md-shape-full);
+  background: var(--md-primary); color: var(--md-on-primary); font-size: 16px; font-weight: 500;
+  transition: border-radius var(--md-medium) var(--md-ease-spring), box-shadow var(--md-short) var(--md-ease);
+}
+.hero .search .btn:hover { background: var(--md-primary); box-shadow: var(--md-elev-1); }
+.hero .search .btn:active { border-radius: var(--md-shape-md); }
+.hero .search .btn:focus-visible { background: var(--md-primary); outline: 3px solid var(--sky); outline-offset: 2px; }
+
+/* ---------- 3. Suggestion chips (M3, elevated) ---------- */
+.search__examples { gap: 8px; margin-top: 16px; font-size: 14px; }
+.search__examples span { font-weight: 500; }
+.search__examples a {
+  height: 32px; padding-inline: 8px 16px; gap: 8px; border-radius: var(--md-shape-sm);
+  background: var(--md-surface); color: var(--md-on-surface); box-shadow: var(--md-elev-1);
+  font-weight: 500; transition: border-radius var(--md-medium) var(--md-ease-spring), box-shadow var(--md-short) var(--md-ease);
+}
+.search__examples a .icon { width: 18px; height: 18px; color: var(--md-on-surface-variant); }
+.search__examples a:hover { box-shadow: var(--md-elev-2); border-radius: var(--md-shape-lg); } /* expressive: הפינות מתרככות בריחוף */
+/* מטרת לחיצה ≥ 48px בלי לשנות את הגובה הנראה (M3 touch target) */
+.search__examples a::after { content: ""; position: absolute; inset: -8px 0; }
+
+/* ---------- 4. פס היישובים: פריטים כמו Navigation rail — מיכל מעוגל + שכבת מצב ---------- */
+.place:not(.place--council) a { border-radius: var(--md-shape-lg); }
+.place:not(.place--council) a { transition: background-color var(--md-short) var(--md-ease); }
+.place:not(.place--council) a:hover { background-color: rgba(255, 255, 255, var(--md-state-hover)); }
+.place:not(.place--council) a:focus-visible { background-color: rgba(255, 255, 255, var(--md-state-focus)); outline: 3px solid var(--gold); outline-offset: -3px; }
+.place--council a { border-radius: var(--md-shape-xl) var(--md-shape-xl) 0 0; } /* M3 extra-large למעלה */
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header .btn--search, .hero .search .btn, .search__examples a { transition: none; }
+}
+
+/* הלוגו בכותרת בגובה 64px: 128px רוחב ≈ 56px גובה, עם מרווח מלמעלה ומלמטה */
+.site-header__logo { width: 128px; }
+
+/* טקסטי הכותרת גדולים יותר (בקשת אורי, ui-ux-pro-max: סולם עקבי, מינימום 16px).
+   ל-COLBO Extended גובה-x נמוך, ולכן 20px בו נקרא כמו ~18px בגופן רגיל */
+.site-header nav a { font-size: 20px; height: 44px; padding: 0 18px; }
+.site-header .btn--search { font-size: 18px; height: 44px; min-height: 44px; padding: 0 24px 0 18px; }
+.site-header .btn--search .icon { width: 20px; height: 20px; }
+
+/* ההירו בקולבו, כמו הכותרת (בקשת אורי). גובה-x נמוך ⇒ +2px מול הגודל הקודם */
+.hero__lead { font-family: var(--display); font-size: 22px; line-height: 1.4; max-width: 30em; text-wrap: balance; } /* קולבו: אותיות נמוכות ⇒ ריווח שורות צפוף יותר מטקסט רגיל */
+.hero .search input, .hero .search input::placeholder { font-family: var(--display); font-size: 19px; }
+.hero .search .btn { font-family: var(--display); font-size: 18px; font-weight: 400; }
+.search__examples { font-family: var(--display); font-size: 16px; }
+.search__examples span, .search__examples a { font-weight: 400; }
+.search__examples a { height: 36px; } /* 32 → 36 כדי שהטקסט הגדול לא יידחס */
+
+/* ---------- תיקוני סקירת UI/UX 1 (8.3) — בלי שינוי צבעים ---------- */
+/* 2 · מיקוד: טבעת אחת ברורה — דיו על כפתור החיפוש; תכלת סביב הסרגל רק כשהשדה עצמו במיקוד */
+.hero .search .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.hero .search__row:focus-within { outline: none; }
+.hero .search__row:has(input:focus-visible), .hero .search__row:has(input:focus) { outline: 3px solid var(--sky); outline-offset: 3px; }
+/* 6 · shape morph אמיתי במיקוד (999 → 16) */
+.hero .search__row:has(input:focus) { border-radius: var(--md-shape-lg); }
+/* 3 · מטרת לחיצה מורחבת של הצ'יפים (overflow מ-style.css גזר אותה) */
+.search__examples a { overflow: visible; }
+/* 10 · בצ'יפים שינוי הצורה בלחיצה, לא בריחוף */
+.search__examples a:hover { border-radius: var(--md-shape-sm); }
+.search__examples a:active { border-radius: var(--md-shape-lg); }
+/* 5 · הצל של כפתור החיפוש בכותרת נכנס במעבר */
+.site-header .btn--search { transition: border-radius var(--md-medium) var(--md-ease-spring), box-shadow var(--md-short) var(--md-ease), opacity 360ms var(--im-ease) 140ms, transform 420ms var(--im-ease) 140ms, visibility 0s; }
+/* 7 · בלחיצה רק שכבת המצב, התוכן לא מתעמעם */
+.site-header nav a:active { opacity: 1; }
+/* 9 · הלוגו נושם בכותרת של 64px; טבעת מיקוד מעוגלת */
+.site-header__logo { width: 116px; }
+.site-header__logo:focus-visible { outline-offset: 2px; border-radius: var(--md-shape-sm); }
+/* 4 · ההדגשה של יישוב מתחילה בקו הפס (לא על הצילום שמעליו) */
+.place:not(.place--council) a { isolation: isolate; border-radius: 0; }
+.place:not(.place--council) a:hover, .place:not(.place--council) a:focus-visible { background-color: transparent; }
+.place:not(.place--council) a::before {
+  content: ""; position: absolute; inset: 34px 4px 0; z-index: -1; border-radius: var(--md-shape-lg) var(--md-shape-lg) 0 0;
+  background: transparent; transition: background-color var(--md-short) var(--md-ease), box-shadow var(--md-short) var(--md-ease);
+}
+.place:not(.place--council) a:hover::before { background: rgba(255, 255, 255, var(--md-state-hover)); }
+.place:not(.place--council) a:focus-visible { outline: none; }
+.place:not(.place--council) a:focus-visible::before { background: rgba(255, 255, 255, var(--md-state-focus)); box-shadow: inset 0 0 0 3px var(--gold); }
+
+/* 1 · "למשל:" בלבן (אושר ע"י אורי, 25.10) — תכלת נכשל בניגודיות מעל חלק מהצילומים */
+.search__examples span { color: var(--white); }
+
+/* מצב ניגודיות גבוהה (Windows): טבעת מיקוד שקופה שהמערכת צובעת — בלי שינוי בתצוגה הרגילה */
+.place:not(.place--council) a:focus-visible { outline: 3px solid transparent; outline-offset: -3px; }
+
+/* כפתור החיפוש בכותרת = אותה פעולה כמו בהירו ⇒ אותו Filled button כחול (אושר ע"י אורי, 25.10) */
+.site-header .btn--search, .site-header .btn--search:hover { background: var(--md-primary); color: var(--md-on-primary); }
+.site-header .btn--search .icon { color: currentColor; }
+
+/* לחיצת עכבר על השדה: בלי טבעת מיקוד ובלי שינוי צורה (אורי, 25.10). במקלדת — נשאר */
+.hero .search__row.is-pointer, .hero .search__row.is-pointer:has(input:focus) { outline: none; border-radius: var(--md-shape-full); }
+
+/* הלוגו בכותרת: רק "שער הארכיון", גדול וחד (בלי תת-הכותרת, שלא נקראת בגובה 64px) */
+.site-header__logo { width: 155px; }
+.site-header__logo img { display: block; width: 100%; height: auto; }
+
+/* ---------- כניסת הלוגו והחיפוש בגלילה הראשונה: רגועה ואלגנטית (emil-design-eng) ----------
+   קודם: 360ms, תזוזה 8px, יציאה ב-ease-in. עכשיו: הרקע נכנס ראשון, הלוגו אחריו והחיפוש אחריו (מדורג),
+   תזוזה קטנה של 4px + ריכוך (blur 2px) שמחבר בין המצבים, עקומת ease-out חזקה ואיטית מעט — "דף שנפתח בארכיון".
+   יציאה מהירה ושקטה (180ms, שקיפות בלבד). */
+.site-header::before { transition: transform 460ms cubic-bezier(.32, .72, 0, 1); }
+.site-header.is-over::before { transition: transform 220ms cubic-bezier(.23, 1, .32, 1); }
+.site-header__logo, .site-header .btn--search {
+  transition: opacity 560ms cubic-bezier(.23, 1, .32, 1) var(--enter-d, 180ms),
+              transform 640ms cubic-bezier(.23, 1, .32, 1) var(--enter-d, 180ms),
+              filter 560ms cubic-bezier(.23, 1, .32, 1) var(--enter-d, 180ms),
+              box-shadow var(--md-short) var(--md-ease), border-radius var(--md-medium) var(--md-ease-spring), visibility 0s;
+}
+.site-header .btn--search { --enter-d: 260ms; } /* 80ms אחרי הלוגו */
+.site-header.is-top .site-header__logo, .site-header.is-top .btn--search {
+  opacity: 0; visibility: hidden; transform: translateY(-4px); filter: blur(2px);
+  transition: opacity 180ms cubic-bezier(.23, 1, .32, 1), transform 180ms cubic-bezier(.23, 1, .32, 1), filter 180ms linear, visibility 0s 180ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header__logo, .site-header .btn--search, .site-header.is-top .site-header__logo, .site-header.is-top .btn--search { transform: none; filter: none; }
+}
+
+/* ---------- כניסת הכותרת בגלילה הראשונה: מעבר בזמן קבוע, תמיד עד הסוף ----------
+   בלי החלקה של הרקע ובלי טשטוש: הרקע, צבע הקישורים, הלוגו והחיפוש מתחלפים יחד בהתבהרות רכה (ease, כמו Sonner — אלגנטי),
+   הלוגו והחיפוש עולים 4px בלבד, מדורגים ב-60ms. יציאה מהירה (200ms). */
+.site-header::before { transform: none !important; opacity: 1; transition: opacity 420ms ease !important; }
+.site-header.is-over::before { opacity: 0; transition: opacity 200ms ease !important; }
+.site-header nav a { transition: color 420ms ease; }
+.site-header__logo, .site-header .btn--search {
+  opacity: 1; transform: none; filter: none;
+  transition: opacity 480ms ease var(--enter-d, 120ms), transform 520ms cubic-bezier(.23, 1, .32, 1) var(--enter-d, 120ms),
+              box-shadow var(--md-short) var(--md-ease), border-radius var(--md-medium) var(--md-ease-spring), visibility 0s !important;
+}
+.site-header .btn--search { --enter-d: 180ms; }
+.site-header.is-top .site-header__logo, .site-header.is-top .btn--search {
+  opacity: 0; visibility: hidden; transform: translateY(4px); filter: none;
+  transition: opacity 200ms ease, transform 200ms ease, visibility 0s 200ms !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header__logo, .site-header .btn--search, .site-header.is-top .site-header__logo, .site-header.is-top .btn--search { transform: none; }
+}
+.site-header.is-over nav a { transition: color 200ms ease; } /* ביציאה הצבע חוזר באותו קצב של הרקע */
+
+/* ---------- התאמה דינמית לגובה המסך (דסקטופ 1024–1920) ----------
+   ההירו = בדיוק גובה המסך, כך שפס היישובים תמיד נכנס במסך הראשון.
+   המשתנה שמתאים את עצמו הוא גובה הלוגו בהירו (אורי): הוא גדל וקטן לפי הגובה הפנוי,
+   והמרווחים בין הפתיח, החיפוש והדוגמאות מתכווצים איתו מעט. */
+.hero { min-height: max(100svh, 600px); height: max(100svh, 600px); }
+.hero__logo {
+  /* 3.05 = יחס רוחב/גובה של הלוגו. הגובה = מה שנשאר אחרי הכותרת, הפתיח, החיפוש והפס */
+  width: min(600px, 46vw, calc((100svh - 540px) * 3.05));
+  min-width: 300px;
+}
+.hero__inner { padding-top: calc(var(--header-h) + clamp(4px, 1.5svh, 16px)); padding-bottom: clamp(16px, 3svh, 40px); }
+.hero__lead { margin-top: clamp(12px, 2.6svh, 28px); }
+.hero .search { margin-top: clamp(16px, 3svh, 32px); }
+.search__examples { margin-top: clamp(10px, 1.6svh, 16px); }
+
+/* הצבע הראשון בנחיתה (מתחת לכניסת החול והצילום): כחול הארכיון במקום הדיו (אורי, 25.10) */
+.hero { background: var(--blue); }
+
+/* ---------- טון צילום ההירו כמו בספר המותג (עמ׳ 62/64) ----------
+   מדידה: הגוון (חום-חול לכל רמת בהירות) כבר זהה לספר; ההבדל היה בבהירות — אצלנו רוב הצילום ברמה 32–64,
+   בספר ברמה 64–128 (גוונים בינוניים). לכן: הצילום בהיר יותר כמו בספר, וההכהיה עוברת לאזור הטקסט בלבד
+   בשכבת multiply בגוון החול עצמו (חול × 0.5) — נשאר במשפחת הצבע של המתכון, בלי שחור. */
+.hero__photo, .hero__swap img { filter: grayscale(1) contrast(1.1) brightness(var(--hero-dim, .82)) !important; }
+.hero__scrim {
+  display: block !important; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+  background: radial-gradient(ellipse 46% 52% at 50% 46%, #6F6B62 0%, #6F6B62 45%, rgba(111, 107, 98, 0) 100%);
+}
+
+/* ---------- הצילומים בהירו "אפויים" בטון של ספר המותג ----------
+   כל צילום עבר התאמת היסטוגרמה לצילום של עמ׳ 62 + עקומת הצבע שלו (assets/img/hero/), ולכן מוצג כמו שהוא:
+   בלי פילטר, בלי multiply. נשארת רק הכהיה עדינה בגוון החול מאחורי הטקסט ובראש העמוד — לקריאות. */
+.hero__photo, .hero__swap img { filter: none !important; mix-blend-mode: normal !important; opacity: 1; }
+@keyframes im-hero-rise { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: scale(1); } }
+.hero__scrim {
+  background:
+    linear-gradient(to bottom, rgba(111, 107, 98, .9) 0, rgba(111, 107, 98, 0) 120px),
+    radial-gradient(ellipse 44% 46% at 50% 47%, #6F6B62 0%, #6F6B62 40%, rgba(111, 107, 98, 0) 100%) !important;
+}
+
+/* ---------- הצעות החיפוש כ-Search view של M3 (במקום צ'יפים קבועים) ----------
+   הדוגמאות מופיעות רק בלחיצה על השדה, ברשימה מחוברת לסרגל — כמו בגוגל. */
+.js-examples-in-list .search__examples { display: none; }
+.hero .search__list {
+  top: calc(100% + 8px); padding: 8px 0; border-radius: var(--md-shape-xl); overflow: hidden;
+  background: var(--md-surface); color: var(--md-on-surface); box-shadow: var(--md-elev-3);
+  font-family: var(--display); text-align: start;
+}
+.hero .search__list li { display: flex; align-items: center; gap: 16px; min-height: 56px; padding: 0 24px; font-size: 18px; }
+.hero .search__list li .icon { width: 20px; height: 20px; flex: none; color: var(--md-on-surface-variant); }
+.hero .search__list li .text { flex: 1; }
+.hero .search__list li .kind { font-family: var(--text); font-size: 14px; color: var(--md-on-surface-variant); }
+.hero .search__list li:hover, .hero .search__list li[aria-selected="true"] { background: rgba(31, 19, 74, var(--md-state-hover)); }
+.hero .search__empty { top: calc(100% + 8px); border-radius: var(--md-shape-xl); background: var(--md-surface); box-shadow: var(--md-elev-3); padding: 16px 24px; font-family: var(--display); }
+
+/* הכהיה עדינה יותר (אורי: "חזקה מידי"): חול × 0.7 במקום × 0.5, ושוליים רכים יותר */
+.hero__scrim {
+  background:
+    linear-gradient(to bottom, rgba(155, 150, 137, .8) 0, rgba(155, 150, 137, 0) 110px),
+    radial-gradient(ellipse 42% 44% at 50% 47%, #9B9689 0%, rgba(155, 150, 137, .85) 45%, rgba(155, 150, 137, 0) 100%) !important;
+}
+
+/* בלי "אליפסה" כהה (אורי סימן אותה): הכהיה אחידה ועדינה על כל הצילום — כמו בספר — ועוד מעט רק בראש העמוד לתפריט */
+.hero__scrim {
+  background:
+    linear-gradient(to bottom, rgba(133, 128, 118, .9) 0, rgba(133, 128, 118, 0) 120px),
+    linear-gradient(#B9B3A4, #B9B3A4) !important;
+}
+
+/* ---------- החלפה אוטומטית: הפריט המוצג מסומן רק בעיגול הצהוב (בלי מצב הריחוף של כל הפריט) ---------- */
+.place.is-current:not(.place--council) a::after { transform: translateX(-50%) scale(1); }
+
+
+/* הרשימה הנפתחת: עד כמעט תחתית המסך (הגובה נקבע ב-JS), גלילה פנימית, פס גלילה בדיו */
+.hero .search__list { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--ink) transparent; }
+.hero .search__list::-webkit-scrollbar { width: 8px; }
+.hero .search__list::-webkit-scrollbar-track { background: transparent; margin: 16px 0; }
+.hero .search__list::-webkit-scrollbar-thumb { background: var(--ink); border-radius: 8px; }
+
+/* הדגשת יישוב במעבר עכבר: מלבן ישר, בלי רדיוס, לכל גובה הפס (מהקו העליון של הפס ועד תחתיתו) */
+.place:not(.place--council) a::before { inset: 34px 0 0 0; border-radius: 0; }
+
+/* ניסיון (אורי, 25.10): הזהב שלנו אחרי לחיצה על השדה — טבעת זהב סביב הסרגל (מעל הצילום הכהה, ניגודיות טובה),
+   ופס זהב קטן לצד ההצעה המסומנת ברשימה. גם בלחיצת עכבר וגם במקלדת; הסרגל נשאר בצורת גלולה */
+.hero .search__row:has(input:focus), .hero .search__row.is-pointer:has(input:focus) {
+  outline: 2px solid var(--gold); outline-offset: 3px; border-radius: var(--md-shape-full);
+}
+.hero .search__list li { position: relative; }
+.hero .search__list li[aria-selected="true"]::before, .hero .search__list li:hover::before {
+  content: ""; position: absolute; inset-block: 12px; inset-inline-start: 0; width: 3px; background: var(--gold);
+}
+
+/* הזהב בצורה אחרת (אורי: לא טבעת מיקוד): בלחיצה על השדה, אייקון החיפוש נכנס לעיגול זהב —
+   אותו עיגול צהוב של פס היישובים. בלי טבעת סביב הסרגל בלחיצת עכבר; במקלדת נשארת טבעת התכלת. */
+.hero .search__row:has(input:focus), .hero .search__row.is-pointer:has(input:focus) { outline: none; }
+.hero .search__row:not(.is-pointer):has(input:focus-visible) { outline: 3px solid var(--sky); outline-offset: 3px; }
+.hero .search__field .icon {
+  box-sizing: content-box; padding: 6px; margin-inline: -6px; border-radius: 50%;
+  background: transparent; color: var(--md-on-surface-variant);
+  transition: background-color 240ms ease, color 240ms ease, transform 320ms var(--md-ease-spring);
+}
+.hero .search__row:has(input:focus) .search__field .icon { background: var(--gold); color: var(--ink); transform: scale(1.06); } /* דיו על זהב 8.6:1 */
+@media (prefers-reduced-motion: reduce) { .hero .search__row:has(input:focus) .search__field .icon { transform: none; } }
+
+/* במקום הקו בקצה: נקודת זהב מימין לסוג התוכן ("הצעה" / "יישוב"...) בפריט המסומן — כמו העיגול שבפס היישובים */
+.hero .search__list li[aria-selected="true"]::before, .hero .search__list li:hover::before { content: none; }
+.hero .search__list li .kind { display: inline-flex; align-items: center; gap: 8px; }
+.hero .search__list li .kind::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  transform: scale(0); transition: transform 200ms var(--md-ease);
+}
+.hero .search__list li[aria-selected="true"] .kind::before, .hero .search__list li:hover .kind::before { transform: scale(1); }
+
+/* פס הגלילה בתוך הפינות המעוגלות: clip-path חותך גם את פס הגלילה לפי הרדיוס,
+   והמסילה מתחילה ונגמרת במרחק הרדיוס (28px) כך שהידית לא נוגעת בפינות.
+   ב-Chrome ‏scrollbar-color מבטל את עיצוב ‎::-webkit-scrollbar, לכן הוא מוגדר רק לדפדפנים בלעדיו (Firefox). */
+.hero .search__list { clip-path: inset(0 round var(--md-shape-xl)); scrollbar-width: auto; scrollbar-color: auto; }
+@supports not selector(::-webkit-scrollbar) { .hero .search__list { scrollbar-width: thin; scrollbar-color: var(--ink) transparent; } }
+.hero .search__list::-webkit-scrollbar { width: 12px; }
+.hero .search__list::-webkit-scrollbar-track { background: transparent; margin-block: var(--md-shape-xl); }
+.hero .search__list::-webkit-scrollbar-thumb { background: var(--ink); border-radius: 8px; border: 3px solid transparent; background-clip: padding-box; }
+/* מקום לפס הגלילה: רווח נוסף בצד שמאל של כל פריט (RTL: inline-end) */
+.hero .search__list li { padding-inline: 24px 36px; }
+
+/* ---------- אוצרות הארכיון: גם כרזות וצילום 2006 (מהסטייל גייד) ----------
+   כרזות: בצבע המקורי, שלמות (לא נחתכות), על נייר. צילומים: במתכון הספיה. */
+.treasure__frame.is-poster, .treasure__peek.is-poster, .treasure__sheet button.is-poster { background: var(--paper); }
+.treasure__frame.is-poster > img { object-fit: contain; padding: 24px; }
+.treasure__peek.is-poster img, .treasure__sheet button.is-poster img { object-fit: contain; padding: 6px; }
+/* 9 אוצרות: דף המגע בשתי שורות */
+.treasure__sheet { grid-template-columns: repeat(5, 1fr); }
+
+/* אוצרות: השנה ממורכזת בעמודה; קו המסגרת נמתח מצד הצילום (שמאל) והשנתה יורדת מלמעלה */
+.treasure__year { text-align: center; }
+.treasure__text::before { transform-origin: left center; }
+.treasure__text::after { transform-origin: center top; }
+.treasure__year { padding-inline: 0; } /* מירכוז אמיתי */
+
+/* ==========================================================================
+   אוצרות: (1) מסגרת נייר אחידה — 24px מכל צד לכל פריט, בלי חיתוך (JS קובע את גודל ההדפס לפי פרופורציית התמונה)
+   (2) נכנס בגובה המסך מתחת לכותרת, מ-1920 ועד טאבלט (כמו ההירו)  (3) התמונה עצמה היא קישור לפוסט, עם מחוות ריחוף
+   ========================================================================== */
+.treasures { padding-top: calc(var(--header-h) + clamp(16px, 4svh, 48px)); }
+.treasures .section__head { margin-bottom: clamp(20px, 3.5svh, 56px); }
+.treasures__stage {
+  --tr-pad: clamp(16px, 4svh, 48px); --tr-head: 104px; --tr-headgap: clamp(20px, 3.5svh, 56px);
+  /* גובה הבמה = מה שנשאר מתחת לכותרת, לראש הסקשן ולמרווחים */
+  --tr-h: clamp(330px, calc(100svh - var(--header-h) - var(--tr-pad) - var(--tr-head) - var(--tr-headgap) - 24px), 579px);
+  height: var(--tr-h);
+}
+.treasure__year { font-size: clamp(132px, calc(var(--tr-h) * .4), 232px); }
+.treasure__title { font-size: clamp(26px, calc(var(--tr-h) * .059), 34px); padding-top: clamp(12px, calc(var(--tr-h) * .04), 24px); }
+.treasure__link { margin-top: clamp(14px, calc(var(--tr-h) * .048), 28px); }
+.treasure__sheet { padding-top: clamp(14px, calc(var(--tr-h) * .048), 28px); gap: 6px; row-gap: 8px; }
+
+.treasure__frame, .treasure__frame.is-poster { aspect-ratio: auto; height: 100%; background: none; cursor: pointer; }
+.treasure__frame > img, .treasure__frame.is-poster > img, .treasure__frame > .im-ghost {
+  position: absolute; top: 0; inset-inline-start: 0; inset-inline-end: auto; bottom: auto;
+  width: var(--mat-w, 100%); height: var(--mat-h, 100%); box-sizing: border-box;
+  padding: 24px; background: var(--paper); object-fit: contain;
+}
+.treasure__peek, .treasure__peek.is-poster {
+  top: 0; bottom: auto; height: var(--mat-h, 100%); width: var(--peek-w, 400px);
+  inset-inline-start: calc(var(--mat-w, 100%) + 24px); background: var(--paper);
+}
+.treasure__peek img, .treasure__peek.is-poster img { box-sizing: border-box; padding: 24px; object-fit: contain; object-position: center; }
+/* מחוות ריחוף: ההדפס מתרומם מעט, והקישור "לפוסט המלא" מגיב יחד איתו */
+.treasure__frame > img { transition: transform 280ms cubic-bezier(.2, 0, 0, 1), box-shadow 280ms cubic-bezier(.2, 0, 0, 1); }
+.treasure__frame:hover > img { transform: translateY(-3px); box-shadow: 0 1px 3px rgba(31, 19, 74, .18), 0 6px 14px 2px rgba(31, 19, 74, .12); }
+.treasure__link.is-hover { color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .treasure__frame:hover > img { transform: none; } }
+/* השנה מתכווצת גם לפי רוחב המסך (אורי), ועמודת הטקסט צרה יותר במסכים קטנים */
+.treasures__stage { grid-template-columns: clamp(280px, 26vw, 372px) 1fr; --tr-gap: clamp(32px, 3.9vw, 56px); }
+.treasure__year { font-size: clamp(120px, min(calc(var(--tr-h) * .4), 15vw), 232px); }
+/* ברזולוציות נמוכות: הכותרת עולה ונצמדת מתחת לשנה (בלי הרווח הגדול ביניהן); דף המגע נשאר בתחתית */
+@media (max-width: 1439px), (max-height: 899px) {
+  .treasure__title { margin-top: clamp(8px, 1.5svh, 16px); padding-top: 0; }
+}
+/* כניסה ראשונה: הקו מוסתר עד שהסקשן נראה; השנתה נבנית מלמטה למעלה */
+.treasure__text.tr-line-pending::before, .treasure__text.tr-line-pending::after { transform: scale(0); }
+.treasures .treasure__text::after { transform-origin: center bottom; }
+
+/* ההדפס = מסגרת נייר קבועה (.treasure__mat) + חלון תמונה (.treasure__clip). במעבר עכבר: זום-אין עדין מאוד לתמונה בלבד, הנייר לא זז */
+.treasure__frame > img, .treasure__frame.is-poster > img { all: unset; }
+.treasure__mat {
+  position: absolute; top: 0; inset-inline-start: 0; width: var(--mat-w, 100%); height: var(--mat-h, 100%);
+  box-sizing: border-box; padding: 24px; background: var(--paper);
+}
+.treasure__clip { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.treasure__clip > img, .treasure__clip > .im-ghost {
+  position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; background: none; object-fit: cover;
+  transform-origin: center;
+}
+.treasure__clip > img { transition: transform 600ms cubic-bezier(.2, 0, 0, 1); }
+.treasure__frame.is-zoom .treasure__clip > img { transform: scale(1.03); box-shadow: none; }
+.treasure__frame:hover > img { transform: none; box-shadow: none; }
+@media (prefers-reduced-motion: reduce) { .treasure__frame.is-zoom .treasure__clip > img { transform: none; } }
+/* השנה: הספרה הישנה והחדשה באותו תא (מעבר רגוע) */
+.im-roll__d { position: relative; overflow: visible; }
+.im-roll__old { position: absolute; inset: 0; text-align: center; pointer-events: none; }
+/* הקו והשנתה בצבע מסגרת הנייר — המשך של ההדפס (אורי) */
+.treasure__text::before, .treasure__text::after { background: var(--paper); }
+/* עמודת הטקסט בגובה ההדפס: הגלריה (דף המגע) מיושרת לתחתית התמונה בכל רזולוציה ובכל פרופורציה */
+.treasures__stage { align-items: start; }
+.treasure__text { height: var(--mat-h, 100%); transition: height 420ms cubic-bezier(.2, 0, 0, 1); }
+@media (prefers-reduced-motion: reduce) { .treasure__text { transition: none; } }
+
+/* ==========================================================================
+   v36 · אוצרות הארכיון ב-Material 3, לפי החלטות ההירו (ui-ux-pro-max: material-you-md3 + כללי UX)
+   מההירו: COLBO לממשק (+2px) · גלולות עם שכבות מצב 8/10/10 · פעולה ראשית = גלולה כחולה מלאה ·
+   זהב = "נבחר" · סולם צורות M3 · צל סביבתי בדיו · emphasized easing · בלי צבעים חדשים.
+   ========================================================================== */
+.treasures .section__head p { font-family: var(--display); font-size: 20px; }
+
+/* פקדים */
+.treasures__controls { gap: 8px; }
+.treasures__controls .link-arrow, .treasure__link {
+  position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 8px; height: 44px;
+  font-family: var(--display); font-size: 18px; font-weight: 400; text-decoration: none !important;
+  transition: border-radius var(--md-medium) var(--md-ease-spring), box-shadow var(--md-short) var(--md-ease);
+}
+.treasures__controls .link-arrow { padding: 0 14px 0 18px; border-radius: 22px; color: var(--md-primary); }
+.treasures__controls .link-arrow .icon, .treasure__link .icon { width: 18px; height: 18px; }
+.treasures .counter { font-family: var(--display); font-size: 17px; min-width: 72px; }
+.treasures .icon-btn {
+  width: 48px; height: 48px; border-radius: 24px; background: transparent; color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--md-outline); position: relative; isolation: isolate;
+  transition: border-radius var(--md-medium) var(--md-ease-spring);
+}
+.treasures .icon-btn:hover:not(:disabled), .treasures .icon-btn:focus-visible:not(:disabled) { background: transparent; color: var(--ink); }
+.treasures .icon-btn:active:not(:disabled) { border-radius: var(--md-shape-md); transform: none; }
+.treasures .icon-btn:disabled { box-shadow: inset 0 0 0 1px rgba(31, 19, 74, .12); color: rgba(31, 19, 74, .38); }
+/* "לפוסט המלא" = Filled button, כמו "חיפוש בארכיון" */
+.treasure__link { align-self: flex-start; padding: 0 18px 0 24px; border-radius: 22px; background: var(--md-primary); color: var(--md-on-primary) !important; }
+.treasure__link:hover, .treasure__link.is-hover { box-shadow: var(--md-elev-1); color: var(--md-on-primary) !important; }
+.treasures__controls .link-arrow:active, .treasure__link:active { border-radius: var(--md-shape-md); }
+/* שכבת מצב משותפת */
+.treasures__controls .link-arrow::before, .treasures .icon-btn::before, .treasure__link::before, .treasure__sheet button::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; background: currentColor; opacity: 0;
+  pointer-events: none; transition: opacity var(--md-short) var(--md-ease);
+}
+.treasures__controls .link-arrow::before, .treasures .icon-btn::before, .treasure__link::before { z-index: -1; }
+.treasure__sheet button::before { background: var(--ink); }
+.treasures__controls .link-arrow:hover::before, .treasures .icon-btn:hover:not(:disabled)::before, .treasure__link:hover::before, .treasure__link.is-hover::before, .treasure__sheet button:hover::before { opacity: var(--md-state-hover); }
+.treasures__controls .link-arrow:focus-visible::before, .treasures .icon-btn:focus-visible::before, .treasure__link:focus-visible::before, .treasure__sheet button:focus-visible::before { opacity: var(--md-state-focus); }
+.treasures__controls .link-arrow:active::before, .treasures .icon-btn:active:not(:disabled)::before, .treasure__link:active::before, .treasure__sheet button:active::before { opacity: var(--md-state-pressed); }
+/* מיקוד אחיד: 3px, מרווח 2px */
+.treasures__controls .link-arrow:focus-visible, .treasures .icon-btn:focus-visible, .treasure__link:focus-visible, .treasure__sheet button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* טקסט האוצר */
+.treasure__title { font-family: var(--display); font-weight: 400; }
+.treasure__place { font-family: var(--display); font-size: 18px; }
+
+/* ההדפס וההצצה: צורת M3 large; הפינה שאליה מתחבר הקו נשארת חדה (צורה אסימטרית, Expressive) */
+.treasure__mat, .treasure__peek { border-radius: var(--md-shape-lg); }
+.treasure__mat { border-start-end-radius: var(--md-shape-xs); box-shadow: var(--md-elev-1); }
+.treasure__clip { border-radius: var(--md-shape-xs); }
+.treasure__peek { overflow: hidden; }
+
+/* דף המגע: אריחים מעוגלים, שכבת מצב, נבחר = עיגול זהב 10px (כמו בפס היישובים) */
+.treasure__sheet button { border-radius: var(--md-shape-sm); isolation: isolate; }
+.treasure__sheet button img { border-radius: var(--md-shape-sm); }
+.treasure__sheet button[aria-current="true"]::after {
+  inset-inline: auto; left: 50%; bottom: -14px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); transform: translateX(-50%);
+}
+.treasure__sheet { row-gap: 22px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .treasures .icon-btn, .treasure__link, .treasures__controls .link-arrow { transition: none; }
+}
+
+/* ההצצה לחיצה: מגיבה כמו פריט שאפשר לבחור */
+.treasure__peek { cursor: pointer; transition: opacity 200ms ease; }
+.treasure__peek:hover { opacity: .85; }
+/* מסגרת ההדפס וההצצה ישרות, בלי פינות מעוגלות (אורי) — כמו הדפס נייר */
+.treasure__mat, .treasure__peek, .treasure__clip { border-radius: 0 !important; }
+
+/* דף המגע: אותה מסגרת בכל כרטיס — נייר 4px אחיד מכל צד, התמונה ממלאת את החלון (כמו ההדפס הגדול), פינות ישרות */
+.treasure__sheet button, .treasure__sheet button.is-poster { padding: 4px; background: var(--paper); border-radius: 0; box-sizing: border-box; }
+.treasure__sheet button img, .treasure__sheet button.is-poster img { padding: 0; object-fit: cover; border-radius: 0; }
+.treasure__sheet button::before { border-radius: 0; }
+/* הכרטיס הנבחר: המסגרת עצמה בזהב (במקום הנקודה/הקו מתחת) */
+.treasure__sheet button[aria-current="true"], .treasure__sheet button.is-poster[aria-current="true"] { background: var(--gold); }
+.treasure__sheet button[aria-current="true"]::after { content: none; }
+.treasure__sheet button { transition: background-color 240ms ease; }
+/* הקו מהמסגרת אל השנה: פס נייר עבה (8px) והשנתה בהתאם — המשך של מסגרת ההדפס, לא קו שיער */
+.treasure__text::before { height: 8px; }
+.treasure__text::after { width: 8px; height: 32px; }
+.treasure__year { margin-top: 4px; }
+/* ריווח ראש הסקשן (ui-ux-pro-max: קרבה — המרווח בין הכותרת לתוכן גדול מהמרווח בתוך קבוצת הכותרת; סולם 8px).
+   כותרת→תיאור 12px, תיאור→תוכן 32px — כמו בציר הזמן */
+.treasures .section__head { margin-bottom: 32px; }
+.treasures__stage { --tr-headgap: 32px; }
+
+/* סוג התוכן עם אייקון קו קטן (Material Symbols Outlined) — מחזק את המשמעות, לא מחליף את המילה */
+.treasure__place { display: inline-flex; align-items: center; gap: 8px; }
+.treasure__place .icon { width: 20px; height: 20px; flex: none; color: var(--ink-soft); }
+
+/* בלי צל על ההדפס: הצל יצר קו בין המסגרת לפס הנייר שממשיך אל השנה */
+.treasure__mat, .treasure__frame, .treasure__peek { box-shadow: none !important; }
+
+/* הדפס קבוע לכל הפריטים: התמונה שלמה בתוכו, בלי חיתוך ובלי מתיחה; הרווח נשאר בנייר */
+.treasure__clip > img, .treasure__clip > .im-ghost { object-fit: contain; object-position: center; }
+/* השנה חוזרת לימין: הקצה הימני של הספרות מיושר לקצה החיצוני של הקו האנכי שיורד מהמסגרת */
+.treasure__year { text-align: start; padding-inline-start: 0; }
+
+/* אוצרות — כניסה ראשונה (motion.js): עד שהבמה נכנסת למסך הרכיבים מוסתרים; האנימציה עצמה ב-WAAPI */
+.tr-intro-pending .treasure__mat, .tr-intro-pending .treasure__peek { clip-path: inset(0 0 0 100%); }
+.tr-intro-pending #trYear, .tr-intro-pending #trTitle, .tr-intro-pending #trPlace, .tr-intro-pending #trLink,
+.tr-intro-pending #trSheet > li { opacity: 0; }
+.tr-intro-pending .treasure__text::before { transform: scaleX(0); }
+.tr-intro-pending .treasure__text::after { transform: scaleY(0); }
+@media print { .tr-intro-pending * { opacity: 1 !important; clip-path: none !important; } }
+
+
+/* כותרת האוצר: לפחות שלוש מילים, ובשורה אחת (רק שם ארוך במיוחד נשבר). הגודל צומח עם עמודת הטקסט (26vw), כך שהיחס נשמר בכל רוחב */
+.treasure__title { font-size: clamp(24px, 2.22vw, 32px); }
+
+/* חצים — כפתורי אייקון "טונאליים" של מטריאל 3 (Filled tonal icon button), כמו החצים בחנות של גוגל:
+   עיגול 48px מלא בצבע הנייר של ההדפס (המשטח המשני שלנו), חץ בצבע הדיו 24px, רווח 8px. מעל הקרוסלה ולא עליה (הנחיית M3).
+   המונה "X מתוך 10" יוצא מהמסך: המיקום כבר מסומן במסגרת הזהב בדף המגע; הוא נשאר לקורא מסך. */
+.treasures__controls { gap: 24px; }
+.treasures .icon-btn { width: 48px; height: 48px; border-radius: 24px; background: var(--paper); color: var(--ink); box-shadow: none; }
+.treasures .icon-btn + .icon-btn { margin-inline-start: -16px; }   /* 24 ← 8 בין שני החצים */
+.treasures .icon-btn .icon { width: 24px; height: 24px; }
+.treasures .icon-btn:hover:not(:disabled), .treasures .icon-btn:focus-visible:not(:disabled) { background: var(--paper); color: var(--ink); }
+.treasures .icon-btn:disabled { background: rgba(31, 19, 74, .12); color: rgba(31, 19, 74, .38); box-shadow: none; cursor: default; }
+
+/* "פרסומים אחרונים": סוג התוכן לפי פורמט הפוסט בוורדפרס (כמו באוצרות) — אייקון + שם; שנה אחת בלבד */
+.ledger .k { display: inline-flex; align-items: center; gap: 8px; }
+.ledger .k .icon { width: 18px; height: 18px; flex: none; }
+.treasures .counter.visually-hidden { min-width: 0; }
+
+/* 7 באוקטובר — בכניסה: לוח עם שוליים לבנים שווים מכל הצדדים (96px; הטקסט ממורכז ונשאר כולו בתוך החלק הגלוי);
+   בהמשך הגלילה הלוח מתרחב עד הקצוות, בלי מסגרת לבנה — צמוד לגלילת העכבר (motion.js מעדכן את --oct7-in).
+   הלוח עצמו תמיד ברוחב מלא, והשוליים הם "חיתוך" (clip-path), כך שאין תזוזת פריסה. */
+.oct7 { padding: 0; --oct7-in: 96px; }
+.oct7__board { min-height: calc(620px + 80px); clip-path: inset(var(--oct7-in)); }
+.oct7__photo figcaption { bottom: calc(14px + var(--oct7-in)); left: calc(16px + var(--oct7-in)); }
+/* ריווח אחיד: בין שני החצים = בין החצים ל"לכל האוצרות" (8px) */
+.treasures__controls { gap: 8px; }
+.treasures .icon-btn + .icon-btn { margin-inline-start: 0; }
+/* חץ לא פעיל: נשאר בצבע הנייר של ההדפס (בלי האפור-סגול), ורק החץ דהוי לדיו 38% */
+.treasures .icon-btn:disabled { background: var(--paper); color: rgba(31, 19, 74, .38); }
+/* "לכל האוצרות" = כפתור טונאלי באותה שפה של החצים (נייר, גובה 48, גלולה) — כך הרווח של 8px נראה שווה בין שלושת הכפתורים */
+.treasures__controls .link-arrow { height: 48px; padding: 0 16px 0 20px; border-radius: 24px; background: var(--paper); color: var(--md-primary); text-decoration: none; }
+.treasures__controls .link-arrow:hover { color: var(--md-primary); }
+/* ריווח ראש הסקשן לפי ui-ux-pro-max (spacing-scale 8, visual-hierarchy בקרבה), נמדד בין קצוות האותיות ולא בין תיבות:
+   כותרת ← תיאור 16px (קבוצה אחת) · תיאור ← תוכן 32px · סקשן ← סקשן ~100px. כל מרווח גדול מהקודם, כך שהראש "שייך" לתוכן שלו */
+.treasures .section__head p { margin-top: 2px; }        /* 2 + ריווח השורה של הכותרת והתיאור = 16px בין האותיות */
+.treasures .section__head { margin-bottom: 24px; }      /* 24 + ריווח השורה של התיאור = 32px עד ההדפס */
+.treasures__stage { --tr-headgap: 24px; }
+/* "לכל האוצרות" — טקסט בלבד: בלי רקע ובלי מסגרת, גם במעבר עכבר (אז רק הטקסט מתחלף לדיו). גובה 48 נשמר כאזור לחיצה;
+   בלי ריפוד, כך שהרווח הנראה מהחץ שלו לעיגול הוא אותם 8px שבין שני העיגולים */
+.treasures__controls .link-arrow { background: none; padding: 0; border-radius: 0; }
+.treasures__controls .link-arrow::before { content: none; }
+.treasures__controls .link-arrow:hover { color: var(--ink); }
+.treasures__controls .link-arrow:active { border-radius: 0; }
+
+/* ===== בקרי האוצרות — גרסה סופית (זהה ב-v34 וב-v36) =====
+   "לכל האוצרות": טקסט בלבד, בלי רקע ובלי מסגרת גם במעבר עכבר (רק הטקסט מתחלף לדיו).
+   החצים: עיגול 48px בצבע הנייר של ההדפס, חץ דיו 24px, רווח 8px. מעבר עכבר / לחיצה / מיקוד = חול (#DED6C4) מהפלטה —
+   בלי שכבת מצב שקופה בדיו (היא יצרה גוון כחול-סגול שאינו בפלטה). הקרוסלה אינסופית, ולכן אין מצב לא פעיל. */
+.treasures__controls { display: flex; align-items: center; gap: 8px; }
+.treasures__controls .link-arrow {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0;
+  background: none; border-radius: 0; box-shadow: none; color: var(--blue); text-decoration: none !important;
+  font-family: var(--display); font-size: 18px; font-weight: 400;
+}
+.treasures__controls .link-arrow::before { content: none; }
+.treasures__controls .link-arrow:hover, .treasures__controls .link-arrow:focus-visible { background: none; color: var(--ink); }
+.treasures__controls .link-arrow:active { border-radius: 0; background: none; }
+.treasures__controls .link-arrow .icon { width: 18px; height: 18px; }
+.treasures .icon-btn {
+  width: 48px; height: 48px; border: 0; border-radius: 24px; display: grid; place-items: center; cursor: pointer;
+  background: var(--paper); color: var(--ink); box-shadow: none; transition: background-color 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.treasures .icon-btn::before { content: none; }
+.treasures .icon-btn + .icon-btn { margin-inline-start: 0; }
+.treasures .icon-btn .icon { width: 24px; height: 24px; }
+.treasures .icon-btn:hover:not(:disabled), .treasures .icon-btn:focus-visible:not(:disabled), .treasures .icon-btn:active:not(:disabled) { background: var(--sand); color: var(--ink); }
+.treasures .icon-btn:active:not(:disabled) { border-radius: 24px; transform: scale(.96); }
+.treasures .icon-btn:focus-visible, .treasures__controls .link-arrow:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.treasures .counter.visually-hidden { min-width: 0; }
+
+/* ===== 7 באוקטובר + עשור בפוקוס = סקשן גלילה אחד =====
+   הסקשן גבוה (הלוח + מרחק נעיצה); הלוח ננעץ מתחת לכותרת וממורכז במסך. בגלילה (motion.js → --fd מ-0 ל-1):
+   הטקסט והצילום של 7 באוקטובר דוהים החוצה, "עשור בפוקוס" דוהה פנימה (שקיפות בלבד, בלי תזוזה — כמו כל 7 באוקטובר),
+   והרקע עובר מדיו לכחול — כל פאנל בצבע המקורי שלו. סמל המועצה נשאר במקומו ברקע לאורך כל הדרך. */
+.oct7 { --fd: 0; --oct7-pin: 80svh; --oct7-h: 700px; height: calc(var(--oct7-h) + var(--oct7-pin)); }
+.oct7__pin { position: sticky; top: calc(var(--header-h, 64px) + max(0px, (100svh - var(--header-h, 64px) - var(--oct7-h)) / 2)); }
+.oct7__board { height: var(--oct7-h); min-height: 0; background: color-mix(in srgb, var(--blue) calc(var(--fd) * 100%), var(--ink)); }
+.oct7__photo > img, .oct7__photo figcaption { opacity: calc(.89 * (1 - var(--fd))); }
+.oct7__photo figcaption { opacity: calc(1 - var(--fd)); }
+.oct7__photo-b { position: absolute; inset: 0; opacity: var(--fd); }
+.oct7__photo-b img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; filter: none; mix-blend-mode: normal; opacity: 1; }
+.oct7__field { display: grid; align-items: center; }
+.oct7__panel { grid-area: 1 / 1; }
+.oct7__panel--a { opacity: calc(1 - var(--fd)); }
+.oct7__panel--b { opacity: var(--fd); }
+.oct7.fd-b .oct7__panel--a, .oct7:not(.fd-b) .oct7__panel--b { pointer-events: none; }
+/* "עשור בפוקוס" בתוך הלוח: בלי הרשת, הרקע והריווח של הסקשן הנפרד שהיה */
+.oct7 .focus-decade { display: block; min-height: 0; background: none; }
+.oct7 .focus-decade__card { padding: 0; }
+/* הטקסטים לא חופפים: הראשון יוצא בחצי הראשון של המעבר, השני נכנס בחצי השני (הצילום והרקע ממשיכים להתחלף ברצף) */
+.oct7__panel--a { opacity: clamp(0, 1 - 2 * var(--fd), 1); }
+.oct7__panel--b { opacity: clamp(0, 2 * var(--fd) - 1, 1); }
+
+/* "עשור בפוקוס": סוג התוכן לפי פורמט הפוסט בוורדפרס, כמו באוצרות וברשימה — אייקון + שם */
+.oct7 .focus-decade .meta { display: inline-flex; align-items: center; gap: 8px; }
+.oct7 .focus-decade .meta .icon { width: 18px; height: 18px; flex: none; }
+
+/* ===== המעבר בין 7 באוקטובר ל"עשור בפוקוס" — באותה שפת תנועה של ההירו והאוצרות (motion.js) =====
+   מצב בדיד (.fd-b), לא שקיפות צמודה לגלילה: משטח כחול נפרש על הדיו מימין לשמאל (כמו החול בהירו),
+   הצילום נחשף באותו כיוון ומופיע, והטקסט עולה שורה אחר שורה. בגלילה חזרה — אותה תנועה בכיוון ההפוך.
+   כאן רק מצבי המנוחה; התנועה עצמה ב-WAAPI. */
+.oct7__board { position: relative; background: var(--ink); }
+.oct7__wash { position: absolute; inset: 0; z-index: 0; background: var(--blue); clip-path: inset(0 0 0 100%); pointer-events: none; }
+.oct7__photo, .oct7__field { position: relative; z-index: 1; }
+.oct7__photo > img { opacity: .89; }
+.oct7__photo figcaption { opacity: 1; }
+.oct7__photo-b { opacity: 0; }
+.oct7__panel--a { opacity: 1; }
+.oct7__panel--b { opacity: 0; }
+.oct7.fd-b .oct7__wash { clip-path: inset(0); }
+.oct7.fd-b .oct7__photo-b { opacity: 1; }
+.oct7.fd-b .oct7__photo figcaption { opacity: 0; }
+.oct7.fd-b .oct7__panel--a { opacity: 0; }
+.oct7.fd-b .oct7__panel--b { opacity: 1; }
+
+/* עוד גלילה ל"עשור בפוקוס" אחרי ההחלפה: מרחק הנעיצה 110svh, וההחלפה ב-40% — 7 באוקטובר מחזיק ~44svh, עשור בפוקוס ~66svh */
+.oct7 { --oct7-pin: 110svh; }
+/* טיפוגרפיה כמו באינטרו (ההירו ועמודת הטקסט של האוצרות): הכול ב-COLBO, בגדלים של שם
+   כותרת קטנה 26 (כמו כותרות ציר הזמן; קודם נדרסה ל-58 דק מכלל h2 ישן של 7 באוקטובר) · סוג תוכן 18 + אייקון 20 (כמו באוצרות)
+   · כותרת 32 (כמו כותרת האוצר) · טקסט 20/32 (כמו תיאור הסקשן) · כפתור 18 (כמו "לפוסט המלא" ו"חיפוש") */
+.oct7 .focus-decade__label { font-family: var(--display); font-size: var(--fs-h3); font-weight: 400; line-height: 1.25; letter-spacing: normal; }
+.oct7 .focus-decade .meta { font-family: var(--display); font-size: 18px; line-height: 1.6; }
+.oct7 .focus-decade .meta .icon { width: 20px; height: 20px; }
+.oct7 .focus-decade h3 { font-family: var(--display); font-weight: 400; font-size: clamp(24px, 2.22vw, 32px); line-height: 1.2; letter-spacing: -0.01em; }
+.oct7 .focus-decade p.body { font-family: var(--display); font-size: 20px; line-height: 1.6; }
+.oct7 .focus-decade .btn { font-family: var(--display); font-size: 18px; font-weight: 400; }
+/* צילום "עשור בפוקוס" מורחק: הצילום שלם על נייר (כמו ההדפס באוצרות, שוליים 24px), במקום חיתוך cover שקטע את הראש.
+   בקובץ המקורי השיער כבר נוגע בקצה העליון — לכן לא "משלימים" פיקסלים, רק מראים את הצילום כולו */
+.oct7__photo-b { background: var(--paper); padding: 24px; box-sizing: border-box; }
+.oct7__photo-b img { position: static; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+/* כפתורי הלוח — באותה צורה כמו הכפתורים למעלה ("לפוסט המלא", "חיפוש בארכיון"): גלולה מלאה 44px, ריפוד 24/18,
+   COLBO 18, חץ SVG 18px. על רקע כהה/כחול המילוי לבן (במקום כחול על כחול), הטקסט בצבע שהיה לו. ריחוף = שכבת מצב 8% */
+.oct7 .oct7__cta {
+  display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px 0 24px; border-radius: 22px;
+  font-family: var(--display); font-size: 18px; font-weight: 400; background: var(--white); text-decoration: none;
+  transition: background-color 150ms cubic-bezier(.2, 0, 0, 1), border-radius 300ms cubic-bezier(.34, 1.4, .64, 1);
+}
+.oct7 .oct7__cta .icon { width: 18px; height: 18px; flex: none; }
+.oct7 .oct7__panel--a .oct7__cta { color: var(--ink); }
+.oct7 .oct7__panel--b .oct7__cta, .oct7 .focus-decade .oct7__cta:not(:hover):not(:focus-visible) { color: var(--blue); }
+.oct7 .oct7__panel--a .oct7__cta:not(:hover):not(:focus-visible) { color: var(--ink); }
+.oct7 .oct7__cta:hover, .oct7 .oct7__cta:focus-visible { background: color-mix(in srgb, currentColor 8%, var(--white)); }
+.oct7 .oct7__cta:active { border-radius: 12px; }
+.oct7 .oct7__cta:focus-visible { outline: 3px solid var(--white); outline-offset: 2px; }
+.oct7 .oct7__cta { height: 44px; min-height: 0; padding-block: 0; }
+/* ===== פרסומים אחרונים — טיפוגרפיה ומבנה כמו באינטרו (ההירו והאוצרות) =====
+   ראש הסקשן: כותרת ← תוכן 32px בין האותיות (כמו באוצרות); "לכל הפרסומים" כמו "לכל האוצרות" (טקסט COLBO 18 + חץ SVG, בלי קו תחתון).
+   ברשימה: סוג התוכן כמו באוצרות (COLBO 18, אייקון 20), השנה COLBO 18. התצוגה המקדימה: טקסט COLBO כמו תיאור הסקשן,
+   והצילום יוצא מהגריד שמאלה עד קצה המסך (כמו ההצצה באוצרות) */
+.recent { overflow-x: clip; }
+.recent .section__head { margin-bottom: 24px; align-items: flex-end; }
+.recent .section__head .link-arrow {
+  display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0; background: none;
+  font-family: var(--display); font-size: 18px; font-weight: 400; color: var(--blue); text-decoration: none !important;
+}
+.recent .section__head .link-arrow:hover, .recent .section__head .link-arrow:focus-visible { color: var(--ink); }
+.recent .section__head .link-arrow .icon { width: 18px; height: 18px; }
+.ledger .k { font-family: var(--display); font-size: 18px; gap: 8px; }
+.ledger .k .icon { width: 20px; height: 20px; }
+.ledger .y { font-family: var(--display); font-size: 18px; font-variant-numeric: tabular-nums; }
+#pvMeta { font-family: var(--display); font-size: 18px; }
+#pvText { font-family: var(--display); font-size: 20px; line-height: 1.6; }
+.preview__frame { margin-inline-end: calc(-1 * var(--gutter)); }
+.preview__frame { aspect-ratio: auto; height: clamp(320px, 30.6vw, 440px); } /* הגובה נשאר כמו קודם (ריבוע ברוחב העמודה); רק הרוחב גדל אל קצה המסך */
+
+/* צילום "עשור בפוקוס" המורחב: חוזר לכיסוי מלא (בלי נייר) — יש עכשיו מקום מעל הראש */
+.oct7__photo-b { background: none; padding: 0; }
+.oct7__photo-b img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+/* תצוגה מקדימה בפרסומים — כמו ההדפס באוצרות: הצילום בתוך נייר 24px. כאן הרקע של הסקשן הוא נייר, ולכן ההדפס לבן */
+.preview__frame { background: var(--white); padding: 24px; box-sizing: border-box; }
+.preview__frame img { width: 100%; height: 100%; object-fit: cover; }
+#pvText { margin-top: 24px; } /* אחרי הורדת השורה הכפולה: 24px מההדפס, כמו שולי הנייר */
+/* הנייר של התצוגה כמסגרת (border) ולא ריפוד: overflow חותך בתוך המסגרת, כך שההחלפה (צילום רפאים + התיישבות מהגדלה) נשארת בתוך החלון */
+.preview__frame { padding: 0; border: 24px solid var(--white); }
+/* שורת "פרסומים אחרונים" לפי ui-ux-pro-max: ריווח בסולם 8 (24px פנימי, 32px בין עמודות),
+   כל שלושת הטקסטים על אותו קו בסיס של השורה הראשונה (האייקון כבר לא מזיז את "סוג התוכן" למעלה),
+   עמודת סוג קבועה כך שהאייקונים נערמים בטור אחד, והשנה צמודה לקצה בלי חלל ריק באמצע */
+.ledger a { grid-template-columns: 1fr 112px 48px; gap: 32px; padding: 24px; align-items: baseline; }
+.ledger .k { display: block; white-space: nowrap; }
+.ledger .k .icon { display: inline-block; vertical-align: -4px; margin-inline-end: 8px; }
+.ledger .y { text-align: end; }
+/* השנה בפורמט "שנת {שנה}" — העמודה מתרחבת בהתאם */
+.ledger a { grid-template-columns: 1fr 112px 88px; }
+.ledger .y { white-space: nowrap; }
+/* כותרות קטנות בלוח ("7 באוקטובר", "עשור בפוקוס") בתכלת — אושר 25.10. ניגודיות: 11.82 על הדיו, 3.61 על הכחול (טקסט גדול, סף 3:1) */
+.oct7 .focus-decade__label { color: var(--sky); }
+/* ===== פרסומים אחרונים — עימוד לפי ספר המותג עמ' 63 (עמוד יישוב), רק הצילום שמשמאל =====
+   הצילום יוצא עד קצה שמאל ברוחב ~41% מהמסך, ועמודת הצילום (הדפס + תקציר) מיושרת בגובה לרשימה מהשורה הראשונה ועד האחרונה —
+   אותה קומפוזיציה כמו באוצרות: טקסט מימין, הדפס משמאל באותו גובה */
+.recent__body { grid-template-columns: 1fr calc(41vw - var(--gutter)); align-items: stretch; }
+.preview { align-self: stretch; display: flex; flex-direction: column; }
+.preview__frame { flex: 1 1 auto; height: auto; min-height: 320px; aspect-ratio: auto; }
+#pvText { flex: none; }
+/* הצילום לא קובע גובה: הרשימה קובעת, וההדפס נמתח אליה (התמונה ממלאת את החלון במיקום מוחלט) */
+.preview__frame { position: relative; min-height: 0; }
+.preview__frame > img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ledger { justify-content: flex-start; }
+/* תוכן הלוח בתוך הגריד של העמוד בכל רוחב: הקצה הימני של הטקסט מיושר לקצה הגריד (כמו הלוגו והכותרות), לא 96px קבועים מקצה המסך */
+.oct7__field { padding-inline-start: var(--gutter); }
+
+/* שורת תיאור ל"פרסומים אחרונים" — אותה טיפוגרפיה וריווח כמו באוצרות (כותרת ← תיאור 16px, תיאור ← תוכן 32px) */
+.recent .section__head p { font-family: var(--display); font-size: 20px; color: var(--ink-soft); margin-top: 2px; }
+/* התקציר בתוך ההדפס (מבנה כרטיס של מטריאל 3: מדיה + טקסט תומך באותו משטח; ui-ux-pro-max: קיבוץ חזותי והיררכיה).
+   המשטח הלבן עוטף את הצילום ואת הטקסט יחד, 24px סביב ו-24px ביניהם; הכרטיס כולו יוצא מהגריד עד קצה שמאל ומיושר בגובה לרשימה */
+.preview { background: var(--white); padding: 24px; box-sizing: border-box; margin-inline-end: calc(-1 * var(--gutter)); }
+.preview__frame { border: 0; margin-inline-end: 0; }
+#pvText { margin-top: 24px; }
+/* ריווח בכרטיס לפי ui-ux-pro-max (סולם 8, נמדד בין קצוות האותיות ולא בין תיבות): 24px אחיד — צדדים, צילום ← טקסט, טקסט ← תחתית.
+   ריווח השורה (32 לגופן 20) מוסיף ~13px מעל האותיות ו~6px מתחתן, ולכן התיבות מקוזזות בהתאם */
+#pvText { margin-top: 11px; }
+.preview { padding-bottom: 18px; }
+#pvText { margin-top: 13px; }
+.preview { padding-bottom: 16px; }
+
+/* הכרטיס בפרסומים לחיץ (מוביל לפוסט הפעיל): סמן יד, זום עדין 1.03 על הצילום בלבד (כמו באוצרות), והשורה הפעילה מודגשת */
+.preview { cursor: pointer; }
+.preview__frame > img { transition: transform 600ms cubic-bezier(.2, 0, 0, 1); }
+.preview.is-zoom .preview__frame > img { transform: scale(1.03); }
+.ledger a.is-hover .t { color: var(--blue); }
+@media (prefers-reduced-motion: reduce) { .preview.is-zoom .preview__frame > img { transform: none; } }
+/* שורת "פרסומים אחרונים" — סופי (אורי, 25.10: "3 עמודות וסיימנו"): שורה אחת בסדר שנה ← כותרת ← סיווג.
+   השנה פותחת כמו בציר הזמן; עמודות שנה וסיווג ברוחב קבוע, כך שהשנים והאייקונים נערמים בטורים ישרים */
+.ledger a { grid-template-columns: 88px 1fr 96px; grid-template-areas: "y t k"; column-gap: 32px; row-gap: 0; align-items: baseline; }
+.ledger .y { grid-area: y; text-align: start; color: var(--ink); }
+.ledger .t { grid-area: t; padding-inline-end: 0; }
+.ledger .k { grid-area: k; }
+.ledger .y::before { content: none; }
+/* "לכל האוצרות" / "לכל הפרסומים" — כפתור טקסט של מטריאל 3: במנוחה טקסט כחול בלבד; במעבר עכבר / מיקוד / לחיצה
+   מופיע מילוי חול (#DED6C4, כמו בריחוף על החצים) בצורת גלולה, והטקסט נשאר כחול (בלי המעבר לדיו שנראה סגול).
+   ריפוד 16/12 קבוע כדי שהמילוי לא יזיז את הטקסט; הרווח בין הכפתורים נמדד בין המיכלים (8px) */
+.treasures__controls .link-arrow, .recent .section__head .link-arrow {
+  padding: 0 16px 0 12px; border-radius: 24px; height: 48px; background: transparent;
+  transition: background-color 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.treasures__controls .link-arrow:hover, .treasures__controls .link-arrow:focus-visible, .treasures__controls .link-arrow:active,
+.recent .section__head .link-arrow:hover, .recent .section__head .link-arrow:focus-visible, .recent .section__head .link-arrow:active {
+  background: var(--sand); color: var(--blue);
+}
+
+/* הזום על ההדפס בפרסומים: כניסה 600ms, יציאה מהירה יותר (250ms) — מעבר מהיר מהכרטיס לשורה לא משאיר את הצילום "תלוי" מוגדל */
+.preview__frame > img { transition: transform 250ms cubic-bezier(.2, 0, 0, 1); }
+.preview.is-zoom .preview__frame > img { transition-duration: 600ms; }
+
+
+/* ===== פוטר (25.10, סופי לבדיקה) — לפי 21st.dev וגוגל: משטח אחד, היררכיה אחת, גריד אחד =====
+   נייר (#F4F2EC) כמו הסקשן שמעל, מופרד בקו חול; גריד 12 עמודות בתוך 1200: מותג 4 · יישובים 6 · הארכיון 2.
+   היישובים מקבלים כבוד בגודל ובמקום — העמודה הרחבה, שם 20 בכתב COLBO ושנת הקמה, בשורות עם קו שיער (כמו רשימת הפרסומים).
+   שורת התחתית: זכויות · קישורים משפטיים · חזרה למעלה. רק צבעי הפלטה; טקסט ≥16; ריווח בסולם 8 */
+.sfoot { background: var(--paper); color: var(--ink); border-top: 1px solid var(--sand); font-family: var(--display); padding-inline: var(--gutter); }
+.sfoot__grid { max-width: var(--content); margin: 0 auto; padding: 72px 0 64px; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 32px; align-items: start; }
+.sfoot__brand { grid-column: span 4; }
+.sfoot__places { grid-column: span 6; }
+.sfoot__col { grid-column: span 2; }
+.sfoot__logo { display: inline-block; }
+.sfoot__logo img { width: 300px; height: auto; display: block; }
+.sfoot__brand p { margin-top: 24px; font-size: 18px; line-height: 1.6; color: var(--ink-soft); max-width: 30ch; }
+.sfoot__cta { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 18px; color: var(--blue); text-decoration: none; }
+.sfoot__cta .icon { width: 18px; height: 18px; }
+.sfoot__cta:hover { text-decoration: underline; text-underline-offset: 4px; }
+.sfoot h3 { font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--ink); margin: 0 0 16px; }
+.sfoot__places h3 span { font-weight: 400; color: var(--ink-soft); margin-inline-start: 8px; }
+.sfoot__places ol { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 32px; border-top: 1px solid var(--sand); }
+.sfoot__places li { break-inside: avoid; border-bottom: 1px solid var(--sand); }
+.sfoot__places a { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; min-height: 48px; padding: 10px 0; text-decoration: none; box-sizing: border-box; }
+.sfoot__places .n { font-size: 20px; color: var(--ink); }
+.sfoot__places .y { font-size: 16px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.sfoot__places a:hover .n, .sfoot__places a:focus-visible .n { color: var(--blue); }
+.sfoot__col ul { list-style: none; margin: 0; padding: 0; }
+.sfoot__col a { display: inline-flex; align-items: center; min-height: 40px; font-size: 18px; color: var(--ink-soft); text-decoration: none; }
+.sfoot__col a:hover, .sfoot__legal a:hover, .sfoot__top:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
+.sfoot__bar { max-width: var(--content); margin: 0 auto; border-top: 1px solid var(--sand); padding: 20px 0 28px; display: flex; align-items: center; gap: 32px; font-size: 16px; color: var(--ink-soft); }
+.sfoot__legal { list-style: none; margin: 0; padding: 0; display: flex; gap: 24px; }
+.sfoot__legal a, .sfoot__top { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-size: 16px; color: var(--ink-soft); text-decoration: none; }
+.sfoot__top { margin-inline-start: auto; }
+.sfoot__top .icon { width: 16px; height: 16px; transform: rotate(90deg); }
+.sfoot a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+
+/* פרסומים אחרונים — עד הכניסה למסך: מוסתר (motion.js מריץ את הכניסה ב-WAAPI ומסיר את המחלקה) */
+.rc-intro-pending .preview { clip-path: inset(0 0 0 100%); }
+.rc-intro-pending #ledger > li, .rc-intro-pending #pvText { opacity: 0; }
+@media print { .rc-intro-pending .preview, .rc-intro-pending #ledger > li, .rc-intro-pending #pvText { clip-path: none; opacity: 1; } }
+
+/* 7 באוקטובר — עד הכניסה למסך: הטקסט והצילום מוסתרים (motion.js) */
+.o7-intro-pending .oct7__panel--a .focus-decade__card > *, .o7-intro-pending .oct7__photo > img { opacity: 0; }
+/* "7 באוקטובר" בזהב — החלטת אורי (25.10). על הדיו: 8.43:1 (עובר). "עשור בפוקוס" נשאר בתכלת */
+.oct7__panel--a .focus-decade__label { color: var(--gold); }
+/* "יצירת קשר עם הארכיון" — כפתור כמו בשאר העמוד ("לפוסט המלא", "חיפוש בארכיון"): גלולה כחולה מלאה 44px, COLBO 18, לבן, חץ SVG 18 */
+.sfoot__cta {
+  height: 44px; min-height: 44px; padding: 0 18px 0 24px; border-radius: 22px; background: var(--blue); color: var(--white) !important;
+  text-decoration: none !important; transition: box-shadow 150ms cubic-bezier(.2, 0, 0, 1), border-radius 300ms cubic-bezier(.34, 1.4, .64, 1);
+}
+.sfoot__cta:hover { box-shadow: var(--md-elev-1); text-decoration: none; }
+.sfoot__cta:active { border-radius: 12px; }
+.sfoot__cta:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+/* הקו התחתון של רשימת היישובים זהה לעליון: קו אחד רציף על כל רוחב הרשימה (גם מעל הרווח בין העמודות).
+   הקווים בין השורות נשארים לכל עמודה בנפרד */
+.sfoot__places ol { border-top: 1px solid var(--sand); border-bottom: 1px solid var(--sand); }
+.sfoot__places li:nth-child(6), .sfoot__places li:nth-child(12) { border-bottom: 0; }
+/* קישורי טקסט בפוטר: קו תחתון שנמתח בכיוון הקריאה (מימין לשמאל) במעבר עכבר/מיקוד, ונאסף חזרה ביציאה — במקום קו שמופיע בבת אחת.
+   כניסה 250ms, יציאה מהירה יותר (150ms); בתנועה מופחתת: הקו מופיע מיד */
+.sfoot__col a, .sfoot__legal a, .sfoot__top {
+  text-decoration: none !important;
+  background: linear-gradient(currentColor, currentColor) right bottom / 0 1px no-repeat;
+  transition: background-size 150ms cubic-bezier(.2, 0, 0, 1), color 150ms ease;
+  padding-bottom: 2px; min-height: 0; margin-block: 8px;
+}
+.sfoot__col a:hover, .sfoot__col a:focus-visible, .sfoot__legal a:hover, .sfoot__legal a:focus-visible, .sfoot__top:hover, .sfoot__top:focus-visible {
+  background-size: 100% 1px; transition-duration: 250ms;
+}
+@media (prefers-reduced-motion: reduce) { .sfoot__col a, .sfoot__legal a, .sfoot__top { transition: none; } }
+/* רשימת היישובים: אותו קו נמתח, לכל רוחב הפריט (שם + שנה) — על קו השיער של השורה, בכחול, מימין לשמאל */
+.sfoot__places a { position: relative; }
+.sfoot__places a::after {
+  content: ""; position: absolute; inset-inline: 0; bottom: -1px; height: 1px; background: var(--blue);
+  transform: scaleX(0); transform-origin: right center; transition: transform 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.sfoot__places a:hover::after, .sfoot__places a:focus-visible::after { transform: scaleX(1); transition-duration: 300ms; }
+.sfoot__places a:hover .y, .sfoot__places a:focus-visible .y { color: var(--blue); }
+@media (prefers-reduced-motion: reduce) { .sfoot__places a::after { transition: none; } }
+/* "יצירת קשר עם הארכיון" — מעבר עכבר כמו כפתור "חיפוש בארכיון" בכותרת: שכבת מצב בצבע הטקסט (לבן) 8% / מיקוד 10% / לחיצה 10%, בלי צל */
+.sfoot__cta { position: relative; isolation: isolate; overflow: hidden; }
+.sfoot__cta::before { content: ""; position: absolute; inset: 0; z-index: -1; background: currentColor; opacity: 0; transition: opacity var(--md-short) var(--md-ease); pointer-events: none; }
+.sfoot__cta:hover { box-shadow: none; }
+.sfoot__cta:hover::before { opacity: var(--md-state-hover); }
+.sfoot__cta:focus-visible::before { opacity: var(--md-state-focus); }
+.sfoot__cta:active::before { opacity: var(--md-state-pressed); }
+/* ניסוי (אורי: "תראי לי לבן" — בלייב): רקע הפוטר לבן. לחזרה לנייר: למחוק את השורה */
+.sfoot { background: var(--white); }
+/* צהוב (אורי: "חסר לי צהוב") — בתפקיד הקבוע שלו בעמוד: "נבחר / פעיל" (כמו מסגרת הזהב בדף המגע והעיגול בהירו).
+   1. פרסומים אחרונים: פס זהב 4px בקצה הימני של השורה הפעילה.
+   2. פוטר: הקו שנמתח בריחוף על הקישורים ועל היישובים — בזהב. הטקסט עצמו נשאר בדיו/כחול (הזהב לא נושא טקסט) */
+.ledger a { position: relative; }
+.ledger a::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; width: 4px; background: var(--gold); transform: scaleY(0); transition: transform 250ms cubic-bezier(.2, 0, 0, 1); }
+.ledger a.is-active::before { transform: scaleY(1); }
+.sfoot__col a, .sfoot__legal a, .sfoot__top { background-image: linear-gradient(var(--gold), var(--gold)); background-size: 0 2px; }
+.sfoot__col a:hover, .sfoot__col a:focus-visible, .sfoot__legal a:hover, .sfoot__legal a:focus-visible, .sfoot__top:hover, .sfoot__top:focus-visible { background-size: 100% 2px; }
+.sfoot__places a::after { background: var(--gold); height: 2px; bottom: -1px; }
+@media (prefers-reduced-motion: reduce) { .ledger a::before { transition: none; } }
+/* פס הזהב: נבנה מלמעלה למטה, ונעלם גם הוא מלמעלה למטה (מקור הסקייל מתחלף: למעלה בכניסה, למטה ביציאה) */
+.ledger a::before { transform-origin: center bottom; transition-duration: 300ms; }
+.ledger a.is-active::before { transform-origin: center top; }
+/* פס הזהב (במקום מלמעלה-למטה): נכנס מימין ויוצא לימין — נחשף מהקצה הימני פנימה, ונאסף בחזרה אל הקצה */
+.ledger a::before, .ledger a.is-active::before { transform: none; transform-origin: center; }
+.ledger a::before { clip-path: inset(0 0 0 100%); transition: clip-path 250ms cubic-bezier(.2, 0, 0, 1); }
+.ledger a.is-active::before { clip-path: inset(0 0 0 0); }
+@media (prefers-reduced-motion: reduce) { .ledger a::before { transition: none; } }
+/* השורה הפעילה — רצף ברור (אורי): קודם הרקע הלבן נפרש מימין לשמאל (300ms), ורק כשהוא מסתיים פס הזהב נבנה מלמעלה למטה (250ms).
+   ביציאה: הפס נעלם מיד (150ms) והרקע נאסף חזרה ימינה. הרקע הוא שכבה (::after) כדי שאפשר יהיה לפרוש אותו */
+.ledger a, .ledger a.is-active, .ledger a.is-hover { background: transparent; isolation: isolate; }
+.ledger a::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--white); clip-path: inset(0 0 0 100%);
+  transition: clip-path 300ms cubic-bezier(.2, 0, 0, 1) 150ms; }
+.ledger a.is-active::after { clip-path: inset(0); transition-delay: 0ms; }
+.ledger a::before { clip-path: none; transform: scaleY(0); transform-origin: center top; transition: transform 150ms ease-in 0ms; }
+.ledger a.is-active::before { transform: scaleY(1); transition: transform 250ms cubic-bezier(.2, 0, 0, 1) 300ms; }
+@media (prefers-reduced-motion: reduce) { .ledger a::after, .ledger a::before, .ledger a.is-active::after, .ledger a.is-active::before { transition: none; } }
+
+
+/* פוטר — רקע לפי עמ' 63: צילום השדות (כפר עזה) ב-7% על לבן, בשחור-לבן, מאחורי התוכן */
+.sfoot { position: relative; isolation: isolate; overflow: hidden; }
+.sfoot__bg { position: absolute; inset: 0; z-index: -1; opacity: .07; pointer-events: none; }
+.sfoot__bg img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: grayscale(1); display: block; }
+
+/* רקע הפוטר: החלק העליון לבן — דהייה רכה של התמונה מלמעלה (0 עד 45%), כמו בעמ' 63; השדות נשארים בתחתית */
+.sfoot__bg { -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%); mask-image: linear-gradient(to bottom, transparent 0%, #000 45%); }
+.sfoot__bg img { object-position: center bottom; }
+/* פס הזהב (אורי): נכנס מימין לשמאל ויוצא משמאל לימין — נחשף מהקצה הימני פנימה ונאסף בחזרה לקצה.
+   עדיין אחרי הרקע הלבן: כניסה 300ms אחרי השהיה 300ms; יציאה מיד, 200ms */
+.ledger a::before { transform: none; clip-path: inset(0 0 0 100%); transition: clip-path 200ms ease-in 0ms; }
+.ledger a.is-active::before { transform: none; clip-path: inset(0); transition: clip-path 300ms cubic-bezier(.2, 0, 0, 1) 300ms; }
+/* רקע הפוטר מכויל לעמ' 63: שם הצילום ברקע אפור ניטרלי (נדגם מהספר: 237–248 על לבן, בלי גוון),
+   ושם הצילום כהה יותר ולכן מורגש יותר. אצלנו הצילום בהיר (שדות ושמיים), לכן האטימות עולה ל-12% כדי להגיע לאותה נוכחות,
+   והדהייה ללבן מלמעלה מתקצרת ל-30% */
+.sfoot__bg { opacity: .12; -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 30%); mask-image: linear-gradient(to bottom, transparent 0%, #000 30%); }
+.sfoot__bg img { filter: grayscale(1) contrast(1.1); }
+
+
+/* ===== v37 · ציר הזמן מיושר לשפת העמוד (אופציה להשוואה מול v34) =====
+   לשוניות העשורים: בלי מסגרת דיו עבה ובלי צל קשיח — משטח לבן שקט על הנייר, ריחוף בחול, הנבחר כחול מלא (כמו קודם); "שנות ה-" ב-COLBO.
+   הכפתור: גלולה כמו "לפוסט המלא". הצילום: הדפס ישר על נייר לבן 24px, בלי הטיה ובלי צל (כמו באוצרות ובפרסומים). התאריך COLBO 18 */
+.decade { border: 0; box-shadow: none; --dc-lift: 0px; background: var(--white); border-radius: 16px; padding: 14px 4px 16px; }
+.decade:not([aria-selected="true"]):hover { background: var(--sand); }
+.decade:not([aria-selected="true"]):focus-visible { background: var(--sand); }
+.decade small { font-family: var(--display); font-size: 16px; font-weight: 400; color: var(--ink-soft); }
+.decade[aria-selected="true"] small, .decade[aria-current="true"] small { color: var(--white); }
+.decade:active { transform: scale(.98); }
+.tl-item__body .meta { font-family: var(--display); font-size: 18px; }
+.tl-item__body .btn {
+  display: inline-flex; align-items: center; gap: 8px; height: 44px; min-height: 44px; padding: 0 18px 0 24px; border-radius: 22px;
+  font-family: var(--display); font-size: 18px; font-weight: 400; position: relative; isolation: isolate; overflow: hidden;
+}
+.tl-item__body .btn .icon { width: 18px; height: 18px; }
+.tl-item__body .btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: currentColor; opacity: 0; transition: opacity 150ms ease; }
+.tl-item__body .btn:hover { background: var(--blue); }
+.tl-item__body .btn:hover::before { opacity: .08; }
+.tl-photo { transform: none; box-shadow: none; padding: 24px; background: var(--white); }
+.tl-photo__cap { font-family: var(--display); }
+/* העשור הנבחר: כחול מלא וטקסט לבן (גובר על המשטח הלבן החדש) */
+.decades .decade[aria-selected="true"], .decades .decade[aria-current="true"] { background: var(--blue); color: var(--white); }
+/* לשוניות העשורים — בעיצוב הכפתורים שלנו (כמו "חיפוש בארכיון"): גלולה, COLBO, שורה אחת "שנות ה- 1940".
+   לא נבחר: גלולת מתאר (קו דיו מוחלש 1px, כמו כפתור המתאר בכותרת), ריחוף = שכבת מצב 8%. נבחר: גלולה כחולה מלאה, טקסט לבן */
+.decades .decade {
+  flex-direction: row; align-items: baseline; justify-content: center; gap: 6px;
+  height: 56px; padding: 0 12px; border-radius: 28px; background: transparent; color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink-soft); border: 0; position: relative; isolation: isolate; overflow: hidden;
+}
+.decades .decade small { font-size: 16px; }
+.decades .decade b { font-size: 24px; line-height: 1; }
+.decades .decade::after { content: ""; position: absolute; inset: 0; z-index: -1; background: currentColor; opacity: 0; transition: opacity 150ms ease; border-radius: inherit; }
+.decades .decade:not([aria-selected="true"]):hover, .decades .decade:not([aria-selected="true"]):focus-visible { background: transparent; }
+.decades .decade:not([aria-selected="true"]):hover::after { opacity: .08; }
+.decades .decade:focus-visible::after { opacity: .10; }
+.decades .decade[aria-selected="true"], .decades .decade[aria-current="true"] { background: var(--blue); color: var(--white); box-shadow: none; }
+/* בלי חיתוך: הנקודה של כל עשור על הציר (‎::before) יושבת מעל הכפתור, ושכבת המצב מעוגלת ממילא */
+.decades .decade { overflow: visible; }
+
+
+/* ===== v38 · ציר הזמן — Material 3, בשפת העמוד =====
+   ui-ux-pro-max: nav-state-active · visual-hierarchy · state-clarity · consistency · touch-target-size · focus-states ·
+   excessive-motion · fade-crossfade · stagger-sequence · reduced-motion · spacing-scale.
+   סימון "נבחר" אחד בלבד (במקום עיגול זהב + גלולה כחולה): סמן זהב שנע על קו שיער חול — הקו הוא הציר.
+   הפריט הפתוח כמו השורה הפעילה בפרסומים: משטח לבן + פס זהב 4px בתחילת השורה. */
+
+/* כותרת ותיאור: אותן מידות כמו באוצרות ובפרסומים (16px בין האותיות, 32px עד התוכן) */
+.timeline .section__head { margin-bottom: 0; } /* הלשונית בגובה 56 והספרות במרכזה: 0 כאן = 32px בין אותיות התיאור לספרות (נמדד) */
+.timeline .section__head p { font-family: var(--display); font-size: 20px; color: var(--ink-soft); margin-top: 2px; }
+
+/* הציר: קו שיער חול רציף מתחת לכל העשורים (במקום קו הנקודות) */
+.timeline .decades-nav { padding-top: 0; }
+.timeline .decades-nav::before {
+  top: auto; bottom: 0; height: 1px; background: var(--sand);
+  transform-origin: right center;
+}
+/* סמן הנבחר: זהב, 4px, פינות עליונות מעוגלות (מחוון הלשונית של M3), נע ב-transform בלבד */
+.timeline .decades__ind {
+  top: auto; bottom: 0; width: 64px; height: 4px; border-radius: 4px 4px 0 0;
+  background: var(--gold); transition: transform 300ms cubic-bezier(.2, 0, 0, 1);
+}
+.timeline .decades__ind.is-instant { transition: none; }
+
+/* הלשוניות: 9 עמודות שוות, בלי מסגרות ובלי משטחים — רק הספרות (COLBO 24, ספרות טבלאיות) */
+.timeline .decades { gap: 0; }
+.timeline .decades .decade {
+  display: flex; align-items: center; justify-content: center; gap: 0;
+  height: 56px; padding: 0 8px; margin: 0; border: 0; border-radius: 28px;
+  background: transparent; box-shadow: none; color: var(--ink-soft); transform: none;
+  font-family: var(--display); font-size: 24px; font-weight: 400; line-height: 1; letter-spacing: 0;
+  font-variant-numeric: tabular-nums; text-decoration: none; cursor: pointer;
+  position: relative; isolation: isolate; overflow: visible;
+  transition: color 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.timeline .decades .decade::before { content: none; }
+/* ריחוף = גלולת חול (כמו כפתורי הטקסט "לכל האוצרות" / "לכל הפרסומים") */
+.timeline .decades .decade::after {
+  content: ""; position: absolute; inset: 6px 4px 10px; z-index: -1; border-radius: 20px;
+  background: var(--sand); opacity: 0; transition: opacity 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.timeline .decades .decade:not([aria-selected="true"]):not([aria-current="true"]):hover { background: transparent; color: var(--ink); }
+.timeline .decades .decade:not([aria-selected="true"]):not([aria-current="true"]):hover::after { opacity: 1; }
+.timeline .decades .decade:active { transform: none; }
+.timeline .decades .decade:active::after { opacity: 1; }
+.timeline .decades .decade[aria-selected="true"], .timeline .decades .decade[aria-current="true"] {
+  background: transparent; color: var(--ink); font-weight: 700; box-shadow: none;
+}
+.timeline .decades .decade:focus-visible { background: transparent; outline: 3px solid var(--blue); outline-offset: -6px; --focus: var(--blue); }
+.timeline .decades .decade:focus-visible::after { opacity: 0; }
+html:not(.js) .timeline .decades .decade[aria-current="true"] { box-shadow: inset 0 -4px 0 var(--gold); border-radius: 0; }
+
+/* כניסה בגלילה: הקו נמתח, הסמן נפתח לרוחבו (בלי קפיצת קפיץ) */
+.timeline .im-pending[data-im="axis"] .decades__ind { opacity: 0; scale: 0 1; }
+.timeline .im-r[data-im="axis"] .decades__ind { transition: opacity 200ms linear, scale 400ms cubic-bezier(.2, 0, 0, 1), transform 300ms cubic-bezier(.2, 0, 0, 1); transition-delay: calc(var(--im-delay, 0ms) + 600ms), calc(var(--im-delay, 0ms) + 600ms), 0ms; }
+
+/* גוף: רשימה מימין, הדפס משמאל — 48px מתחת לציר */
+.timeline .tl-body { margin-top: 48px; gap: 80px; }
+
+/* פריט: שנה (COLBO Light 32, כחול) · כותרת (COLBO 24). פתוח = משטח לבן + פס זהב בתחילת השורה */
+.timeline .tl-item { position: relative; padding: 24px; }
+.timeline .tl-item + .tl-item { margin-top: 0; }
+.timeline .tl-item::before {
+  content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; width: 4px; background: var(--gold);
+  clip-path: inset(0 0 0 100%); transition: clip-path 200ms cubic-bezier(.3, 0, .8, .15);
+}
+.timeline .tl-item.is-active::before { clip-path: inset(0); transition: clip-path 300ms cubic-bezier(.2, 0, 0, 1); }
+.timeline .tl-item__row { grid-template-columns: 96px 1fr; gap: 24px; align-items: baseline; }
+.timeline .tl-item__year { font-size: 32px; font-weight: 300; line-height: 1.2; }
+.timeline .tl-item__year--range { font-size: 28px; }
+.timeline .tl-item__title { font-size: 24px; line-height: 1.3; text-decoration: none; }
+.timeline .tl-item__btn:hover .tl-item__title, .timeline .tl-item.is-active .tl-item__title { color: var(--blue); text-decoration: none; }
+.timeline .tl-item__btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 8px; border-radius: 4px; }
+.timeline .tl-item__btn:active { transform: none; }
+.timeline .tl-item__btn { position: relative; }
+.timeline .tl-item__btn::after { content: ""; position: absolute; inset: -24px; } /* כל השורה לחיצה (≥ 44px), לא רק השורה של הטקסט */
+.timeline .tl-item__body { margin-inline-start: 120px; margin-top: 16px; max-width: 34em; }
+.timeline .tl-item__body .meta { font-family: var(--display); font-size: 18px; line-height: 1.6; color: var(--ink-soft); margin-bottom: 8px; }
+.timeline .tl-item__body p:not(.meta) { font-family: var(--display); font-size: 20px; line-height: 1.6; }
+.timeline .tl-item__body .btn { margin-top: 24px; }
+
+/* "הוקמו בעשור הזה": בלי כרטיס — קו שיער חול ושורה אחת, מיושרת לעמודת השנה */
+.timeline .founded {
+  margin: 32px 24px 0; padding: 24px 0 0; border-radius: 0; background: none; border-top: 1px solid var(--sand);
+  flex-direction: column; align-items: flex-start; gap: 8px; /* התווית תמיד בשורה משלה — זהה בכל העשורים */
+}
+.timeline .founded__label { font-family: var(--display); font-size: 18px; font-weight: 400; color: var(--ink-soft); }
+.timeline .founded ul { gap: 8px 24px; }
+.timeline .founded li span { font-size: 20px; }
+.timeline .founded li b { font-size: 18px; font-weight: 400; }
+
+/* עשור ריק */
+.timeline .tl-empty { padding: 24px; }
+.timeline .tl-empty h3 { font-size: 24px; line-height: 1.3; margin-bottom: 8px; }
+.timeline .tl-empty p, .timeline .tl-item__body p { text-wrap: pretty; }
+.timeline .tl-empty p { font-family: var(--display); font-size: 20px; line-height: 1.6; color: var(--ink-soft); }
+.timeline .tl-empty .link-arrow { font-family: var(--display); font-size: inherit; font-weight: 400; text-decoration: underline; text-underline-offset: 4px; }
+
+/* "לכל הסיפורים של שנות ה-X": כפתור טקסט כמו "לכל האוצרות" — בסוף הרשימה, הטקסט מיושר לעמודת השנה */
+.timeline .tl-all { max-width: none; margin: 32px 0 0; margin-inline-start: 8px; }
+.timeline .tl-all .link-arrow {
+  display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px 0 12px; border-radius: 24px;
+  font-family: var(--display); font-size: 18px; font-weight: 400; color: var(--blue); text-decoration: none; background: transparent;
+  transition: background-color 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.timeline .tl-all .link-arrow .icon { width: 18px; height: 18px; }
+.timeline .tl-all .link-arrow:hover, .timeline .tl-all .link-arrow:focus-visible, .timeline .tl-all .link-arrow:active { background: var(--sand); color: var(--blue); }
+.timeline .tl-all .link-arrow:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+/* ההדפס: נייר לבן 24px מכל הצדדים, ישר, בלי צל; כיתוב COLBO 24 */
+.timeline .tl-photo { padding: 24px; transform: none; box-shadow: none; }
+.timeline .tl-photo__cap { font-size: 24px; line-height: 1.2; padding: 16px 0 0; }
+.timeline .tl-photo.is-empty .tl-photo__frame { outline: 0; }
+
+@media (max-width: 1279px) {
+  .timeline .tl-body { grid-template-columns: 1fr 400px; gap: 56px; }
+  .timeline .tl-photo__frame { height: 480px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .timeline .decades__ind, .timeline .decades .decade, .timeline .decades .decade::after, .timeline .tl-item::before, .timeline .tl-all .link-arrow { transition: none; }
+}
+
+/* סמן הנבחר: נקודת זהב על קו הציר (במקום הפס), במרכז הלשונית; נעה ב-transform בלבד */
+.timeline .decades__ind { width: 12px; height: 12px; border-radius: 50%; bottom: -5.5px; }
+.timeline .im-pending[data-im="axis"] .decades__ind { scale: 0; }
+
+/* נקודה לכל עשור על קו הציר: לא נבחר = חול (צבע הקו), נבחר = נקודת הזהב הנעה */
+.timeline .decades .decade::before { content: ""; position: absolute; inset: auto; left: 50%; bottom: -5.5px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--sand); pointer-events: none; transition: opacity 150ms linear; }
+.timeline .decades .decade[aria-selected="true"]::before { opacity: 0; }
+/* v39 — ציר מסתובב + קו יורד (מדויק)
+   הנבחר תמיד בקצה הימני; ממרכזו יורד קו מקווקו בצבע הציר (חול) עם נקודה לכל שנה: חול = פריט, זהב = הפריט הפתוח.
+   הרשימה מוזזת פנימה (--tl-spine-pad = חצי לשונית + 20px), כך שהקו עובר מחוץ לכרטיסים ולא דרך השנים */
+.timeline { position: relative; --tl-spine-pad: 86px; }
+.timeline .tl-panel { padding-inline-start: var(--tl-spine-pad); }
+.timeline .tl-all { margin-inline-start: calc(var(--tl-spine-pad) + 8px); }
+.tl-spine { position: absolute; width: 2px; margin-left: -1px; pointer-events: none; z-index: 3;
+  background: repeating-linear-gradient(to bottom, var(--sand) 0 6px, transparent 6px 12px); }
+.tl-spine__dot { position: absolute; left: -5px; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--sand); transition: background-color 150ms cubic-bezier(.2, 0, 0, 1); }
+.tl-spine__dot.is-on { background: var(--gold); }
+/* "חוזרים להתחלה": מפריד אנכי קצר מימין לעשור הראשון שחזר משמאל */
+.timeline .decades .decade.is-wrap .decade__y::after { content: ""; position: absolute; right: 0; top: 50%; width: 1px; height: 24px; margin-top: -12px; background: var(--ink-soft); }
+@media (prefers-reduced-motion: reduce) { .tl-spine__dot { transition: none; } }
+/* מטא עם אייקון סוג תוכן (פוסטי התיעוד של היישובים) */
+.tl-item__body .meta:has(.icon) { display: flex; align-items: center; gap: 8px; }
+.tl-item__body .meta .icon { width: 20px; height: 20px; flex: none; }
+/* גדלים כמו בפרסומים האחרונים (אורי: "דומה"): עמודת שנה 88px, רווח 32px, שנה COLBO 18 / 400, כותרת 24, סוג תוכן 18, תקציר 20, ריפוד 24 */
+.timeline { --tl-year-col: 88px; --tl-gap: 32px; }
+.timeline .tl-item__year, .timeline .tl-item__year--range { font-size: 18px; font-weight: 400; line-height: 1.6; }
+/* צבע השנה = כהה, כמו בפרסומים האחרונים (אורי: "מאושר", 25.10) */
+.timeline .tl-item__year { color: var(--ink); }
+/* "לכל הפרסומים" בשורת הכותרת של ציר הזמן — אותו כפתור טקסט כמו "לכל האוצרות" / "לכל הפרסומים" (אורי, 25.10) */
+.timeline .section__head { align-items: flex-end; }
+.timeline .section__head .link-arrow {
+  display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px 0 12px; border-radius: 24px; background: transparent;
+  font-family: var(--display); font-size: 18px; font-weight: 400; color: var(--blue); text-decoration: none !important;
+  transition: background-color 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.timeline .section__head .link-arrow .icon { width: 18px; height: 18px; }
+.timeline .section__head .link-arrow:hover, .timeline .section__head .link-arrow:focus-visible, .timeline .section__head .link-arrow:active { background: var(--sand); color: var(--blue); }
+.timeline .section__head .link-arrow:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .timeline .section__head .link-arrow { transition: none; } }
+/* סקירת קוד (25.10): המשתנים יחולו בפועל (כללי 96/24/120 הקשיחים דרסו אותם) */
+.timeline .tl-item__row { grid-template-columns: var(--tl-year-col) 1fr; gap: var(--tl-gap); }
+.timeline .tl-item__body { margin-inline-start: calc(var(--tl-year-col) + var(--tl-gap)); }
+/* הקו נכנס יחד עם הרשימה (לא תלוי באוויר לפני שהתוכן עולה) */
+.tl-spine { transition: opacity 400ms cubic-bezier(.2, 0, 0, 1); }
+.timeline:has(.tl-body.im-pending) .tl-spine { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .tl-spine { transition: none; } }
+/* יישור לקווי הגריד (אורי, 25.10): שורת העשורים רחבה מהתוכן ב-51px לכל צד, כך שהספרה הימנית מסתיימת בקו של הכותרת
+   והשמאלית מתחילה בקו של "לכל הפרסומים". קו הציר נשאר ברוחב התוכן */
+.timeline .decades { margin-inline: -33px; } /* 25.10: היה 51 — הגלולה של הריחוף יצאה מהגריד */
+/* "לכל הפרסומים" עומד על אותה שורה כמו התיאור */
+.timeline .section__head .link-arrow { position: relative; top: 9px; } /* נמדד: קו הטקסט של הכפתור 9px מעל קו התיאור (flex-end מיישר תיבות, לא שורות) */
+/* אורי: "צריך להישאר בגריד" — גלולת הריחוף והמיקוד עוטפת את הספרה (16px לכל צד) ולא את כל התא,
+   והשורה רחבה רק 33px לכל צד ⇐ הגלולה של העשור הקיצוני נוגעת בקו הגריד ולא עוברת אותו; הספרות 16px פנימה מהקו */
+.timeline .decades .decade::after { content: none; }
+.timeline .decades .decade__y { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border-radius: 20px; transition: background-color 150ms cubic-bezier(.2, 0, 0, 1); }
+.timeline .decades .decade:not([aria-selected="true"]):hover .decade__y, .timeline .decades .decade:active .decade__y { background: var(--sand); }
+.timeline .decades .decade:focus-visible { outline: none; }
+.timeline .decades .decade:focus-visible .decade__y { outline: 3px solid var(--blue); outline-offset: 0; }
+@media (prefers-reduced-motion: reduce) { .timeline .decades .decade__y { transition: none; } }
+/* אורי: העשור הנבחר "דולק" ומיושר לימין — הספרה שלו מסתיימת בקו הגריד (1319); השאר כפתורים עם 16px רווח פנימי */
+.timeline .decades .decade[aria-selected="true"] .decade__y { transform: translateX(16px); }
+/* v40 ניסוי (אורי, 25.10): בלי "לכל הפרסומים" בשורת הכותרת; כותרת ותיאור במרכז — קומפוזיציה סימטרית מעל ציר העשורים */
+.timeline .section__head { justify-content: center; text-align: center; }
+.timeline .section__head .link-arrow { display: none; }
+/* ריווח בין הכותרת לשנים (אורי): היה 26px בין התיאור לספרות — עכשיו 48, כמו בין הציר לכרטיסים (סולם 8; הכותרת קבוצה אחת, התוכן קבוצה אחרת) */
+.timeline .section__head { margin-bottom: 22px; }
+/* ריווח עליון (אורי: "סדרי את הריווח"): 128 → 96. סולם 8: 96 מעל הכותרת = פי 2 מ-48 שבין התיאור לשנים, כך שהכותרת שייכת לתוכן שמתחתיה */
+.timeline { padding-top: 96px; }
+/* v40 (אורי): הכרטיס הפתוח נמתח עד קו הגריד — נקודת הזהב בתוכו, והקו המקווקו עובר מאחוריו.
+   הפאנל בלי הזחה; כל שורה מקבלת את ההזחה כריפוד, כך שהתוכן נשאר במקום והמשטח הלבן מכסה את הקו */
+.timeline .tl-panel { padding-inline-start: 0; }
+.timeline .tl-item { padding-inline-start: calc(24px + var(--tl-spine-pad)); }
+.timeline .tl-body { position: relative; z-index: 1; }
+.tl-spine { z-index: 0; }
+.tl-spine.tl-spine--dots { z-index: 2; background: none; }
+/* ריווח תחתון (אורי: "סדרי את התחתון גם"): 128 → 96, כמו העליון */
+.timeline { padding-bottom: 96px; }
+/* סוג התוכן בשורת הכותרת, כמו בפרסומים האחרונים (אורי): שנה · כותרת · סוג — עמודה שלישית 96px משמאל, COLBO 18, אייקון 20 */
+.timeline .tl-item__row { grid-template-columns: var(--tl-year-col) 1fr 96px; }
+.timeline .tl-item__type { display: inline-flex; align-items: center; gap: 8px; justify-self: start; white-space: nowrap;
+  font-family: var(--display); font-size: 18px; line-height: 1.6; color: var(--ink-soft); }
+.timeline .tl-item__type .icon { width: 20px; height: 20px; flex: none; }
+/* v40 (אורי): מבנה זהה לפרסומים האחרונים — ריפוד 24 מקצה הגריד, עמודות 88 · כותרת · 96.
+   בעמודת השנה הנקודה על הקו יושבת במקום "שנת", והספרות אחריה (הריווח מחושב ב-JS לפי מיקום הקו) */
+.timeline .tl-item { padding-inline-start: 24px; }
+.timeline .tl-item__year { padding-inline-start: var(--tl-year-pad, 0px); }
+/* כמו בפרסומים: רוחב השורה 650 (הכרטיס מתחיל ב-669 כמו שורות הפרסומים) */
+.timeline .tl-list { margin-inline-end: 10px; }
+/* אורי: התקציר "מעט פחות רחב" — באותו רוחב כמו עמודת הכותרת, לא מתחת לעמודת הסוג (96 + 32) */
+.timeline .tl-item__body { margin-inline-end: calc(96px + var(--tl-gap)); max-width: none; }
+/* אורי: שורת העשורים דביקה עד סוף הסקשן — נעצרת מתחת לכותרת האתר (64px) ומשתחררת בסוף ציר הזמן (sticky בתוך #timeline).
+   רקע נייר לכל רוחב הסקשן (box-shadow + clip-path), כדי שהרשימה תיעלם מתחתיה; הצילום הדביק יורד מתחת לשורה */
+.timeline .decades-nav {
+  position: sticky; top: var(--header-h, 64px); z-index: 5; background: var(--paper);
+  box-shadow: 0 0 0 100vmax var(--paper); clip-path: inset(0 -100vmax -8px);
+}
+.timeline .tl-photo { top: calc(var(--header-h, 64px) + 56px + 24px); }
+/* תמונה אחרת לכל פוסט (אורי) — כולל כרזות מהסטייל גייד; כרזה מוצגת שלמה (לא נחתכת) על המשטח הלבן */
+.tl-photo__frame img[src*="poster-"] { object-fit: contain; }
+/* אורי: קו הציר הוא הקצה התחתון של השורה הדביקה — בלי רצועת רקע מתחתיו; הנקודות "מרחפות" חצי מעל התוכן.
+   הרקע עובר לשכבה (::after) שנגמרת בדיוק בקו, ונמתחת לרוחב הסקשן; בלי clip-path כדי שהנקודות לא ייחתכו */
+.timeline .decades-nav { background: none; box-shadow: none; clip-path: none; }
+.timeline .decades-nav::after { content: ""; position: absolute; inset: 0 -100vmax; z-index: -1; background: var(--paper); pointer-events: none; }
+/* אורי ("ככה"): ריווח מינימלי בין השורה הדביקה לתוכן — 16px גם לצילום הדביק וגם לרשימה אחרי בחירת עשור */
+.timeline .tl-photo { top: calc(var(--header-h, 64px) + 56px + 16px); }
+/* החלפת עשור משנה את גובה הרשימה — בלי "עיגון גלילה" של הדפדפן, שהזיז את הדף מעבר לנקודה שחישבנו */
+.timeline .tl-body { overflow-anchor: none; }
+/* אורי: טשטוש קל ברקע השורה הדביקה (צבע הנייר, לא לבן) — הרשימה נגללת מתחתיה ברכות */
+.timeline .decades-nav::after { background: color-mix(in srgb, var(--paper) 82%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+/* אורי: התקציר בכרטיס — שתי שורות בלבד (שלוש נקודות בסוף); הטקסט המלא בפוסט */
+.timeline .tl-item__body p:not(.meta) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+/* אורי: כותרת שנשברת — לא להשאיר מילה אחת בשורה השנייה; שבירה מאוזנת (עוד מילה-שתיים יורדות) */
+.timeline .tl-item__title { text-wrap: balance; }
+/* אורי: שנת הפריט גדולה ב-2px (18 → 20) */
+.timeline .tl-item__year, .timeline .tl-item__year--range { font-size: 20px; }
+/* אורי: עוד 2px (20 → 22) */
+.timeline .tl-item__year, .timeline .tl-item__year--range { font-size: 22px; }
+/* אורי ("מאושר"): שנת הפריט = גודל העשור (24); ההבדל ביניהם במשקל בלבד (העשור הנבחר מודגש) */
+.timeline .tl-item__year, .timeline .tl-item__year--range { font-size: 24px; }
+/* אורי: ריווח עליון ותחתון בפרסומים האחרונים — 96, כמו ציר הזמן */
+.recent { padding-top: 96px; padding-bottom: 96px; }
+/* אורי: גדלים כמו בציר הזמן — שנה 24 (כמו שנת הפריט והעשור), סוג תוכן 18 עם אייקון 20 */
+.ledger .y { font-size: 24px; line-height: 1.3; white-space: nowrap; }
+.ledger .k { font-size: 18px; }
+/* אורי: הנקודות לא "עולות" על התוכן — רקע השורה (נייר + טשטוש) נמשך 24px מתחת לקו ודועך לשקיפות (מסכה הדרגתית),
+   כך שהתוכן נעלם בהדרגה לפני שהוא מגיע לנקודות, בלי פס בצבע מלא */
+.timeline .decades-nav::after {
+  inset: 0 -100vmax -24px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent);
+          mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent);
+}
+/* הכפתור הכחול שנגלל מתחת יצר "כתם" מטושטש בשורה — רקע אטום יותר (90%) */
+.timeline .decades-nav::after { background: color-mix(in srgb, var(--paper) 90%, transparent); }
+
+/* ===== התאמה לכל רזולוציה (אורי, 25.10) — כמו האוצרות וההירו: הגבהים נגזרים מגובה המסך (svh) =====
+   יעד: ברגע שהשורה נדבקת, הצילום (מסגרת + כיתוב) והכרטיס הפתוח נראים במלואם — מ-1280×720 עד 1920×1080.
+   רווחים: 96/48 במסך גבוה (900+), מתכווצים יחד במסך נמוך; מסגרת הצילום 560 לכל היותר */
+.timeline {
+  --tl-gap-v: clamp(28px, 5.3svh, 48px);                 /* תיאור→שנים, ציר→תוכן */
+  --tl-frame-h: clamp(300px, calc(100svh - var(--header-h, 64px) - 56px - var(--tl-gap-v) - 24px - 45px - 24px - 16px), 560px);
+  padding-top: clamp(56px, 10.7svh, 96px); padding-bottom: clamp(56px, 10.7svh, 96px);
+}
+.timeline .section__head { margin-bottom: calc(var(--tl-gap-v) - 26px); }
+.timeline .tl-body { margin-top: var(--tl-gap-v); }
+.timeline .tl-photo__frame { height: var(--tl-frame-h); }
+@media (max-width: 1279px) { .timeline .tl-photo__frame { height: min(480px, var(--tl-frame-h)); } }
+/* אורי: "קווים מופרדים בריווח — גזירה של ילד" ⇐ הקו היורד רציף ודק, זהה לקו הציר (1px חול): ציר אחד שפונה מטה */
+.tl-spine:not(.tl-spine--dots) { width: 1px; margin-left: -0.5px; background: var(--sand); }
+/* אורי: 7 באוקטובר / עשור בפוקוס — פסקה צרה יותר, שתי שורות (טקסט קוצר) */
+.oct7 .focus-decade p.body { max-width: 26em; }
+
+/* ===== פרסומים אחרונים — התאמה לכל רזולוציה, כמו ציר הזמן (אורי, 25.10) =====
+   כל הסקשן (כותרת + 5 שורות + צילום) בתוך מסך אחד מתחת לכותרת האתר, מ-1280×720 עד 1920×1080.
+   רווחי הסקשן 96 ↓ 56, ריפוד שורה 24 ↓ 14 (הצילום נמתח לגובה הרשימה ממילא) */
+.recent { padding-top: clamp(56px, 10.7svh, 96px); padding-bottom: clamp(56px, 10.7svh, 96px); }
+.recent .section__head { margin-bottom: clamp(16px, 2.7svh, 24px); }
+.ledger a { padding-block: clamp(14px, 2.7svh, 24px); }
+/* הטשטוש על שכבה ברוחב 100vmax×2 יצר "רצועה" בהירה בחלק מהשורה — השכבה ברוחב המסך בלבד (עד קצה ה-gutter) */
+.timeline .decades-nav::after { inset: 0 calc(-1 * var(--gutter)) -24px; }
+.timeline .decades-nav::after { opacity: 0; transition: opacity 150ms linear; }
+.timeline .decades-nav.is-stuck::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .timeline .decades-nav::after { transition: none; } }
+/* קרדיט לצילום ברישיון CC (ויקישיתוף) — שורה קטנה מתחת ל"שנת X" */
+.tl-photo__credit { display: block; margin-top: 4px; font-family: var(--display); font-size: 14px; line-height: 1.4; color: var(--ink-soft); }
+/* אורי: הצילום בפרסומים האחרונים כמו בציר הזמן — בלי מסגרת לבנה משמאל; הצילום נוגע בקצה המסך */
+.recent .preview { padding-inline-end: 0; }
+/* אורי: כשהשורה דבוקה — 16px רקע מלא מתחת לקו (כמו הרווח מעל הצילום משמאל), ומתחתיו הילת הטשטוש הדועכת (24px) */
+.timeline .decades-nav::after {
+  inset: 0 calc(-1 * var(--gutter)) -40px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent);
+          mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent);
+}
+/* אורי: הרצועה (16px מלא + הילה 24px) רק מעל עמודת הרשימה; מעל הצילום הרקע נגמר בקו */
+.timeline .decades-nav::after { inset: 0 calc(-1 * var(--gutter)); -webkit-mask-image: none; mask-image: none; }
+.timeline .decades { position: relative; }
+.timeline .decades::after {
+  content: ""; position: absolute; top: 100%; right: 33px; width: var(--tl-listcol, 650px); height: 40px; pointer-events: none;
+  background: color-mix(in srgb, var(--paper) 90%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 16px, transparent); mask-image: linear-gradient(to bottom, #000 16px, transparent);
+  opacity: 0; transition: opacity 150ms linear;
+}
+.timeline .decades-nav.is-stuck .decades::after { opacity: 1; }
+@media (max-width: 1279px) { .timeline { --tl-listcol: calc(100% - 76px - 400px - 56px); } }
+@media (prefers-reduced-motion: reduce) { .timeline .decades::after { transition: none; } }
+/* אורי: "עדיין יש חיתוך" — בלי רצועה מלאה עם קצה; דעיכה רכה וארוכה (56px, עקומה הדרגתית) מהקו ומטה, כך שהתוכן נעלם ולא נחתך */
+.timeline .decades::after {
+  height: 56px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, rgba(0,0,0,.92) 18%, rgba(0,0,0,.7) 40%, rgba(0,0,0,.38) 65%, rgba(0,0,0,.12) 85%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0, rgba(0,0,0,.92) 18%, rgba(0,0,0,.7) 40%, rgba(0,0,0,.38) 65%, rgba(0,0,0,.12) 85%, transparent 100%);
+}
+/* אורי: כשהשורה דבוקה — בלי הילה מתחתיה, ובלי נקודות החול של העשורים (נשארת רק נקודת הזהב של הנבחר) */
+.timeline .decades::after { content: none; }
+.timeline .decades .decade::before { transition: opacity 150ms linear; }
+.timeline .decades-nav.is-stuck .decades .decade::before { opacity: 0; }
+/* אורי: בשורה הדבוקה — נקודת החול של עשור מופיעה רק במעבר עכבר / מיקוד */
+.timeline .decades-nav.is-stuck .decades .decade:not([aria-selected="true"]):hover::before,
+.timeline .decades-nav.is-stuck .decades .decade:not([aria-selected="true"]):focus-visible::before { opacity: 1; }

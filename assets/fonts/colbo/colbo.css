@@ -1,0 +1,5 @@
+/* COLBO Extended — webfont licensed to the client (Hagilda_License_Web.pdf). Headings, name, decade numerals only. */
+@font-face{font-family:"COLBO";font-weight:300;font-style:normal;font-display:swap;src:url("COLBO-LightExtended.woff2") format("woff2"),url("COLBO-LightExtended.woff") format("woff")}
+@font-face{font-family:"COLBO";font-weight:400;font-style:normal;font-display:swap;src:url("COLBO-RegularExtended.woff2") format("woff2"),url("COLBO-RegularExtended.woff") format("woff")}
+@font-face{font-family:"COLBO";font-weight:700;font-style:normal;font-display:swap;src:url("COLBO-BoldExtended.woff2") format("woff2"),url("COLBO-BoldExtended.woff") format("woff")}
+@font-face{font-family:"COLBO";font-weight:900;font-style:normal;font-display:swap;src:url("COLBO-BlackExtended.woff2") format("woff2"),url("COLBO-BlackExtended.woff") format("woff")}
