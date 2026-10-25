@@ -583,3 +583,5 @@ html.is-places-out .places:focus-within .place, html.is-places-out .places:focus
   .treasures .treasure__text { height: auto; align-self: stretch; }
   .treasures .treasure__year { font-size: min(clamp(120px, min(calc(var(--tr-h) * .4), 15vw), 232px), 16svh); }
 }
+/* אורי: בתפריט הנפתח "לפי שנת ההקמה" מיושר לשמאל — מעל עמודת השנים, מול "12 היישובים" מימין */
+.subnav__sub { justify-content: space-between; }
