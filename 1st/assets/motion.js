@@ -308,6 +308,33 @@
     body.addEventListener('focusin', function () { if (body.classList.contains('rc-intro-pending')) { io.disconnect(); body.classList.remove('rc-intro-pending'); } });
   })();
 
+  /* ---------- ציר הזמן: כניסה פשוטה כמו באוצרות ובפרסומים (אורי, 26.10) ----------
+     שורת העשורים עולה, הצילום נחשף מימין לשמאל ומופיע בשקיפות, והפריטים של העשור הפתוח עולים אחד אחרי השני. פעם אחת. */
+  (function () {
+    var sec = document.getElementById('timeline'), body = sec && sec.querySelector('.tl-body');
+    if (!body || !body.animate || reduced() || !('IntersectionObserver' in window)) return;
+    if (body.getBoundingClientRect().top < window.innerHeight * 0.92) return;
+    sec.classList.add('tl-intro-pending');
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries.some(function (e) { return e.isIntersecting; })) return;
+      io.disconnect();
+      var WIPE = 'cubic-bezier(0.76, 0, 0.24, 1)', OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
+      var a = function (el, f, o) { if (el) try { el.animate(f, Object.assign({ fill: 'backwards' }, o)); } catch (e) {} };
+      a(sec.querySelector('.decades-nav'), [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 800, easing: OUT });
+      a(sec.querySelector('.tl-photo__frame'), [{ clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 900, delay: 150, easing: WIPE });
+      a(document.getElementById('tlImg'), [{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: 450, easing: 'ease-out' });
+      a(document.getElementById('tlCap'), [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 800, delay: 650, easing: OUT });
+      var items = sec.querySelectorAll('.tl-panel:not([hidden]) .tl-item, .tl-all');
+      Array.prototype.forEach.call(items, function (li, i) {
+        a(li, [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 800, delay: 200 + i * 110, easing: OUT });
+      });
+      sec.classList.remove('tl-intro-pending');
+    }, { threshold: 0.2 });
+    io.observe(body);
+    sec.addEventListener('focusin', function () { if (sec.classList.contains('tl-intro-pending')) { io.disconnect(); sec.classList.remove('tl-intro-pending'); } });
+    window.addEventListener('beforeprint', function () { sec.classList.remove('tl-intro-pending'); });
+  })();
+
   /* ---------- טקסט שמתחלף: נכנס בעדינות (היציאה מיידית) ---------- */
   var TEXT = { 'treasure-title': [8, 340], 'treasure-place': [6, 340], 'preview-meta': [6, 340], 'preview-text': [8, 340] }; // התצוגה בפרסומים כמו הטקסט באוצרות
   function swapIn(el, dist, dur) {

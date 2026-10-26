@@ -1,0 +1,496 @@
+<!doctype html>
+<!-- Layout, components and motion reimplemented from "Onda" by 8B (https://github.com/8bsite/design-studio-website-template), MIT License. -->
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שער הארכיון · מועצה אזורית שער הנגב (סקיצה 3)</title>
+<meta name="description" content="סיפורים, תצלומים, מסמכים ועדויות של שתים-עשרה הקהילות והמועצה, מ-1941 ועד היום.">
+<link rel="icon" type="image/png" href="assets/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="../assets/fonts/colbo/colbo.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/site.css?v=5e">
+</head>
+<body class="m-text">
+<a class="skip" href="#main">דילוג לתוכן</a>
+
+<!-- navigation -->
+<header id="navigation" class="nav" data-8b-section="navigation">
+  <a class="nav__brand" href="#hero" aria-label="שער הארכיון, חזרה לראש העמוד"><img src="assets/img/logo-light.png" alt="" width="1306" height="428"></a>
+  <nav class="nav__links" aria-label="ניווט ראשי">
+    <ul>
+      <li><a class="m-link-2" href="/community/council/">המועצה</a></li>
+      <li><button class="m-link-2 nav__drop-btn" type="button" aria-expanded="false" aria-controls="drop">היישובים<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <div class="drop" id="drop" hidden>
+          <ul class="drop__list"><li><a href="/community/dorot/"><span>דורות</span><span class="year">1941</span></a></li><li><a href="/community/nir-am/"><span>ניר עם</span><span class="year">1943</span></a></li><li><a href="/community/ruhama/"><span>רוחמה</span><span class="year">1944</span></a></li><li><a href="/community/gvim/"><span>גבים</span><span class="year">1947</span></a></li><li><a href="/community/ivim/"><span>איבים</span><span class="year">1947</span></a></li><li><a href="/community/bror-hayil/"><span>ברור חיל</span><span class="year">1948</span></a></li><li><a href="/community/erez/"><span>ארז</span><span class="year">1949</span></a></li><li><a href="/community/mefalsim/"><span>מפלסים</span><span class="year">1949</span></a></li><li><a href="/community/yachini/"><span>יכיני</span><span class="year">1950</span></a></li><li><a href="/community/kfar-aza/"><span>כפר עזה</span><span class="year">1951</span></a></li><li><a href="/community/nahal-oz/"><span>נחל עוז</span><span class="year">1951</span></a></li><li><a href="/community/or-haner/"><span>אור הנר</span><span class="year">1957</span></a></li></ul>
+          
+        </div>
+      </li>
+      <li><a class="m-link-2" href="/topic/october-7/">7 באוקטובר</a></li>
+      <li><a class="m-link-2" href="/?s=">כל הפרסומים</a></li>
+    </ul>
+  </nav>
+  <a class="m-btn nav__cta" href="#contact"><span class="m-btn__label">חיפוש בארכיון</span></a>
+  <button class="m-btn-2 nav__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="m-btn__label">תפריט</span></button>
+  <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="תפריט" data-lenis-prevent hidden>
+    <div class="menu__top"><img src="assets/img/logo-light.png" alt="שער הארכיון" width="165" height="54"><button class="m-icon menu__close" type="button" aria-label="סגירת התפריט"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13"/></svg></button></div>
+    <ul class="menu__list">
+      <li><a href="/community/council/">המועצה<span class="m-dot" aria-hidden="true"></span></a></li>
+      <li><a href="/topic/october-7/">7 באוקטובר<span class="m-dot" aria-hidden="true"></span></a></li>
+      <li><a href="/?s=">כל הפרסומים<span class="m-dot" aria-hidden="true"></span></a></li>
+      <li><a href="#contact">חיפוש בארכיון<span class="m-dot" aria-hidden="true"></span></a></li>
+    </ul>
+    <nav aria-label="היישובים"><p class="m-text-6" style="color:var(--sky);margin-bottom:6px">היישובים</p><ul class="menu__places"><li><a href="/community/dorot/"><span>דורות</span><span class="year">1941</span></a></li><li><a href="/community/nir-am/"><span>ניר עם</span><span class="year">1943</span></a></li><li><a href="/community/ruhama/"><span>רוחמה</span><span class="year">1944</span></a></li><li><a href="/community/gvim/"><span>גבים</span><span class="year">1947</span></a></li><li><a href="/community/ivim/"><span>איבים</span><span class="year">1947</span></a></li><li><a href="/community/bror-hayil/"><span>ברור חיל</span><span class="year">1948</span></a></li><li><a href="/community/erez/"><span>ארז</span><span class="year">1949</span></a></li><li><a href="/community/mefalsim/"><span>מפלסים</span><span class="year">1949</span></a></li><li><a href="/community/yachini/"><span>יכיני</span><span class="year">1950</span></a></li><li><a href="/community/kfar-aza/"><span>כפר עזה</span><span class="year">1951</span></a></li><li><a href="/community/nahal-oz/"><span>נחל עוז</span><span class="year">1951</span></a></li><li><a href="/community/or-haner/"><span>אור הנר</span><span class="year">1957</span></a></li></ul></nav>
+  </div>
+</header>
+
+<main id="main">
+<!-- hero: one giant word whose full stop is a round photo -->
+<section id="hero" data-8b-section="hero" aria-label="פתיחה" style="--len:11">
+  <div class="hero__intro">
+    <h1 class="visually-hidden">שער הארכיון: הסיפור של הקהילות שהקימו כאן בית. מועצה אזורית שער הנגב</h1><!-- אורי 26.10: בלי לוגו בהירו; הלוגו רק בכותרת -->
+    <p class="m-text-5 hero__lead">סיפורים, תצלומים, מסמכים ועדויות של שתים‑עשרה הקהילות והמועצה, מ‑1941 ועד היום.</p>
+    <form class="hero__search" action="/" method="get" role="search">
+      <label class="m-text-6" for="q">חיפוש בארכיון</label>
+      <div class="hero__field">
+        <input class="m-field" id="q" name="s" type="search" autocomplete="off" placeholder="חפשו יישוב, אדם, מקום, אירוע או שנה">
+        <button class="m-icon" type="submit" aria-label="חיפוש"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.4 10.4 3.6 3.6"/></svg></button>
+      </div>
+      <p class="m-text-6 hero__examples"><span>למשל:</span><a class="m-link-2" href="/topic/1950s/">1950</a><a class="m-link-2" href="/shaar-hanegev-factories/">מפעלי שער הנגב</a><a class="m-link-2" href="/topic/october-7/">7 באוקטובר</a></p>
+    </form>
+  </div>
+  <div class="hero__room" aria-hidden="true"></div>
+  <p class="m-text-2 hero__title" aria-hidden="true"><span class="hero__word"><span class="hero__mask"><span class="hero__glyphs">שער הארכיון</span></span></span><span class="hero__period"><span class="hero__stage"><span class="hero__orbit"><span class="hero__moon"></span></span><span class="hero__aperture"><img class="hero__img" src="assets/img/hero/ruhama-1944-3.jpg" alt="" width="1707" height="1066"><span class="hero__tint"></span></span></span></span></p>
+</section>
+
+<!-- statement -->
+<section id="statement" data-8b-section="statement" aria-labelledby="statement-title">
+  <h2 class="m-text-3 statement__title" id="statement-title"><span class="statement__line">הסיפור של הקהילות</span><span class="statement__line">שהקימו כאן&nbsp;בית<span class="m-dot statement__dot" aria-hidden="true"></span></span></h2>
+  <div class="statement__body">
+    <p class="m-text-5 statement__lead" data-8b-motion="ink">ארכיון המורשת של מועצה אזורית שער הנגב: הסיפורים, התצלומים והמסמכים של הקהילות, מההתיישבות ועד היום.</p>
+    <nav class="statement__index" aria-label="בעמוד הזה">
+      <ul>
+        <li><a class="m-link" href="#work"><span class="m-link__label">אוצרות הארכיון</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></li>
+        <li><a class="m-link" href="#again"><span class="m-link__label">12 היישובים</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></li>
+        <li><a class="m-link" href="#capabilities"><span class="m-link__label">7 באוקטובר</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></li>
+        <li><a class="m-link" href="#method"><span class="m-link__label">ציר הזמן</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></li>
+        <li><a class="m-link" href="#journal"><span class="m-link__label">פרסומים אחרונים</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></li>
+        <li><a class="m-link" href="#contact"><span class="m-link__label">חיפוש בארכיון</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<!-- work → אוצרות הארכיון -->
+<section id="work" data-8b-section="work" aria-labelledby="work-title">
+  <div class="work__plate" aria-hidden="true"></div>
+  <div class="work__stage">
+    <div class="work__head">
+      <h2 class="m-text-3" id="work-title">אוצרות הארכיון<span class="m-dot" aria-hidden="true"></span></h2>
+      <div class="work__aside">
+        <p class="m-text-5 work__lead">כרזות ותצלומים מאוספי הקהילות והמועצה.</p>
+        <a class="m-link" href="/topic/featured/"><span class="m-link__label">לכל האוצרות</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </div>
+    </div>
+    <div class="work__window">
+      <ul class="work__track">
+        <li class="case case--poster">
+          <a class="case__link" href="/poster-hagashash-1979/">
+            <div class="case__media"><img class="case__img" src="assets/img/arch/poster-hagashash-avoda-ivrit-1979.jpg" alt="כרזה: הגשש החיוור, עובדים עלינו, אמפי שער הנגב, 1979" loading="lazy"></div>
+            <span class="m-badge case__tag">תמונה</span>
+            <div class="case__text"><span class="year case__year">1979</span><h3 class="m-text-4 case__name">הגשש החיוור, ״עובדים עלינו״</h3><p class="m-text case__line">אמפי שער הנגב</p></div>
+          </a>
+        </li>
+        <li class="case case--poster">
+          <a class="case__link" href="/poster-gazoz-1979/">
+            <div class="case__media"><img class="case__img" src="assets/img/arch/poster-gazoz-1979.jpg" alt="כרזה: להקת גזוז, אמפי שער הנגב, 1978" loading="lazy"></div>
+            <span class="m-badge case__tag">וידאו</span>
+            <div class="case__text"><span class="year case__year">1978</span><h3 class="m-text-4 case__name">להקת גזוז, אמפי שער הנגב</h3></div>
+          </a>
+        </li>
+        <li class="case case--poster">
+          <a class="case__link" href="/poster-batdor-1980/">
+            <div class="case__media"><img class="case__img" src="assets/img/arch/poster-batdor-1980.jpg" alt="כרזה: להקת מחול בת-דור, אמפיתיאטרון שער הנגב, 1980" loading="lazy"></div>
+            <span class="m-badge case__tag">גלריה</span>
+            <div class="case__text"><span class="year case__year">1980</span><h3 class="m-text-4 case__name">להקת מחול בת-דור</h3><p class="m-text case__line">אמפיתיאטרון שער הנגב</p></div>
+          </a>
+        </li>
+        <li class="case case--photo">
+          <a class="case__link" href="/gvim-gathering-1947/">
+            <div class="case__media"><img class="case__img" src="assets/img/arch/gvim-1947-1-hero.jpg" alt="קבוצה גדולה יושבת במעגל בחצר, גבים, 1947" loading="lazy"></div>
+            <span class="m-badge case__tag">תיעוד</span>
+            <div class="case__text"><span class="year case__year">1947</span><h3 class="m-text-4 case__name">אסיפה בחצר בגבים</h3></div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- again → 12 היישובים -->
+<section id="again" data-8b-section="again" aria-labelledby="again-title">
+  <div class="again__stage">
+    <div class="again__head">
+      <h2 class="m-text-3" id="again-title">12 היישובים<span class="m-dot" aria-hidden="true"></span></h2>
+      <p class="m-text-5 again__lead">שתים-עשרה הקהילות והמועצה, לפי שנת ההקמה: מדורות ב-1941 ועד אור הנר ב-1957.</p>
+    </div>
+    <div class="again__swing">
+      <ul class="again__wheel">
+        <li class="partner">
+          <a class="partner__card" href="/community/dorot/"><img class="partner__img" src="assets/img/hero/dorot-1941-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1941</span><span class="m-text-4 partner__name">דורות</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/nir-am/"><img class="partner__img" src="assets/img/hero/niram-1949-3.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1943</span><span class="m-text-4 partner__name">ניר עם</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/ruhama/"><img class="partner__img" src="assets/img/hero/ruhama-1944-2.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1944</span><span class="m-text-4 partner__name">רוחמה</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/gvim/"><img class="partner__img" src="assets/img/hero/gvim-1947-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1947</span><span class="m-text-4 partner__name">גבים</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/ivim/"><img class="partner__img" src="assets/img/hero/ivim-mirror-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1947</span><span class="m-text-4 partner__name">איבים</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/bror-hayil/"><img class="partner__img" src="assets/img/hero/brorhayil-1953-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1948</span><span class="m-text-4 partner__name">ברור חיל</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/erez/"><img class="partner__img" src="assets/img/hero/erez-1950-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1949</span><span class="m-text-4 partner__name">ארז</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/mefalsim/"><img class="partner__img" src="assets/img/hero/mefalsim-1949-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1949</span><span class="m-text-4 partner__name">מפלסים</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/yachini/"><img class="partner__img" src="assets/img/hero/yachini-1954-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1950</span><span class="m-text-4 partner__name">יכיני</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/kfar-aza/"><img class="partner__img" src="assets/img/hero/kfaraza-1951-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1951</span><span class="m-text-4 partner__name">כפר עזה</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/nahal-oz/"><img class="partner__img" src="assets/img/hero/nahaloz-1953-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1951</span><span class="m-text-4 partner__name">נחל עוז</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner">
+          <a class="partner__card" href="/community/or-haner/"><img class="partner__img" src="assets/img/hero/orhaner-1960-1.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">1957</span><span class="m-text-4 partner__name">אור הנר</span><span class="m-text partner__line">לעמוד היישוב<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+        <li class="partner partner--council">
+          <a class="partner__card" href="/community/council/"><img class="partner__img" src="assets/img/arch/council-building-lawn-up.jpg" alt="" loading="lazy">
+          <span class="partner__text"><span class="m-badge partner__year">כל 12 הקהילות</span><span class="m-text-4 partner__name">המועצה</span><span class="m-text partner__line">לעמוד המועצה<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></span></span></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- capabilities → 7 באוקטובר + עשור בפוקוס -->
+<section id="capabilities" data-8b-section="capabilities" aria-labelledby="capabilities-title">
+  <div class="capabilities__head">
+    <h2 class="m-text-3" id="capabilities-title" data-8b-motion="rise">בפוקוס<span class="m-dot" aria-hidden="true"></span></h2>
+    <p class="m-text-5 capabilities__lead">אירוע אחד ועשור אחד מתוך הארכיון.</p>
+  </div>
+  <ol class="capabilities__deck">
+    <li class="service m-surface" aria-labelledby="fe-h">
+      <div class="service__text">
+        <p class="service__kicker"><b id="fe-h">7 באוקטובר</b><span class="m-badge">נושא</span></p>
+        <p class="year service__year">2023</p>
+        <h3 class="m-text-4">ברגע האמת בחרנו לקום ולעשות</h3>
+        <p class="m-text-5 service__line">היום שבו הכול השתנה. כאן נאספים העדויות והזיכרונות של הקהילות שלנו, בקצב שלהן ובמילים שלהן.</p>
+        <a class="m-btn service__cta" href="/topic/october-7/"><span class="m-btn__label">לעדויות ולסיפורים</span></a>
+      </div>
+      <div class="service__media" data-8b-motion="iris"><img src="assets/img/arch/anemone-march-2006-037.jpg" alt="צעדת הכלניות בשדות המועצה, 2006" loading="lazy"></div>
+      <span class="service__shade" aria-hidden="true"></span>
+    </li>
+    <li class="service m-surface" aria-labelledby="fd-h">
+      <div class="service__text">
+        <p class="service__kicker"><b id="fd-h">עשור בפוקוס</b><span class="m-badge">עשור</span></p>
+        <p class="year service__year">1960</p>
+        <h3 class="m-text-4">מהמרכז ללימודי מבוגרים למכללת ספיר</h3>
+        <p class="m-text-5 service__line">ב-1963 עבר בית הספר למבוגרים מהצריפים לבית הספר האזורי, והתפתח בהדרגה למכללה האקדמית ספיר.</p>
+        <a class="m-btn service__cta" href="/topic/1960s/"><span class="m-btn__label">לכל הסיפורים של שנות ה-60</span></a>
+      </div>
+      <div class="service__media" data-8b-motion="iris"><img src="assets/img/arch/niram-1960-2-wide.jpg" alt="נערה מחזיקה תרנגולת, ניר עם, 1960" loading="lazy"></div>
+      <span class="service__shade" aria-hidden="true"></span>
+    </li>
+  </ol>
+</section>
+
+<!-- method → ציר הזמן -->
+<section id="method" data-8b-section="method" aria-labelledby="method-title">
+  <div class="method__head">
+    <h2 class="m-text-3" id="method-title" data-8b-motion="rise">ציר הזמן<span class="m-dot" aria-hidden="true"></span></h2>
+    <div class="method__aside">
+      <p class="m-text-5 method__lead" data-8b-motion="ink">מההתיישבות בנגב המערבי ועד היום.</p>
+      <a class="m-link" href="/?s="><span class="m-link__label">לכל הפרסומים</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+    </div>
+  </div>
+  <div class="method__body">
+    <div class="method__ring" aria-hidden="true">
+      <svg class="method__svg" viewBox="0 0 400 400"><circle class="method__track" cx="200" cy="200" r="170"/><circle class="method__arc" cx="200" cy="200" r="170" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="0"/></svg>
+      <span class="method__station" style="--x:0.0000;--y:-1.0000"></span><span class="method__label" style="--x:0.0000;--y:-1.0000">1940</span><span class="method__station" style="--x:0.6428;--y:-0.7660"></span><span class="method__label" style="--x:0.6428;--y:-0.7660">1950</span><span class="method__station" style="--x:0.9848;--y:-0.1736"></span><span class="method__label" style="--x:0.9848;--y:-0.1736">1960</span><span class="method__station" style="--x:0.8660;--y:0.5000"></span><span class="method__label" style="--x:0.8660;--y:0.5000">1970</span><span class="method__station" style="--x:0.3420;--y:0.9397"></span><span class="method__label" style="--x:0.3420;--y:0.9397">1980</span><span class="method__station" style="--x:-0.3420;--y:0.9397"></span><span class="method__label" style="--x:-0.3420;--y:0.9397">1990</span><span class="method__station" style="--x:-0.8660;--y:0.5000"></span><span class="method__label" style="--x:-0.8660;--y:0.5000">2000</span><span class="method__station" style="--x:-0.9848;--y:-0.1736"></span><span class="method__label" style="--x:-0.9848;--y:-0.1736">2010</span><span class="method__station" style="--x:-0.6428;--y:-0.7660"></span><span class="method__label" style="--x:-0.6428;--y:-0.7660">2020</span>
+      <span class="method__eye"><img src="assets/img/arch/ruhama-1940-1.jpg" alt="" data-decade="1940" loading="lazy"><img src="assets/img/arch/council-building-lawn-up.jpg" alt="" data-decade="1950" loading="lazy"><img src="assets/img/arch/niram-1960-2.jpg" alt="" data-decade="1960" loading="lazy"><img src="assets/img/arch/poster-tv-stars-1977.jpg" alt="" data-decade="1970" class="is-poster" loading="lazy"><img src="assets/img/arch/poster-sixteenth-sheep-1980.jpg" alt="" data-decade="1980" class="is-poster" loading="lazy"><img src="assets/img/arch/poster-hagashash-kreker-1981.jpg" alt="" data-decade="1990" class="is-poster" loading="lazy"><img src="assets/img/arch/campus-sapir-2007.jpg" alt="" data-decade="2000" loading="lazy"><img src="assets/img/arch/sapir-college-2013.jpg" alt="" data-decade="2010" loading="lazy"><img src="assets/img/arch/niram-reservoir-2021.jpg" alt="" data-decade="2020" loading="lazy"></span>
+      <span class="method__arm"><span class="method__runner"></span></span>
+    </div>
+    <ol class="method__steps">
+      <li class="step" data-decade="1940" data-img="ruhama-1940-1.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">1940</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="ruhama-1940-1.jpg">
+            <summary><span class="tl__year">1941</span><span class="tl__title">הקמת יישובי האזור וההתיישבות בנגב המערבי</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">הפרק המקדים להקמת המועצה. בתקופה זו הוקמו והתבססו יישובים שהפכו בהמשך לליבת שער הנגב, ובהם דורות, ניר עם, רוחמה, גבים, ברור חיל, מפלסים, ארז, יכיני, כפר עזה ונחל עוז.</p><a class="m-link" href="/western-negev-settlement/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="dorot-1941-1.jpg">
+            <summary><span class="tl__year">1941</span><span class="tl__title">הקמת דורות בחנוכה תש״ב</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של דורות: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/dorot/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="niram-1949-1.jpg">
+            <summary><span class="tl__year">1943</span><span class="tl__title">הקמת ניר עם בט״ו בשבט תש״ג</span><span class="tl__type">גלריה<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">ניר עם הוקם בט״ו בשבט ה׳תש״ג.</p><a class="m-link" href="/community/nir-am/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="ruhama-1944-2.jpg">
+            <summary><span class="tl__year">1944</span><span class="tl__title">הקמת רוחמה, אחרי שני ניסיונות התיישבות קודמים</span><span class="tl__type">תמונה<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">רוחמה נוסדה ב-1944.</p><a class="m-link" href="/community/ruhama/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="gvim-1947-1.jpg">
+            <summary><span class="tl__year">1947</span><span class="tl__title">הקמת גבים: עשרה צריפים ומגדל מים אחד בלב השדות</span><span class="tl__type">ציטוט<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">גבים הוקם ב-28 באוגוסט 1947.</p><a class="m-link" href="/community/gvim/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="ivim-mirror-1.jpg">
+            <summary><span class="tl__year">1947</span><span class="tl__title">חוות איבים: חווה חקלאית של איחוד הקבוצות והקיבוצים</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של איבים: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/ivim/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="brorhayil-1953-1.jpg">
+            <summary><span class="tl__year">1948</span><span class="tl__title">הקמת ברור חיל: העלייה למשלט במאי 1948</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של ברור חיל: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/bror-hayil/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="erez-1950-1.jpg">
+            <summary><span class="tl__year">1949</span><span class="tl__title">הקמת ארז: העלייה על הקרקע באוקטובר 1949</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של ארז: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/erez/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="mefalsim-1949-1.jpg">
+            <summary><span class="tl__year">1949</span><span class="tl__title">הקמת מפלסים בידי עולים מארגנטינה ומאורוגוואי</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של מפלסים: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/mefalsim/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/1940s/"><span class="m-link__label">לכל הסיפורים של שנות ה-1940</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+      <li class="step" data-decade="1950" data-img="council-building-lawn-up.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">1950</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="council-building-lawn-up.jpg">
+            <summary><span class="tl__year">1950</span><span class="tl__title">הקמת המועצה האזורית שער הנגב</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">הקמת המועצה היא נקודת הפתיחה המוסדית של שער הנגב. בתחילת דרכה כללה המועצה גם מקומות שאינם נמצאים כיום בתחומה, ובהם שדרות, תלמים ומעברת גבים–דורות.</p><a class="m-link" href="/founding-of-the-council/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="yachini-1954-1.jpg">
+            <summary><span class="tl__year">1950</span><span class="tl__title">הקמת המושב יכיני: המשפחות הראשונות והחלקות הראשונות</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של יכיני: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/yachini/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="kfaraza-1951-1.jpg">
+            <summary><span class="tl__year">1951</span><span class="tl__title">הקמת כפר עזה, היאחזות הנח״ל החמישית על גבול הרצועה</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של כפר עזה: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/kfar-aza/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="nahaloz-1953-1.jpg">
+            <summary><span class="tl__year">1951</span><span class="tl__title">הקמת נחל עוז, היאחזות הנח״ל הראשונה</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של נחל עוז: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/nahal-oz/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="niram-1949-3.jpg">
+            <summary><span class="tl__year">1956</span><span class="tl__title">רצח רועי רוטברג, רכז הביטחון של נחל עוז</span><span class="tl__type">אודיו<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">אחד האירועים המכוננים בתולדות ההתיישבות מול רצועת עזה. האירוע ממחיש את השילוב המתמשך בין חקלאות, התיישבות, שמירה וביטחון.</p><a class="m-link" href="/roi-rotberg/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="orhaner-1960-1.jpg">
+            <summary><span class="tl__year">1957</span><span class="tl__title">הקמת אור הנר בידי בוגרי תנועות נוער מארגנטינה</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">תיעוד ימי ההקמה של אור הנר: צילומים, מסמכים וזיכרונות של המייסדים מתוך אוסף הארכיון.</p><a class="m-link" href="/community/or-haner/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="dorot-1942-2.jpg">
+            <summary><span class="tl__year">1958</span><span class="tl__title">שדרות הופכת למועצה מקומית עצמאית</span><span class="tl__type">קישור<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">בשנותיה הראשונות טיפלה שער הנגב גם בעיירת העולים שדרות. במהלך העשור השתנו גבולות המועצה: נחל עוז צורפה לתחום הטיפול, ותלמים הועברה למועצה האזורית לכיש.</p><a class="m-link" href="/sderot-local-council/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/1950s/"><span class="m-link__label">לכל הסיפורים של שנות ה-1950</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+      <li class="step" data-decade="1960" data-img="niram-1960-2.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">1960</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="niram-1960-2.jpg">
+            <summary><span class="tl__year">1960</span><span class="tl__title">המרכז האזורי, מפעלי שער הנגב וקריית החינוך</span><span class="tl__type">גלריה<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">מפעלי חקלאות ותעשייה, בית אריזה, מוסך, מכבסה, מנפטה, שירותי בריאות ובית הספר האזורי. משרדי המועצה עברו בהדרגה מדורות אל המרכז האזורי.</p><a class="m-link" href="/regional-center/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="school-bus-kids-up.jpg">
+            <summary><span class="tl__year">1963</span><span class="tl__title">מהמרכז ללימודי מבוגרים למכללת ספיר</span><span class="tl__type">תמונה<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">בית הספר למבוגרים של שער הנגב עבר מן הצריפים לכיתות בבית הספר האזורי, והתפתח בהדרגה למכללת הנגב ובהמשך למכללה האקדמית ספיר.</p><a class="m-link" href="/sapir-college/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/1960s/"><span class="m-link__label">לכל הסיפורים של שנות ה-1960</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+      <li class="step" data-decade="1970" data-img="poster-tv-stars-1977.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">1970</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="poster-tv-stars-1977.jpg">
+            <summary><span class="tl__year">1970</span><span class="tl__title">פיתוח החינוך, התרבות, הספורט והשירותים האזוריים</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">התרחבות קריית החינוך, המתנ״ס, האולפן למוזיקה ולמחול, שירותי הרווחה, מתקני הספורט והמרכזים הקהילתיים הפכה את שער הנגב ממסגרת של יישובים חקלאיים למערכת אזורית רחבה.</p><a class="m-link" href="/education-culture-sport/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/1970s/"><span class="m-link__label">לכל הסיפורים של שנות ה-1970</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+      <li class="step" data-decade="1980" data-img="poster-sixteenth-sheep-1980.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">1980</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="poster-sixteenth-sheep-1980.jpg">
+            <summary><span class="tl__year">1980</span><span class="tl__title">פיתוח החינוך, התרבות, הספורט והשירותים האזוריים</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">התרחבות קריית החינוך, המתנ״ס, האולפן למוזיקה ולמחול, שירותי הרווחה, מתקני הספורט והמרכזים הקהילתיים הפכה את שער הנגב ממסגרת של יישובים חקלאיים למערכת אזורית רחבה.</p><a class="m-link" href="/education-culture-sport/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/1980s/"><span class="m-link__label">לכל הסיפורים של שנות ה-1980</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+      <li class="step" data-decade="1990" data-img="poster-hagashash-kreker-1981.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">1990</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="poster-hagashash-kreker-1981.jpg">
+            <summary><span class="tl__year">1990</span><span class="tl__title">פיתוח החינוך, התרבות, הספורט והשירותים האזוריים</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">התרחבות קריית החינוך, המתנ״ס, האולפן למוזיקה ולמחול, שירותי הרווחה, מתקני הספורט והמרכזים הקהילתיים הפכה את שער הנגב ממסגרת של יישובים חקלאיים למערכת אזורית רחבה.</p><a class="m-link" href="/education-culture-sport/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="ruhama-1944-3.jpg">
+            <summary><span class="tl__year">1998</span><span class="tl__title">שותפות שער הנגב–סן דייגו</span><span class="tl__type">וידאו<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">השותפות החלה בשנת 1998 והפכה לרכיב משמעותי בחינוך, בפיתוח הקהילתי, בהתנדבות, במשלחות ובגיוס משאבים.</p><a class="m-link" href="/san-diego-partnership/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/1990s/"><span class="m-link__label">לכל הסיפורים של שנות ה-1990</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+      <li class="step" data-decade="2000" data-img="campus-sapir-2007.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">2000</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="campus-sapir-2007.jpg">
+            <summary><span class="tl__year">2000</span><span class="tl__title">50 שנה למועצה האזורית שער הנגב</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">חצי יובל של יישובים, חינוך וקהילה: מסמכים, צילומים וברכות מאירועי שנת החמישים למועצה.</p><a class="m-link" href="/demo/council-50/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="anemone-march-2006-034.jpg">
+            <summary><span class="tl__year">2006</span><span class="tl__title">צעדת הכלניות בשדות המועצה</span><span class="tl__type">גלריה<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">אלבום התמונות מצעדת הכלניות, צילום ג׳ימי קדושים ז״ל: עשרות תמונות מהמסלול בשדות.</p><a class="m-link" href="/demo/anemone-march-album/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/2000s/"><span class="m-link__label">לכל הסיפורים של שנות ה-2000</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+      <li class="step" data-decade="2010" data-img="sapir-college-2013.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">2010</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="sapir-college-2013.jpg">
+            <summary><span class="tl__year">2010</span><span class="tl__title">60 שנה למועצה האזורית שער הנגב</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">שישים שנה להקמת המועצה: תערוכת צילומים מהארכיון ומפגש של דור המייסדים עם תלמידי קריית החינוך.</p><a class="m-link" href="/demo/council-60/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="boy-with-flag-night-up.jpg">
+            <summary><span class="tl__year">2010</span><span class="tl__title">עדויות מוקלטות: דור המייסדים מספר</span><span class="tl__type">אודיו<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">פרויקט הקלטות של ותיקי היישובים, על הלילה הראשון בנקודה, על העבודה בשדות ועל הקהילה שנבנתה.</p><a class="m-link" href="/demo/founders-testimonies/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/2010s/"><span class="m-link__label">לכל הסיפורים של שנות ה-2010</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+      <li class="step" data-decade="2020" data-img="niram-reservoir-2021.jpg">
+        <h3 class="step__head"><small>שנות ה-</small><span class="year">2020</span></h3>
+        <ol class="tl__list">
+          <li><details class="tl__item" data-img="niram-reservoir-2021.jpg">
+            <summary><span class="tl__year">2020</span><span class="tl__title">70 שנה למועצה האזורית שער הנגב</span><span class="tl__type">תיעוד<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">שבעים שנה להקמת המועצה: מבחר מסמכים וצילומים מכל העשורים, מתוך אוסף הארכיון.</p><a class="m-link" href="/demo/council-70/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+          <li><details class="tl__item" data-img="anemone-march-2006-042.jpg">
+            <summary><span class="tl__year">2023</span><span class="tl__title">7 באוקטובר: עדויות הקהילות</span><span class="tl__type">וידאו<span class="faq__mark" aria-hidden="true"></span></span></summary>
+            <div class="tl__answer"><p class="m-text">העדויות, הסיפורים והזיכרונות של הקהילות מהשבעה באוקטובר ואילך, בקצב שלהן ובמילים שלהן.</p><a class="m-link" href="/topic/october-7/"><span class="m-link__label">להמשך קריאה</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a></div>
+          </details></li>
+        </ol>
+        <a class="m-link step__all" href="/topic/2020s/"><span class="m-link__label">לכל הסיפורים של שנות ה-2020</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- journal → פרסומים אחרונים -->
+<section id="journal" data-8b-section="journal" aria-labelledby="journal-title">
+  <div class="journal__head">
+    <h2 class="m-text-3" id="journal-title" data-8b-motion="rise">פרסומים אחרונים<span class="m-dot" aria-hidden="true"></span></h2>
+    <div class="journal__aside">
+      <p class="m-text-5 journal__lead">המאמרים, הגלריות והתיעוד שעלו לאחרונה לארכיון.</p>
+      <a class="m-link" href="/?s="><span class="m-link__label">לכל הפרסומים</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+    </div>
+  </div>
+  <div class="journal__body">
+    <div class="journal__frame" aria-hidden="true"><img class="journal__shot" src="assets/img/arch/boy-with-flag-night-up.jpg" alt="" loading="lazy"><img class="journal__shot" src="assets/img/arch/council-building-lawn-up.jpg" alt="" loading="lazy"><img class="journal__shot" src="assets/img/arch/council-bus-dorot-ruhama-up.jpg" alt="" loading="lazy"><img class="journal__shot" src="assets/img/arch/school-bus-kids-up.jpg" alt="" loading="lazy"><img class="journal__shot" src="assets/img/arch/anemone-march-2006-042.jpg" alt="" loading="lazy"></div>
+    <ol class="journal__list">
+      <li class="story"><a href="/demo/testimony-first-night/"><p class="m-text-6 story__meta"><span>אודיו</span> · שנת 1951</p><h3 class="m-text-7 story__title">עדות: הלילה הראשון בנקודה, כפי שסיפרו אותו המייסדים לנכדיהם</h3><p class="m-text story__text">זיכרונות מהלילה הראשון בנקודה, כפי שסיפרו אותם המייסדים לנכדיהם. עדות מוקלטת מתוך פרויקט שימור המורשת.</p></a></li>
+      <li class="story"><a href="/demo/kibbutz-newsletter-bikurim/"><p class="m-text-6 story__meta"><span>תיעוד</span> · שנת 1956</p><h3 class="m-text-7 story__title">מעלון הקיבוץ: חג הביכורים בחצר</h3><p class="m-text story__text">כתבה מתוך עלון הקיבוץ על חגיגות הביכורים בחצר המשותפת, עם רשימת המשתתפים והתוכנייה.</p></a></li>
+      <li class="story"><a href="/demo/regional-bus-interview/"><p class="m-text-6 story__meta"><span>וידאו</span> · שנת 1974</p><h3 class="m-text-7 story__title">ראיון: נהגי האוטובוס שהסיעו את תלמידי היישובים</h3><p class="m-text story__text">ראיון מצולם עם נהגי האוטובוס של המועצה, שהסיעו את תלמידי היישובים לבית הספר האזורי.</p></a></li>
+      <li class="story"><a href="/demo/school-choir-recording/"><p class="m-text-6 story__meta"><span>אודיו</span> · שנת 1968</p><h3 class="m-text-7 story__title">הקלטה: מקהלת בית הספר האזורי</h3><p class="m-text story__text">הקלטה נדירה של מקהלת בית הספר האזורי מטקס סוף השנה, שנמצאה בארכיון הקלטות המועצה.</p></a></li>
+      <li class="story"><a href="/demo/anemone-march-album/"><p class="m-text-6 story__meta"><span>גלריה</span> · שנת 2006</p><h3 class="m-text-7 story__title">אלבום: צעדת הכלניות בשדות המועצה</h3><p class="m-text story__text">אלבום התמונות המלא מצעדת הכלניות, צילום ג׳ימי קדושים ז״ל. עשרות תמונות מהמסלול בשדות.</p></a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- contact → חיפוש בארכיון -->
+<section id="contact" data-8b-section="contact" aria-labelledby="contact-title" style="--len:13">
+  <h2 class="m-text-3 contact__title" id="contact-title"><span class="contact__voice">חיפוש בארכיון</span><span class="m-dot" aria-hidden="true"></span></h2>
+  <div class="contact__grid">
+    <div class="contact__info">
+      <p class="m-text-5 contact__lead">חפשו יישוב, אדם, מקום, אירוע או שנה.</p>
+      <a class="contact__mail" href="/?s="><span>כל הפרסומים</span></a>
+      <dl class="contact__places">
+        <div><dt class="m-text-7">המועצה</dt><dd class="m-text"><a href="/community/council/">כל 12 הקהילות</a></dd></div>
+        <div><dt class="m-text-7">7 באוקטובר</dt><dd class="m-text"><a href="/topic/october-7/">לעדויות ולסיפורים</a></dd></div>
+      </dl>
+    </div>
+    <form class="contact__form m-surface" action="/" method="get" role="search" novalidate>
+      <label class="m-text-6">חיפוש בארכיון<input class="m-field" name="s" type="search" autocomplete="off" placeholder="חפשו יישוב, אדם, מקום, אירוע או שנה" required></label>
+      <p class="m-text-6 contact__chips"><span>למשל:</span><a href="/topic/1950s/">1950</a><a href="/shaar-hanegev-factories/">מפעלי שער הנגב</a><a href="/topic/october-7/">7 באוקטובר</a></p>
+      <div class="contact__actions">
+        <button class="m-btn" type="submit"><span class="m-btn__label">חיפוש</span></button>
+        <p class="m-text contact__status" role="status" aria-live="polite" data-error="הקלידו מילה לחיפוש, למשל שם של יישוב או שנה."></p>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- footer -->
+<footer id="footer" data-8b-section="footer" aria-labelledby="footer-h">
+  <h2 class="visually-hidden" id="footer-h">מידע נוסף וניווט</h2>
+  <p class="m-text-2 footer__bye" aria-label="קהילה. משמעות. השפעה."><span>קהילה<span class="m-dot" aria-hidden="true"></span></span><span>משמעות<span class="m-dot" aria-hidden="true"></span></span><span><span class="footer__word">השפעה</span><span class="footer__period" aria-hidden="true"><span class="footer__aperture"><img class="footer__img" src="assets/img/arch/anemone-march-2006-034.jpg" alt="" loading="lazy"><span class="footer__tint"></span></span></span></span></p>
+  <div class="footer__grid">
+    <div class="footer__brand">
+      <a href="#hero" aria-label="שער הארכיון, חזרה לראש העמוד"><img src="assets/img/logo-light.png" alt="" width="1306" height="428" loading="lazy"></a>
+      <p class="m-text">ארכיון המורשת של מועצה אזורית שער הנגב: הסיפורים, התצלומים והמסמכים של הקהילות, מההתיישבות ועד היום.</p>
+      <a class="m-link" href="/?s="><span class="m-link__label">כל הפרסומים</span><svg class="m-link__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M14 8H3M7 3.5 2.5 8 7 12.5"/></svg></a>
+    </div>
+    <nav class="footer__col" aria-label="הארכיון">
+      <p class="m-text-6 footer__label">הארכיון</p>
+      <a class="m-link-2" href="/community/council/">המועצה</a>
+      <a class="m-link-2" href="/community/">היישובים</a>
+      <a class="m-link-2" href="/topic/october-7/">7 באוקטובר</a>
+      <a class="m-link-2" href="/contact/">יצירת קשר</a>
+    </nav>
+    <nav class="footer__col footer__places" aria-labelledby="fp-h">
+      <p class="m-text-6 footer__label" id="fp-h">12 היישובים · לפי שנת ההקמה</p>
+      <ol><li><a href="/community/dorot/"><span>דורות</span><span class="year">1941</span></a></li><li><a href="/community/nir-am/"><span>ניר עם</span><span class="year">1943</span></a></li><li><a href="/community/ruhama/"><span>רוחמה</span><span class="year">1944</span></a></li><li><a href="/community/gvim/"><span>גבים</span><span class="year">1947</span></a></li><li><a href="/community/ivim/"><span>איבים</span><span class="year">1947</span></a></li><li><a href="/community/bror-hayil/"><span>ברור חיל</span><span class="year">1948</span></a></li><li><a href="/community/erez/"><span>ארז</span><span class="year">1949</span></a></li><li><a href="/community/mefalsim/"><span>מפלסים</span><span class="year">1949</span></a></li><li><a href="/community/yachini/"><span>יכיני</span><span class="year">1950</span></a></li><li><a href="/community/kfar-aza/"><span>כפר עזה</span><span class="year">1951</span></a></li><li><a href="/community/nahal-oz/"><span>נחל עוז</span><span class="year">1951</span></a></li><li><a href="/community/or-haner/"><span>אור הנר</span><span class="year">1957</span></a></li></ol>
+    </nav>
+  </div>
+  <div class="footer__legal m-text-6">
+    <p>© 2026 מועצה אזורית שער הנגב</p>
+    <ul><li><a class="m-link-2" href="/accessibility/">הצהרת נגישות</a></li><li><a class="m-link-2" href="/terms/">תנאי שימוש</a></li><li><a class="m-link-2" href="/privacy/">מדיניות פרטיות</a></li></ul>
+    <a class="m-link-2" href="https://webinside.co.il/" target="_blank" rel="noopener" lang="en" dir="ltr">Built by webinside</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js" defer></script>
+<script src="assets/site.js?v=5a" defer></script>
+</body>
+</html>

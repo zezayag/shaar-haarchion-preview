@@ -1,0 +1,730 @@
+/* ==========================================================================
+   final_var3b — סקיצה 3 בשפת המותג (26.10). אותו מבנה Google Arts & Culture,
+   וכל החלטת צבע / משטח / שכבה נגזרת מספר המותג ומהסטייל גייד (design/style-guide):
+   · עמוד לבן נקי ............................ עמ׳ 61 ("לבן נקי"), גייד 05א
+   · לבן עם צילום ב-7% מאחורי הטקסט ......... עמ׳ 63, גייד 05א  → .f-photo (המשטח החלופי היחיד)
+   · שדה כחול מלא, עליו רק לבן .............. עמ׳ 60, גייד 05א  → בר החיפוש, "עוד לגלות"
+   · תיבה ירוקה כהה #195B4C, תכלת/לבן ...... עמ׳ 63 + גייד "מותר"  → "קהילה של היום"
+   · צילום = שחור-לבן + חול + Multiply 89% .. עמ׳ 62, גייד 05ב  → נאפה לקבצי ‎-640/-1280 (ספיה)
+   · צילומי תוכן: מלבן מלא, בלי מסגרת וצל ... עמ׳ 63, גייד 05ג
+   · כרזות: צבע מקורי, שלמות, על נייר ........ גייד 06א
+   · שם יישוב + שנה בשורה אחת, COLBO Light ... עמ׳ 63, גייד 5א
+   · כותרת סקשן COLBO Light כחול; טקסט דיו; משני #5E557D; קישור #0D6585 + קו 2px .. גייד 03 (סולם)
+   · צהוב — רק סימון "נבחר" (יישוב מודגש בציר עמ׳ 62) → העשור הפתוח בלבד
+   · שכבת הקריאה על צילום: גוון כהה של החול (לא סגול), מלמטה ורק איפה שיש טקסט
+   ========================================================================== */
+:root {
+  /* מותג */
+  --ink: #1F134A; --ink-2: #5E557D; --blue: #11769C; --link: #0D6585; --sky: #B3E0EB;
+  --gold: #EBAD29; --sand: #DED6C4; --paper: #F4F2EC; --white: #FFFFFF; --green: #195B4C;
+  /* תפקידים */
+  --surface: var(--white); --line: #E6E2EC; --scrim: 28, 26, 22;          /* חול × 0.12 — ניטרלי חם */
+  --hover: rgba(17, 118, 156, .08);
+  --e1: 0 1px 2px rgba(31, 19, 74, .16), 0 1px 3px 1px rgba(31, 19, 74, .08);
+  --e2: 0 2px 6px rgba(31, 19, 74, .14), 0 8px 24px rgba(31, 19, 74, .12);
+  /* טיפוגרפיה: סולם אחד */
+  --sans: "Heebo", system-ui, sans-serif; --display: "COLBO", "Heebo", sans-serif;
+  --fs-meta: 14px; --fs-body: 16px; --fs-lg: 18px; --fs-h4: 22px; --fs-h3: 28px; --fs-h2: 40px;
+  /* מידות ותנועה */
+  --r: 8px; --max: 1200px; --hdr: 64px; --gut: 24px;
+  --ease-out: cubic-bezier(.2, 0, 0, 1); --ease-in: cubic-bezier(.3, 0, 1, 1);
+  --t-fast: 150ms; --t-med: 280ms; --t-slow: 520ms;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--hdr) + 16px); -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--surface); color: var(--ink); font: 400 var(--fs-body)/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; }
+::selection { background: var(--sky); color: var(--ink); }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; inset-inline-start: 16px; top: -64px; z-index: 100; background: var(--white); color: var(--link); padding: 12px 16px; border-radius: var(--r); box-shadow: var(--e1); }
+.skip:focus { top: 8px; }
+.icon { width: 24px; height: 24px; flex: none; }
+.y { font-family: var(--display); }
+
+/* ---------- כפתורים: היררכיה אחת ----------
+   ראשי = מילוי כחול · משני = מתאר כחול · על צילום = מתאר לבן · על משטח כהה = מילוי לבן */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 24px; border-radius: 999px; border: 0;
+  font: 500 var(--fs-meta)/1.2 var(--sans); text-decoration: none; text-align: center; cursor: pointer; user-select: none;
+  transition: background-color var(--t-fast) ease, color var(--t-fast) ease, box-shadow var(--t-fast) ease, transform var(--t-fast) ease; }
+.btn:active { transform: scale(.97); }
+.btn--fill { background: var(--blue); color: var(--white); }
+.btn--fill:hover { background: var(--link); box-shadow: var(--e1); }
+.btn--line { background: transparent; color: var(--link); box-shadow: inset 0 0 0 1px var(--blue); }
+.btn--line:hover { background: var(--hover); }
+.btn--ghost { background: transparent; color: var(--white); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .92); }
+.btn--ghost:hover, a:hover > .btn--ghost { background: var(--white); color: var(--ink); }
+.btn--light { background: var(--white); color: var(--ink); }
+.btn--light:hover, a:hover .btn--light { background: var(--sky); }
+.round { width: 48px; height: 48px; border-radius: 50%; border: 0; display: grid; place-items: center; background: var(--white); color: var(--blue); cursor: pointer;
+  box-shadow: var(--e1); transition: box-shadow var(--t-fast) ease, background-color var(--t-fast) ease, transform var(--t-fast) ease, opacity var(--t-fast) ease; }
+.round:hover { background: #F2F8FA; box-shadow: var(--e2); }
+.round:active { transform: scale(.94); }
+.round:disabled { opacity: 0; pointer-events: none; }
+
+/* ---------- 1. כותרת ---------- */
+.hdr { position: sticky; top: 0; z-index: 50; height: var(--hdr); display: flex; align-items: center; gap: 8px; padding-inline: 8px var(--gut);
+  background: var(--white); box-shadow: 0 1px 0 var(--line); }
+.hdr__menu { width: 48px; height: 48px; border-radius: 50%; border: 0; background: none; display: grid; place-items: center; cursor: pointer; color: var(--ink); transition: background-color var(--t-fast) ease; }
+.hdr__menu:hover { background: var(--hover); }
+.hdr__logo { display: flex; align-items: center; min-height: 48px; border-radius: 4px; }
+.hdr__logo img { height: 40px; width: auto; }
+.tabs { display: flex; align-items: stretch; height: 100%; margin-inline-start: auto; }
+.tabs a { position: relative; display: flex; align-items: center; padding: 0 12px; font: 500 var(--fs-meta)/1 var(--sans); color: var(--ink-2); text-decoration: none; transition: color var(--t-fast) ease, background-color var(--t-fast) ease; }
+.tabs a:hover { color: var(--ink); background: var(--hover); }
+.tabs a[aria-current="page"] { color: var(--blue); }
+.tabs a::after { content: ""; position: absolute; inset-inline: 12px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; background: var(--blue); transform: scaleX(0); transition: transform var(--t-med) var(--ease-out); }
+.tabs a[aria-current="page"]::after { transform: none; }
+.hdr__search { margin-inline-start: 8px; padding: 0 20px; }
+
+/* מגירת ניווט — נכנסת מהצד שלה, יוצאת מהר יותר */
+.drawer { position: fixed; inset: 0; z-index: 80; visibility: hidden; transition: visibility 0s linear 200ms; }
+.drawer.is-open { visibility: visible; transition: none; }
+.drawer__scrim { position: absolute; inset: 0; background: rgba(var(--scrim), .4); opacity: 0; transition: opacity 200ms ease; }
+.drawer__panel { position: absolute; top: 0; bottom: 0; inset-inline-start: 0; width: min(320px, 86vw); background: var(--white); padding: 8px 0 24px; overflow-y: auto; overscroll-behavior: contain;
+  transform: translateX(100%); transition: transform 200ms var(--ease-in); box-shadow: var(--e2); }
+.drawer.is-open .drawer__scrim { opacity: 1; transition-duration: var(--t-med); }
+.drawer.is-open .drawer__panel { transform: none; transition: transform var(--t-med) var(--ease-out); }
+.drawer__head { display: flex; align-items: center; gap: 8px; padding: 0 8px 8px; }
+.drawer__head img { height: 36px; width: auto; }
+.drawer a { display: flex; align-items: center; min-height: 48px; padding: 0 24px; margin-inline-end: 12px; border-radius: 24px 0 0 24px;
+  font: 500 var(--fs-meta)/1.2 var(--sans); color: var(--ink); text-decoration: none; transition: background-color var(--t-fast) ease; }
+[dir="ltr"] .drawer a { border-radius: 0 24px 24px 0; }
+.drawer a:hover { background: var(--hover); }
+.drawer a[aria-current="page"] { background: rgba(179, 224, 235, .5); color: var(--link); }
+.drawer hr { border: 0; border-top: 1px solid var(--line); margin: 8px 0; }
+.drawer__label { display: block; padding: 8px 24px 4px; font: 500 var(--fs-meta)/20px var(--sans); color: var(--ink-2); }
+
+/* ---------- מבנה סקשן ---------- */
+.sec { padding: 72px var(--gut) 80px; }
+.sec__h { margin: 0; text-align: center; font: 300 var(--fs-h2)/1.2 var(--display); color: var(--blue); text-wrap: balance; }
+.sec__sub { margin: 8px 0 0; text-align: center; font: 400 var(--fs-body)/24px var(--sans); color: var(--ink-2); }
+.sec__body { max-width: var(--max); margin: 40px auto 0; }
+.sec__more { display: flex; justify-content: center; margin-top: 40px; }
+/* המשטח החלופי היחיד: לבן עם צילום ב-7% (עמ׳ 63) */
+.f-photo { position: relative; isolation: isolate; }
+.f-photo::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--f-img) center 40% / cover no-repeat; opacity: .07; pointer-events: none; }
+/* שדה כחול מלא, עליו רק לבן (עמ׳ 60) */
+.f-blue { background: var(--blue); color: var(--white); }
+.f-blue .sec__h, .f-blue .sec__sub { color: var(--white); }
+.f-blue :focus-visible { outline-color: var(--white); }
+
+/* ---------- 2. פתיחה: לוגו, בר כחול אחד וחיפוש (עמ׳ 62) ---------- */
+.find { padding: 64px 0 40px; text-align: center; }
+.find + .sec { padding-top: 40px; }
+.find__logo { width: min(440px, 80vw); height: auto; margin: 0 auto; }
+.find__form { margin: 36px 0 0; }
+.find__bar { background: var(--blue); padding: 22px var(--gut); }
+.find__in { position: relative; max-width: 584px; margin: 0 auto; }
+.find__box { position: relative; z-index: 6; display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 8px 0 20px; border-radius: 26px; background: var(--white); cursor: text;
+  transition: box-shadow var(--t-fast) ease; }
+[dir="rtl"] .find__box { padding: 0 20px 0 8px; }
+.find__box:hover, .find__box:focus-within { box-shadow: 0 2px 10px rgba(var(--scrim), .3); }
+.find__box:focus-within { outline: 3px solid var(--sky); outline-offset: 2px; }
+.find__in:has(.find__list:not([hidden])) .find__box { border-radius: 26px 26px 0 0; box-shadow: none; }
+.find__in:has(.find__list:not([hidden])) .find__list { top: 100%; padding-top: 8px; border-top: 1px solid var(--line); }
+.find__box > .icon { width: 20px; height: 20px; color: var(--ink-2); }
+.find__box input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: none; font: 400 var(--fs-body) var(--sans); color: var(--ink); }
+.find__box input::placeholder { color: var(--ink-2); opacity: 1; }
+.find__box input::-webkit-search-cancel-button { display: none; }
+.find__clear { width: 44px; height: 44px; border: 0; border-radius: 50%; background: none; color: var(--ink-2); display: grid; place-items: center; cursor: pointer; flex: none; }
+.find__clear:hover { background: var(--hover); color: var(--ink); }
+.find__clear[hidden] { display: none; }
+.find__list { position: absolute; inset-inline: 0; top: calc(100% - 26px); padding: 34px 0 8px; margin: 0; list-style: none; background: var(--white);
+  border-radius: 0 0 26px 26px; box-shadow: 0 6px 12px rgba(var(--scrim), .25); text-align: start; z-index: 5; }
+.find__list[hidden] { display: none; }
+.find__list a, .find__list .none { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 20px; text-decoration: none; color: var(--ink); }
+.find__list .none { color: var(--ink-2); font-size: var(--fs-meta); }
+.find__list a:hover, .find__list a.is-on { background: var(--hover); }
+.find__list .icon { width: 18px; height: 18px; color: var(--ink-2); }
+.find__btns { display: flex; justify-content: center; gap: 12px; margin-top: 28px; padding: 0 var(--gut); }
+.find__msg { min-height: 20px; margin: 12px 0 0; font-size: var(--fs-meta); color: var(--ink); }
+.find__note { margin: 0; padding: 0 var(--gut); font-size: var(--fs-meta); line-height: 44px; color: var(--ink-2); }
+.find__note a { display: inline-block; min-height: 44px; min-width: 44px; text-align: center; line-height: 44px; padding: 0 4px; color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.find__note a:hover { text-decoration-thickness: 2px; }
+
+/* ---------- צילום בספיה + שכבת קריאה ניטרלית מלמטה ---------- */
+.ph { background: var(--sand); }                        /* חול מתחת (עמ׳ 62) — הקבצים כבר אפויים בספיה */
+.scrim::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(var(--scrim), .88) 0%, rgba(var(--scrim), .62) 34%, rgba(var(--scrim), .18) 62%, rgba(var(--scrim), 0) 80%); }
+
+/* ---------- 3. "מה תרצו לגלות?" ---------- */
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.tile { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 16px; height: 460px; padding: 32px 24px;
+  border-radius: var(--r); overflow: hidden; color: var(--white); text-decoration: none; isolation: isolate; background: var(--sand); text-align: center; }
+.tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform var(--t-slow) var(--ease-out); }
+.tile::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(to top, rgba(var(--scrim), .9) 0%, rgba(var(--scrim), .66) 36%, rgba(var(--scrim), .12) 66%, rgba(var(--scrim), 0) 80%); }
+.tile:hover img { transform: scale(1.04); }
+.tile:active { transform: scale(.99); }
+.tile__kind { font: 500 var(--fs-meta)/20px var(--sans); color: var(--sky); }
+.tile__name { font: 400 var(--fs-h3)/1.2 var(--sans); }
+.tile__sub { display: block; margin-top: 6px; font: 400 var(--fs-meta)/20px var(--sans); color: var(--white); }
+.tile__txt { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.tile .btn { pointer-events: none; }
+
+/* ---------- 4. "אוצרות הארכיון" — קרוסלה ---------- */
+.flow { position: relative; height: 470px; max-width: var(--max); margin: 40px auto 0; }
+.flow__track { position: relative; height: 100%; margin: 0; padding: 0; list-style: none; }
+.flow__card { position: absolute; top: 50%; left: 50%; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: var(--r); overflow: hidden;
+  background: var(--sand); transition: transform var(--t-slow) var(--ease-out), opacity 400ms ease, box-shadow 400ms ease; cursor: pointer; }
+.flow__card a { display: block; width: 100%; height: 100%; }
+.flow__card img { width: 100%; height: 100%; object-fit: cover; }
+.flow__card:not(.is-poster)::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--t-med) ease;
+  background: linear-gradient(to top, rgba(var(--scrim), .88), rgba(var(--scrim), .5) 26%, rgba(var(--scrim), 0) 52%); }
+/* כרזה: שלמה, בצבע המקורי, על נייר — הכיתוב מתחתיה ולא עליה (גייד 06א) */
+.flow__card.is-poster { background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }
+.flow__card.is-poster img { object-fit: contain; padding: 20px 20px 92px; }
+.flow__cap { position: absolute; inset-inline: 20px; bottom: 18px; z-index: 1; color: var(--white); pointer-events: none; }
+.flow__card.is-poster .flow__cap { color: var(--ink); }
+.flow__cap b { display: block; font: 500 var(--fs-lg)/26px var(--sans); }
+.flow__cap span { display: block; margin-top: 2px; font: 400 var(--fs-meta)/20px var(--sans); }
+.flow__card.is-poster .flow__cap > span { color: var(--ink-2); }
+.flow__cap .y { display: inline; font-size: var(--fs-meta); }
+.flow__card[data-pos="0"] { z-index: 5; box-shadow: var(--e2); }
+.flow__card[data-pos="0"]::after { opacity: 1; }
+.flow__card[data-pos="0"].is-poster { box-shadow: var(--e2), inset 0 0 0 1px var(--line); }
+.flow__card:not([data-pos="0"]) .flow__cap { opacity: 0; transition: opacity var(--t-fast) ease; }
+.flow__card[data-pos="0"] .flow__cap { opacity: 1; transition: opacity var(--t-med) ease 120ms; }
+.flow__nav { position: absolute; top: 50%; z-index: 9; margin-top: -24px; }
+.flow__nav--prev { inset-inline-start: 0; }
+.flow__nav--next { inset-inline-end: 0; }
+
+/* ---------- 5. "קהילה של היום" — צילום מלא + תיבה ירוקה כהה (עמ׳ 63, "מותר") ---------- */
+.today { padding: 56px var(--gut) 72px; }
+.today .sec__h { margin-bottom: 40px; }
+.today__card { position: relative; display: block; max-width: var(--max); height: 460px; margin: 0 auto; border-radius: var(--r); overflow: hidden; text-decoration: none; color: var(--white); }
+.today__card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; transition: transform var(--t-slow) var(--ease-out); }
+.today__card:hover > img { transform: scale(1.02); }
+.today__box { position: absolute; inset-inline-start: 40px; bottom: 40px; width: min(440px, calc(100% - 80px)); padding: 32px; border-radius: 4px; background: var(--green); display: flex; flex-direction: column; align-items: flex-start; }
+.today__kind { font: 500 var(--fs-meta)/20px var(--sans); color: var(--sky); }
+.today__name { margin: 8px 0 0; font: 300 var(--fs-h2)/1.1 var(--display); color: var(--white); }
+.today__name .y { color: var(--sky); }
+.today__text { margin: 12px 0 0; font: 400 var(--fs-body)/24px var(--sans); color: var(--white); }
+.today__box .btn { margin-top: 24px; }
+
+/* ---------- 6. "ציר הזמן" ---------- */
+.strips { display: flex; gap: 8px; height: 400px; margin: 0; padding: 0; list-style: none; }
+.strip { position: relative; flex: 1 1 0; min-width: 0; border-radius: var(--r); overflow: hidden; transition: flex-grow var(--t-slow) var(--ease-out); }
+.strip.is-open { flex-grow: 5.5; }
+.strip button { position: absolute; inset: 0; width: 100%; border: 0; padding: 0; background: var(--sand); cursor: pointer; text-align: start; overflow: hidden; }
+.strip img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform var(--t-slow) var(--ease-out); }
+.strip button::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(var(--scrim), .8), rgba(var(--scrim), .3) 30%, rgba(var(--scrim), 0) 55%); }
+.strip:not(.is-open) button:hover img { transform: scale(1.05); }
+/* השנה: גודל אחד, מוקטנת ב-transform (בלי אנימציה של font-size) */
+.strip__y { position: absolute; z-index: 1; inset-inline-start: 16px; bottom: 16px; color: var(--white); font: 300 64px/1 var(--display); white-space: nowrap;
+  transform: scale(.36); transform-origin: right bottom; transition: transform var(--t-slow) var(--ease-out); }
+[dir="ltr"] .strip__y { transform-origin: left bottom; }
+.strip.is-open .strip__y { transform: none; inset-inline-start: 24px; bottom: 24px; }
+/* כרזות ברצועה: שלמות על נייר */
+.strip.is-poster button { background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }
+.strip.is-poster img { object-fit: contain; object-position: center 40%; padding: 10px 8px 56px; }
+.strip.is-poster.is-open img { padding: 20px 20px 104px; }
+.strip.is-poster button::after { display: none; }
+.strip.is-poster .strip__y { color: var(--ink); }
+/* סימון "נבחר" בצהוב — כמו היישוב המודגש בציר (עמ׳ 62) */
+.strip::after { content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 4px; background: var(--gold); transform: scaleX(0); transition: transform var(--t-med) var(--ease-out); pointer-events: none; z-index: 2; }
+.strip.is-open::after { transform: none; }
+
+.story { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 32px; }
+.story__img { position: relative; min-height: 440px; border-radius: var(--r); overflow: hidden; }
+.story__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity var(--t-med) ease; }
+.story__img img.is-swap { opacity: 0; }
+.story__img.is-poster { background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }   /* כרזה: שלמה על נייר (גייד 06א) */
+.story__img.is-poster img { object-fit: contain; padding: 24px; }
+.story__txt { padding: 8px 0; display: flex; flex-direction: column; }
+.story__kind { font: 500 var(--fs-meta)/20px var(--sans); color: var(--ink-2); }
+.story__h { margin: 4px 0 0; font: 300 32px/1.2 var(--display); color: var(--blue); }
+.story__list { list-style: none; margin: 20px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.story__list li { border-bottom: 1px solid var(--line); }
+.story__list a { display: grid; grid-template-columns: 64px 1fr auto; gap: 16px; align-items: baseline; padding: 14px 4px; text-decoration: none; transition: background-color var(--t-fast) ease; }
+.story__list a:hover { background: var(--hover); }
+.story__list a:hover .t { color: var(--link); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.story__list .y { font: 300 var(--fs-h4)/1 var(--display); color: var(--blue); }
+.story__list .t { font: 400 var(--fs-body)/24px var(--sans); color: var(--ink); }
+.story__list .k { font: 400 var(--fs-meta)/20px var(--sans); color: var(--ink-2); white-space: nowrap; }
+.story__txt .btn { margin-top: 28px; align-self: flex-start; }
+
+/* ---------- 7. "סיפור בפוקוס" — צילום מלא בלי מסגרת, טור טקסט (עמ׳ 63) ---------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; max-width: var(--max); margin: 40px auto 0; border-radius: var(--r); overflow: hidden; background: var(--white); }
+.split + .split { margin-top: 24px; }
+.split__img { position: relative; min-height: 460px; }
+.split__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.split__txt { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 48px; }
+.split__kind { font: 500 var(--fs-meta)/20px var(--sans); color: var(--ink-2); }
+.split__y { margin: 8px 0 0; font: 300 88px/1 var(--display); color: var(--blue); }
+.split__h { margin: 16px 0 0; font: 400 var(--fs-h3)/36px var(--sans); color: var(--ink); text-wrap: balance; }
+.split__p { margin: 12px 0 0; max-width: 32em; font: 400 var(--fs-body)/26px var(--sans); color: var(--ink); }
+.split__txt .btn { margin-top: 28px; }
+
+/* ---------- 8. "פרסומים אחרונים" ---------- */
+.reco { position: relative; max-width: var(--max); margin: 40px auto 0; }
+.reco__row { display: flex; align-items: flex-end; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 0 0 4px; margin: 0; list-style: none; overscroll-behavior-x: contain; }
+.reco__row::-webkit-scrollbar { display: none; }
+.reco__row li { flex: none; scroll-snap-align: start; }
+.reco__row a { display: block; text-decoration: none; border-radius: var(--r); }
+.reco__row .ph { display: block; overflow: hidden; border-radius: var(--r); }
+.reco__row img { object-fit: cover; transition: transform var(--t-slow) var(--ease-out); }
+.reco__row a:hover img { transform: scale(1.03); }
+.reco__row a:hover b { color: var(--link); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.reco__row li:nth-child(1) img { height: 300px; width: 260px; }
+.reco__row li:nth-child(2) img { height: 340px; width: 300px; }
+.reco__row li:nth-child(3) img { height: 260px; width: 260px; }
+.reco__row li:nth-child(4) img { height: 320px; width: 240px; }
+.reco__row li:nth-child(5) img { height: 280px; width: 320px; }
+.reco__meta { width: 0; min-width: 100%; padding-top: 12px; }
+.reco__meta b { display: block; font: 500 var(--fs-body)/24px var(--sans); color: var(--ink); }
+.reco__meta > span { display: block; margin-top: 2px; font: 400 var(--fs-meta)/20px var(--sans); color: var(--ink-2); }
+.reco .round { position: absolute; top: 146px; z-index: 2; }
+.reco .round--next { inset-inline-end: -24px; }
+.reco .round--prev { inset-inline-start: -24px; }
+
+/* ---------- 9. "12 הקהילות" ---------- */
+.rail { position: relative; max-width: var(--max); margin: 40px auto 0; }
+.rail__row { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 48px) / 4); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 0; padding: 0; list-style: none; overscroll-behavior-x: contain; }
+.rail__row::-webkit-scrollbar { display: none; }
+.rail__row li { scroll-snap-align: start; }
+.rail__row .tile { height: 420px; }
+.rail .tile__name { font: 300 32px/1.15 var(--display); }
+.rail .tile__name .y { color: var(--sky); }
+.rail .tile__name .vh { font-size: 1px; }
+.rail .round { position: absolute; top: 50%; margin-top: -24px; z-index: 2; }
+.rail .round--next { inset-inline-end: -24px; }
+.rail .round--prev { inset-inline-start: -24px; }
+
+/* ---------- 10. "עוד לגלות" — שדה כחול מלא, צ׳יפים במתאר לבן (עמ׳ 60) ---------- */
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 12px; max-width: 920px; margin: 32px auto 0; padding: 0; list-style: none; }
+.chips a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .85);
+  font: 500 var(--fs-meta)/1.2 var(--sans); color: var(--white); text-decoration: none; transition: background-color var(--t-fast) ease, color var(--t-fast) ease, transform var(--t-fast) ease; }
+.chips a:hover { background: var(--white); color: var(--link); }
+.chips a:active { transform: scale(.97); }
+
+/* ---------- 11. פוטר ---------- */
+.foot { padding: 40px var(--gut) 40px; }
+.foot__in { max-width: var(--max); margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; }
+.foot__brand { display: flex; align-items: center; gap: 16px; }
+.foot__brand img { height: 40px; width: auto; }
+.foot__brand span { font-size: var(--fs-meta); color: var(--ink-2); }
+.foot ul { display: flex; flex-wrap: wrap; gap: 0 20px; margin: 0; padding: 0; list-style: none; }
+.foot a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; font-size: var(--fs-meta); color: var(--ink-2); text-decoration: none; }
+.foot a:hover { color: var(--link); text-decoration: underline; text-underline-offset: 4px; }
+.foot__places { max-width: var(--max); margin: 0 auto 16px; display: flex; flex-wrap: wrap; gap: 0 12px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.foot__places a { color: var(--ink); }
+.foot__credit { direction: ltr; }
+
+/* ---------- תנועה: כניסה עדינה (בלי להסתיר תוכן בלי סקריפט) ---------- */
+.js .rv { opacity: 0; transform: translateY(16px); transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out); }
+.js .rv.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 1ms !important; transition-delay: 0s !important; animation: none !important; }
+  .js .rv { opacity: 1; transform: none; }
+  .tile:hover img, .strip button:hover img, .reco__row a:hover img, .today__card:hover > img { transform: none; }
+}
+@media (hover: none) { .tile:hover img, .reco__row a:hover img, .today__card:hover > img { transform: none; } }
+
+/* ---------- 1024 ---------- */
+@media (max-width: 1100px) {
+  .tabs a { padding: 0 8px; }
+  .tabs a::after { inset-inline: 8px; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tiles .tile { height: 400px; }
+  .rail__row { grid-auto-columns: calc((100% - 32px) / 3); }
+  .rail .round--next, .reco .round--next { inset-inline-end: -12px; }
+  .rail .round--prev, .reco .round--prev { inset-inline-start: -12px; }
+}
+/* ---------- 768 ---------- */
+@media (max-width: 860px) {
+  .tabs { display: none; }
+  .hdr__search { margin-inline-start: auto; }
+  .story, .split { grid-template-columns: 1fr; }
+  .story { gap: 24px; }
+  .story__img, .split__img { min-height: 320px; }
+  .split__txt { order: 2; }
+  /* העשורים בטאבלט ובטלפון: שורת גלולות בגלילה (רצועות של 24–37px לא נלחצות ולא מכילות את השנה) */
+  .strips { height: auto; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-inline: calc(var(--gut) * -1); padding: 2px var(--gut) 6px; scroll-padding-inline: var(--gut); }
+  .strips::-webkit-scrollbar { display: none; }
+  .strip, .strip.is-open { flex: none; overflow: visible; border-radius: 999px; transition: none; }
+  .strip::after { display: none; }
+  .strip button, .strip.is-poster button { position: static; display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1px var(--blue); color: var(--link); }
+  .strip button::after, .strip img { display: none; }
+  .strip__y, .strip.is-open .strip__y, .strip.is-poster .strip__y { position: static; transform: none; font: 400 var(--fs-body)/1 var(--display); color: inherit; }
+  .strip.is-open button { background: var(--blue); color: var(--white); }
+  .flow__card { width: 300px; height: 300px; margin: -150px 0 0 -150px; }
+  .flow__card.is-poster img { padding: 16px 16px 84px; }
+  .flow { height: 360px; }
+  .rail__row { grid-auto-columns: calc((100% - 16px) / 2); }
+  .rail .round, .reco .round { display: none; }
+  .rail__row, .reco__row { margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut); scroll-padding-inline: var(--gut); }
+}
+/* ---------- 390 ---------- */
+@media (max-width: 599px) {
+  :root { --gut: 16px; --fs-h2: 32px; --fs-h3: 24px; }
+  .sec { padding: 48px var(--gut) 56px; }
+  .sec__body, .flow, .reco, .rail, .split { margin-top: 28px; }
+  .hdr { padding-inline: 4px 12px; }
+  .hdr__logo img { height: 34px; }
+  .hdr__search .lbl { display: none; }
+  .hdr__search { width: 44px; padding: 0; }
+  .find { padding-top: 40px; }
+  .find__bar { padding: 16px var(--gut); }
+  .find__btns { flex-wrap: wrap; }
+  .tiles { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tiles .tile { height: 280px; padding: 16px 8px 16px; gap: 12px; }
+  .tile__name { font-size: var(--fs-h4); line-height: 28px; }
+  .tile__sub { display: none; }
+  .tiles .tile .btn { min-height: 40px; padding: 0 16px; }
+  .rail__row { grid-auto-columns: 72%; }
+  .rail__row .tile { height: 340px; }
+  .rail .tile__name { font-size: var(--fs-h3); }
+  .split__h { font-size: var(--fs-h4); line-height: 30px; }
+  .story__h { font-size: var(--fs-h3); }
+  .story__img { min-height: 240px; }
+  .story__list a { grid-template-columns: 52px 1fr; }
+  .story__list .k { grid-column: 2; }
+  .split__txt { padding: 28px 20px 32px; }
+  .split__y { font-size: 64px; }
+  .split__img { min-height: 240px; }
+  .today { padding: 40px var(--gut) 48px; }
+  .today .sec__h { margin-bottom: 28px; }
+  .today__card { height: auto; display: flex; flex-direction: column; }
+  .today__card > img { position: relative; height: 240px; }
+  .today__box { position: static; width: auto; padding: 24px 20px; border-radius: 0; }
+  .flow__card { width: 240px; height: 240px; margin: -120px 0 0 -120px; }
+  .flow__card.is-poster img { padding: 12px 12px 76px; }
+  .flow__cap { inset-inline: 14px; bottom: 12px; }
+  .flow__cap b { font-size: var(--fs-body); line-height: 22px; }
+  .flow { height: 300px; }
+  .flow__nav--prev { inset-inline-start: -4px; } .flow__nav--next { inset-inline-end: -4px; }
+  .foot__brand { flex-wrap: wrap; }
+}
+
+/* הקרוסלה: כרטיסים מוסתרים מחוץ למסך לא יוצרים גלילה לצדדים */
+#treasures { overflow-x: clip; }
+
+/* אורי 26.10: "בלי הרקע" — החיפוש בלי הבר הכחול; השדה כמו בגוגל: לבן עם מתאר אפור עדין, צל בריחוף ובמיקוד */
+.find__bar { background: none; padding-block: 8px; }
+.find__box { box-shadow: 0 0 0 1px #D9DCE1; }
+.find__box:hover, .find__box:focus-within { box-shadow: 0 0 0 1px transparent, 0 2px 10px rgba(var(--scrim), .28); }
+.find__box:focus-within { outline-color: var(--blue); }
+
+/* אורי 26.10: ברצועות העשורים רק צילומים מלאים (בלי כרזות), כולם באותו צבע — מתכון הספיה של הספר (עמ׳ 62, גייד 05ב): שחור-לבן, חול מתחת, Multiply 89% */
+@media (min-width: 861px) {
+.strip button { background: #DED6C4; }
+.strip img { object-fit: cover !important; padding: 0 !important; background: none !important; filter: grayscale(1) contrast(1.05); mix-blend-mode: multiply; opacity: .89; }
+}
+
+/* אורי 26.10: "חסר שילוב של הצהוב והירוק של המותג — בלי לשנות את העיצוב, כמו ברפרנס".
+   כמו ב-Google Arts & Culture: שדות חיוורים בגוון לסקשנים מסוימים + רצועה אחת רוויה עם צ׳יפים.
+   · אוצרות — שדה זהב חיוור (כמו "Play with culture" #FFF5E9) · 12 הקהילות — שדה ירוק חיוור (כמו "What adventure" #F1F8E9)
+   · עוד לגלות — רצועת זהב מלאה עם צ׳יפים כהים (כמו הרצועה הצהובה שלהם). הירוק הכהה נשאר בתיבת "קהילה של היום" (עמ׳ 63) */
+.f-gold-soft { background: #FBF3E0; }
+.f-green-soft { background: #E8F0EC; }
+.f-gold { background: var(--gold); color: var(--ink); }
+.f-gold .sec__h, .f-gold .sec__sub { color: var(--ink); }
+.f-gold .chips a { box-shadow: inset 0 0 0 1px rgba(31, 19, 74, .55); color: var(--ink); background: transparent; }
+.f-gold .chips a:hover { background: var(--ink); color: var(--white); box-shadow: none; }
+.f-gold :focus-visible { outline-color: var(--ink); }
+.f-gold-soft .flow__card.is-poster { background: var(--white); }
+
+/* אורי 26.10: "שלבי את הצהוב והירוק במיקומים רלוונטיים — בלי לשנות רקעים".
+   זהב רק כמילוי/סימון או כטקסט על רקע כהה (על לבן הוא לא עובר ניגודיות); ירוק כהה כטקסט על לבן (7.95:1).
+   · סוג התוכן על צילום (אריחים, הקהילה של היום) — קו זהב קצר מתחת לתווית
+   · תוויות סוג על לבן (ציר הזמן, סיפור בפוקוס) + השנים ברשימת הסיפורים — ירוק כהה
+   · האוצר שבמרכז הקרוסלה — קו זהב בתחתית (כמו העשור הנבחר)
+   · צ׳יפים ב"עוד לגלות" — מילוי זהב בריחוף */
+/* זהב כטקסט קטן על השכבה הכהה לא עובר 4.5:1 — לכן התווית נשארת בתכלת, והזהב הוא הקו הקצר מתחתיה (כמו בגוגל) */
+.tile__kind::after, .today__kind::after { content: ""; display: block; width: 24px; height: 3px; margin: 8px auto 0; border-radius: 2px; background: var(--gold); }
+.today__kind::after { margin-inline: 0; }
+.story__kind, .split__kind { color: var(--green); }
+.story__list .y { color: var(--green); }
+.flow__card[data-pos="0"] { border-bottom: 4px solid var(--gold); }
+.chips a:hover { background: var(--gold); color: var(--ink); box-shadow: none; }
+
+/* אורי 26.10: התפריט הראשי = המועצה · היישובים (תפריט נפתח) · 7 באוקטובר · כל הפרסומים; ובפוטר בקצה השמאלי של שורת היישובים */
+.tabs__dd { position: relative; display: flex; }
+.tabs__btn { position: relative; display: flex; align-items: center; gap: 4px; padding: 0 12px; border: 0; background: none; cursor: pointer;
+  font: 500 var(--fs-meta)/1 var(--sans); color: var(--ink-2); transition: color var(--t-fast) ease, background-color var(--t-fast) ease; }
+.tabs__btn:hover, .tabs__btn[aria-expanded="true"] { color: var(--ink); background: var(--hover); }
+.tabs__chev { width: 16px; height: 16px; transition: transform var(--t-med) var(--ease-out); }
+.tabs__btn[aria-expanded="true"] .tabs__chev { transform: rotate(180deg); }
+.tabs__menu { position: absolute; top: calc(100% + 8px); inset-inline-start: 0; z-index: 60; width: 520px; padding: 20px 24px 16px; border-radius: var(--r); background: var(--white);
+  box-shadow: var(--e2, 0 8px 24px rgba(31, 19, 74, .14)); }
+.tabs__menu[hidden] { display: none; }
+.tabs__menu-h { display: flex; justify-content: space-between; margin: 0 0 12px; font: 500 var(--fs-body)/1.3 var(--sans); color: var(--ink); }
+.tabs__menu-h span { font-weight: 400; color: var(--ink-2); }
+.tabs__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 24px; border-top: 1px solid var(--line); }
+.tabs .tabs__grid a { display: flex; justify-content: space-between; align-items: center; height: 44px; padding: 0 4px; border-bottom: 1px solid var(--line); color: var(--ink); font-weight: 400; }
+.tabs .tabs__grid a::after { content: none; }
+.tabs .tabs__grid a span { font: 300 var(--fs-meta)/1 var(--display); color: var(--green); }
+.tabs .tabs__grid a:hover { background: none; color: var(--blue); }
+.foot__row { max-width: var(--max); margin: 0 auto 16px; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.foot__row .foot__places { margin: 0; padding: 0; border: 0; max-width: none; }
+.foot__main { display: flex; flex-wrap: wrap; gap: 0 20px; margin-inline-start: auto; }
+.foot__main a { color: var(--ink); font-weight: 500; text-decoration: none; }
+.foot__main a:hover { color: var(--blue); text-decoration: underline; }
+
+/* אורי 26.10: "משהו לא עובד" מתחת לחיפוש — אחרי שהבר הכחול ירד נשאר רווח של 68px (הודעת שגיאה ריקה תפסה מקום),
+   והכפתורים נראו כפעולה נפרדת. ui-ux-pro-max whitespace-balance: פריטים קשורים צמודים. כמו בדף הבית של גוגל:
+   שדה ← 24px ← שני כפתורים ניטרליים זהים ← 12px ← דוגמאות */
+.find__msg:empty { display: none; }
+.find__msg { margin-top: 12px; text-align: center; }
+.find__btns { margin-top: 24px; }
+.find__btns .btn { height: 40px; padding: 0 20px; border-radius: 999px; background: var(--paper); color: var(--ink); box-shadow: none; font-weight: 500; }
+.find__btns .btn:hover { background: var(--paper); box-shadow: inset 0 0 0 1px var(--line-strong, rgba(31, 19, 74, .22)), 0 1px 2px rgba(31, 19, 74, .12); color: var(--ink); }
+.find__note { margin-top: 8px; }
+
+/* אורי 26.10: התפריט הנפתח "משמאל נחתך" — היה מעוגן לקצה הימני של הכפתור ונמתח 520px שמאלה אל מחוץ למסך.
+   עכשיו מעוגן לקצה השמאלי של הכפתור ונפתח פנימה (ימינה), בתוך המסך */
+.tabs__menu { inset-inline-start: auto; inset-inline-end: 0; }
+
+/* אורי 26.10: התפריט נפתח ממורכז מתחת לפריט "היישובים" (לא מיושר לימין או לשמאל) */
+.tabs__menu { inset-inline: auto; left: 50%; right: auto; transform: translateX(-50%); }
+
+/* אורי 26.10: "התמונות של היום צריכות להיות כבר בצבע — הלקוח יעלה תמונות אמיתיות בצבע".
+   העשורים 2000 / 2010 / 2020 — צילום בצבע המקורי, בלי מתכון הספיה (הקבצים המוקטנים נוצרו מחדש מהמקור בצבע) */
+@media (min-width: 861px) {
+  .strip[data-d="2000"] img, .strip[data-d="2010"] img, .strip[data-d="2020"] img { filter: none; mix-blend-mode: normal; opacity: 1; }
+}
+
+/* אורי 26.10: שורת הסוג והשנה בפרסומים האחרונים "קטנה מדי" — 16px כמו טקסט הגוף (ui-ux-pro-max: גוף 16) */
+.reco__meta > span, .reco__meta .y { font-size: var(--fs-body, 16px); line-height: 24px; }
+
+/* ==========================================================================
+   סבב 2 (26.10) — התאמה ל-Google Arts & Culture במחשב בלבד (≥1024). טאבלט, טלפון ומגירה לא השתנו.
+   המידות נמדדו מהרפרנס ב-1440 (artsandculture.google.com): כותרת 56, סקשן 36px למעלה ולמטה, כותרת 36/44,
+   תוכן 40px מתחת לכותרת, אריח 288×461 עם שכבה שטוחה rgba(0,0,0,.4) ותווית למעלה / שם באמצע / כפתור למטה,
+   כפתור על צילום: מסגרת לבנה 2px ופינה 2px, "עוד" בסוף סקשן: מילוי כהה ופינה 4px בגובה 36,
+   קרוסלה: מרכז 421×454 וצדדים ~78%, "של היום": כרטיס 1200×640, כותרת למעלה ותיאור למטה,
+   סיפור: כרטיס 1200×364 עם צל רמה 1, ציר זמן: רצועות 454 גובה, שנה 22px, "מומלצים": 220×265 עם כותרת על התמונה,
+   צ׳יפים 34px בפינה 16. הצבעים, הגופנים, הרקעים והתוכן — כמו שהיו (נעולים).
+   ========================================================================== */
+@media (min-width: 1024px) {
+  :root { --hdr: 56px; --g-e1: 0 1px 2px rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15); }
+  /* כותרת */
+  .hdr { height: 56px; }
+  .hdr__logo img { height: 36px; }
+  .tabs a, .tabs__btn { padding: 0 12px; font: 500 14px/20px var(--sans); letter-spacing: .25px; }
+  .hdr__search { min-height: 40px; height: 40px; padding: 0 16px 0 12px; border-radius: 100px; }
+  /* קצב סקשנים וכותרות */
+  .sec { padding: 36px var(--gut); }
+  .find + .sec { padding-top: 36px; }
+  .sec__h { font-size: 36px; line-height: 44px; }
+  .sec__more { margin-top: 32px; }
+  /* כפתורים כמו אצלם: פינה 4px, גובה 36; "עוד" בסוף סקשן = מילוי כהה */
+  .btn { min-height: 36px; padding: 0 24px; border-radius: 4px; font: 500 14px/20px var(--sans); letter-spacing: .25px; }
+  .sec__more .btn, .sec__more .btn--line { background: var(--ink); color: var(--white); box-shadow: none; }
+  .sec__more .btn:hover { background: #2E2166; box-shadow: var(--g-e1); }
+  .btn--ghost { min-height: 40px; border-radius: 2px; box-shadow: inset 0 0 0 2px var(--white); }
+  /* אריחים ("גלו" ו-12 הקהילות): תווית למעלה, שם באמצע, כפתור למטה */
+  .tiles .tile, .rail__row .tile { height: 461px; padding: 40px 12px 24px; justify-content: space-between; gap: 0; }
+  .tile__txt { display: contents; }
+  .tile::after { background: rgba(0, 0, 0, .45); }
+  .tile:hover::after { background: rgba(0, 0, 0, .55); }
+  .tile__kind { color: var(--white); }   /* התווית לבנה כמו אצלם (תכלת על השכבה השטוחה ירדה ל-3.97:1) */
+  .tile__name { font: 400 22px/28px var(--sans); }
+  .tile__sub { margin-top: 8px; }
+  .rail .tile__name { font: 300 28px/1.2 var(--display); }
+  /* קרוסלת האוצרות */
+  .flow { height: 500px; --flow-shrink: .22; }
+  .flow__card { width: 421px; height: 454px; margin: -227px 0 0 -210px; }
+  .flow__cap b { font: 400 22px/28px var(--sans); }
+  /* הקהילה של היום: כרטיס 1200×640, הכותרת למעלה במרכז, התיאור למטה, בלי תיבה */
+  .today { padding: 36px var(--gut); }
+  .today .sec__h { margin-bottom: 40px; }
+  .today__card { height: 640px; }
+  .today__card::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(0deg, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, .32) 26%, rgba(0, 0, 0, .3) 70%, rgba(0, 0, 0, .58) 100%); }
+  .today__box { position: absolute; inset: 0; z-index: 1; width: auto; padding: 40px; border-radius: 0; background: none; align-items: center; text-align: center; }
+  .today__kind::after { margin: 8px auto 0; }
+  .today__name { margin-top: 12px; font: 300 36px/44px var(--display); }
+  .today__text { margin-top: auto; max-width: 700px; }
+  .today__box .btn { display: none; }
+  /* ציר הזמן: רצועות 454, הפתוחה ~3 רוחבים, השנה 22px תמיד */
+  .strips { height: 454px; }
+  .strip.is-open { flex-grow: 2.9; }
+  .strip__y, .strip.is-open .strip__y { transform: none; inset-inline-start: 24px; bottom: 24px; font: 400 22px/28px var(--display); }
+  /* כרטיס הסיפור מתחת לרצועות — כמו "Story of the day": טקסט בצד ההתחלה, תמונה בצד השני, צל רמה 1 */
+  .story { gap: 0; margin-top: 36px; border-radius: var(--r); overflow: hidden; background: var(--white); box-shadow: var(--g-e1); }
+  .story__img { order: 2; min-height: 364px; border-radius: 0; }
+  .story__txt { padding: 24px 32px; }
+  .story__h { font-size: 28px; }
+  /* רגעים שנחרטו: אותו כרטיס */
+  .split { box-shadow: var(--g-e1); }
+  .split__img { min-height: 364px; }
+  .split__txt { padding: 24px 48px; }
+  .split__kind, .story__kind { font: 500 13px/20px var(--sans); letter-spacing: .8px; }
+  .split__y { font-size: 56px; }
+  .split__h { margin-top: 12px; font: 400 24px/32px var(--sans); }
+  .split__txt .btn, .story__txt .btn { margin-top: 24px; }
+  /* פרסומים אחרונים: כרטיסים אחידים 220×265, הכותרת על התמונה */
+  .reco__row { gap: 40px; align-items: flex-start; }
+  .reco__row a { position: relative; width: 220px; }
+  .reco__row .ph { position: relative; }
+  .reco__row .ph::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .5) 34%, rgba(0, 0, 0, 0) 62%); }
+  .reco__row li:nth-child(n) img { width: 220px; height: 265px; }
+  .reco__meta { position: absolute; inset-inline: 0; bottom: 0; z-index: 1; width: auto; min-width: 0; padding: 16px; }
+  .reco__meta b { color: var(--white); font: 500 16px/22px var(--sans); }
+  .reco__meta > span { color: var(--white); }
+  .reco__row a:hover b { color: var(--white); }
+  .reco .round { top: 108px; }
+  /* צ׳יפים */
+  .chips { gap: 8px; }
+  .chips a { min-height: 34px; padding: 0 12px; border-radius: 16px; font: 500 13px/20px var(--sans); letter-spacing: .25px; }
+}
+
+/* אורי 26.10: 12 הקהילות כמו "Museum explorer / Where do you want to visit today?" — רשת של 4 בשורה, 3 שורות (במקום גלילה לצדדים).
+   דסקטופ בלבד. "עוד לגלות" הוסר מהעמוד */
+@media (min-width: 1024px) {
+  .rail__row { grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-columns: auto; overflow: visible; scroll-snap-type: none; gap: 16px; }
+  .rail .round { display: none !important; }
+  .rail__row .tile { height: 360px !important; }
+}
+
+/* ===== אורי 26.10 — שלושה תיקונים לפי הרפרנס (Google Arts & Culture), דסקטופ בלבד ===== */
+@media (min-width: 1024px) {
+
+  /* 1. 12 הקהילות = "Museum explorer": עיגול עם התמונה, תג עגול עם סמל המועצה על קצה העיגול, ומתחת: "קהילה" · שם היישוב · שנה */
+  #communities .rail__row { gap: 48px 16px; }
+  #communities .tile { height: auto !important; padding: 0 !important; gap: 0 !important; justify-content: flex-start !important; background: none !important;
+    color: var(--ink) !important; overflow: visible !important; border-radius: 0 !important; isolation: auto; }
+  #communities .tile img { position: relative !important; inset: auto !important; z-index: 0 !important; width: 240px !important; height: 240px !important;
+    border-radius: 50%; object-fit: cover; transform: none !important; }
+  #communities .tile::after { content: "" !important; position: absolute !important; inset: auto !important; top: 212px !important; left: 50% !important;
+    width: 56px; height: 56px; margin-left: -28px; border-radius: 50%; z-index: 2 !important; opacity: 1 !important;
+    background: var(--white) !important; box-shadow: 0 1px 3px rgba(31, 19, 74, .2), 0 2px 8px rgba(31, 19, 74, .14); }
+  #communities .tile::before { content: "" !important; position: absolute !important; top: 226px; left: 50%; width: 28px; height: 28px; margin-left: -14px; z-index: 3;
+    background: var(--gold); -webkit-mask: url("img/emblem-mask.png") center / contain no-repeat; mask: url("img/emblem-mask.png") center / contain no-repeat; }
+  #communities .tile__txt { margin-top: 44px; gap: 0 !important; text-align: center; }
+  #communities .tile__kind { font: 500 13px/20px var(--sans) !important; color: var(--ink-2) !important; letter-spacing: .4px; }
+  #communities .tile__kind::after { content: none !important; }
+  #communities .tile__name { margin-top: 8px; font: 500 17px/24px var(--sans) !important; color: var(--ink) !important; }
+  #communities .tile__name .y { display: block; margin-top: 6px; font: 400 15px/20px var(--sans) !important; color: var(--ink-2) !important; }
+  #communities .tile .btn { display: none !important; }
+  #communities .tile:hover .tile__name { color: var(--blue) !important; }
+
+  /* 2. פרסומים אחרונים = "Recommended for you": התמונות בפרופורציה הטבעית, בלי פינות, ממורכזות לגובה; הכיתוב מופיע רק בריחוף/מיקוד, על התמונה */
+  .reco__row { align-items: center !important; gap: 40px !important; }
+  .reco__row a { width: auto !important; border-radius: 0 !important; }
+  .reco__row .ph { border-radius: 0 !important; }
+  .reco__row li:nth-child(n) img { width: auto !important; height: 265px !important; max-width: 420px; object-fit: contain; border-radius: 0; transform: none !important; }
+  .reco__row .ph::after, .reco__meta { opacity: 0; transition: opacity var(--t-med, 200ms) ease; }
+  .reco__row a:hover .ph::after, .reco__row a:focus-visible .ph::after, .reco__row a:hover .reco__meta, .reco__row a:focus-visible .reco__meta { opacity: 1; }
+
+  /* 3. שנים: בלי הדגשה — באותו גופן, גודל וצבע של הטקסט סביבן (ברפרנס שנה היא מידע, לא כותרת).
+        תוויות הרצועות בציר הזמן נשארות (כמו "1672" ברפרנס) */
+  .story__list .y, .flow__cap .y, .today__name .y, .reco__meta .y, .tabs .tabs__grid a span { font-family: var(--sans) !important; font-weight: 400 !important; color: inherit !important; }
+  .story__list .y { font-size: 16px !important; color: var(--ink-2) !important; }
+  .today__name .y { font-size: inherit !important; }
+  .tabs .tabs__grid a span { font-size: 14px !important; color: var(--ink-2) !important; }
+  .split__y { font: 400 16px/24px var(--sans) !important; color: var(--ink-2) !important; margin: 4px 0 0 !important; letter-spacing: normal !important; }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) { .reco__row .ph::after, .reco__meta { transition: none; } }
+
+/* אורי 26.10: ניקוי החיפוש — אייקון פח קטן במקום X */
+.find__clear .find__trash { width: 20px; height: 20px; }
+.find__clear:hover .find__trash { color: var(--ink); }
+
+/* אורי 26.10: "התמונות צריכות להיות זהות בצבע ובטון" — כל אריחי "גלו את הסיפור" וכל עיגולי 12 הקהילות עוברים את אותו מתכון ספיה של הספר
+   (עמ׳ 62) — מסנן אחיד: שחור-לבן ← גוון ספיה קבוע ← ניגודיות ובהירות אחידות, כך שהטון זהה בלי קשר לצילום המקור */
+.tiles .tile img, #communities .tile img { filter: grayscale(1) sepia(.32) contrast(1.06) brightness(1.03); }
+
+/* אורי 26.10: בריחוף על אריח — הכפתור "גלו עוד" מתמלא בירוק המותג (#195B4C, לבן עליו 7.95:1) */
+.tiles .tile .btn { transition: background-color 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+.tiles .tile:hover .btn, .tiles .tile:focus-visible .btn { background: var(--green) !important; border-color: var(--green) !important; box-shadow: inset 0 0 0 2px var(--green) !important; color: var(--white) !important; }
+
+/* אורי 26.10: כפתורי "לכל..." בסוף הסקשנים — ירוק המותג (לבן עליו 7.95:1); בריחוף ירוק כהה יותר */
+.sec__more .btn { background: var(--green) !important; color: var(--white) !important; box-shadow: none !important; }
+.sec__more .btn:hover, .sec__more .btn:focus-visible { background: #134537 !important; }
+
+/* אורי 26.10: "הקהילה של היום" על הלבן, מעל רצועת הצילום — כמו "Museum of the day" ברפרנס.
+   מדוד ברפרנס (1440): ~72px מתוכן הסקשן הקודם עד הכותרת (36 סוף סקשן + 36 תחילת סקשן), ~40px מהכותרת עד הרצועה, והכרטיס ~32px בתוך הרצועה */
+.today__head { padding: 36px var(--gut) 40px; text-align: center; }
+.today__head .sec__h { margin: 0; }
+@media (min-width: 1024px) { .today.f-photo { padding-top: 32px !important; padding-bottom: 32px !important; } }
+
+/* אורי 26.10: כרטיס "הקהילה של היום" — בלי התווית "קהילה", שם גדול יותר, השנה בתכלת */
+@media (min-width: 1024px) {
+  .today__name { margin-top: 0; font: 300 48px/56px var(--display); }
+}
+.today__name .y { color: var(--sky) !important; }
+
+/* אורי 26.10: כפתורי הסיפורים בירוק (כמו "לכל האוצרות"); "לעדויות ולסיפורים" בכחול הכהה של המותג */
+#storyAll, .split .btn[href="/topic/1960s/"] { background: var(--green) !important; color: var(--white) !important; box-shadow: none !important; }
+#storyAll:hover, #storyAll:focus-visible, .split .btn[href="/topic/1960s/"]:hover, .split .btn[href="/topic/1960s/"]:focus-visible { background: #134537 !important; }
+.split .btn[href="/topic/october-7/"] { background: var(--ink) !important; color: var(--white) !important; box-shadow: none !important; }
+.split .btn[href="/topic/october-7/"]:hover, .split .btn[href="/topic/october-7/"]:focus-visible { background: #2E2166 !important; }
+
+/* אורי 26.10: 12 הקהילות — עיגול קטן יותר, טיפוגרפיה מסודרת: שם ואז שנה גדולה בקולבו */
+@media (min-width: 1024px) {
+  #communities .rail__row { gap: 56px 16px; }
+  #communities .tile img { width: 184px !important; height: 184px !important; }
+  #communities .tile::after { top: 160px !important; width: 48px; height: 48px; margin-left: -24px; }
+  #communities .tile::before { top: 172px; width: 24px; height: 24px; margin-left: -12px; }
+  #communities .tile__txt { margin-top: 40px; }
+  #communities .tile__name { margin-top: 0; font: 500 18px/24px var(--sans) !important; }
+  #communities .tile__name .y { margin-top: 4px; font: 300 28px/32px var(--display) !important; color: var(--ink) !important; }
+}
+
+/* אורי 26.10: "הקהילה של היום" — חצים לדפדוף בין 12 הקהילות + סימן מים של סמל המועצה שנשאר קבוע (דסקטופ) */
+.today__stage { position: relative; max-width: var(--max); margin: 0 auto; }
+.today__nav, .today__mark { display: none; }
+@media (min-width: 1024px) {
+  .today__nav { display: grid; position: absolute; top: 50%; margin-top: -24px; z-index: 3; box-shadow: var(--e2); }
+  .today__nav--prev { inset-inline-start: 24px; }
+  .today__nav--next { inset-inline-end: 24px; }
+  .today__nav:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .today__mark { display: block; position: absolute; z-index: 1; top: 50%; inset-inline-end: 112px; width: 300px; height: 300px; margin-top: -150px; pointer-events: none;
+    background: var(--white); opacity: .16; -webkit-mask: url("img/emblem-mask.png") center / contain no-repeat; mask: url("img/emblem-mask.png") center / contain no-repeat; }
+  .today__card > img { transition: transform var(--t-slow) var(--ease-out), opacity .2s ease; }
+  .today__card > img.is-swap, .today__box.is-swap { opacity: 0; }
+  .today__box { transition: opacity .2s ease; }
+}
+@media (prefers-reduced-motion: reduce) { .today__card > img, .today__box { transition: none; } }
+
+/* אורי 26.10: "פרסומים אחרונים" כמו "ג'פוניזם" ברפרנס — פסיפס של 5: כרטיס גבוה בצד שמאל, ומימין שתי שורות ברוחב מתחלף (רחב+צר / צר+רחב).
+   מידות מהרפרנס (1845 רוחב): עמודות 430 · 242 · 429 · 671, שורות 387+387. תג צבעוני, כותרת ותת-כותרת לבנים על מעבר כהה, תמיד גלויים */
+.reco__chip { display: none; }
+@media (min-width: 1024px) {
+  .reco__row { display: grid !important; grid-template-columns: 430fr 242fr 429fr 671fr; grid-template-rows: 264px 264px; gap: 24px !important; overflow: visible !important; padding: 0 !important; }
+  .reco__row li { min-width: 0; }
+  .reco__row li:nth-child(1) { grid-column: 4; grid-row: 1 / 3; }
+  .reco__row li:nth-child(2) { grid-column: 1 / 3; grid-row: 1; }
+  .reco__row li:nth-child(3) { grid-column: 3; grid-row: 1; }
+  .reco__row li:nth-child(4) { grid-column: 1; grid-row: 2; }
+  .reco__row li:nth-child(5) { grid-column: 2 / 4; grid-row: 2; }
+  .reco__row a { position: relative; display: block; width: 100% !important; height: 100%; border-radius: 8px !important; overflow: hidden; }
+  .reco__row .ph { position: absolute !important; inset: 0; border-radius: 8px !important; }
+  .reco__row li:nth-child(n) img { width: 100% !important; height: 100% !important; max-width: none; object-fit: cover; object-position: center 40%; }
+  .reco__row a:hover img { transform: scale(1.03) !important; }
+  .reco__row .ph::after { opacity: 1 !important; background: linear-gradient(0deg, rgba(0, 0, 0, .78) 0%, rgba(0, 0, 0, .42) 30%, rgba(0, 0, 0, 0) 58%) !important; }
+  .reco__meta { opacity: 1 !important; padding: 20px 24px !important; display: flex; flex-direction: column; align-items: flex-start; }
+  .reco__chip { display: inline-block; margin-bottom: 8px; padding: 2px 10px; border-radius: 4px; background: var(--blue); color: var(--white); font: 500 13px/20px var(--sans); }
+  .reco__meta b { font: 500 20px/26px var(--sans) !important; color: var(--white) !important; }
+  .reco__meta > span:last-child { margin-top: 2px; color: var(--white) !important; font: 400 15px/20px var(--sans) !important; }
+  .reco__k { display: none; }
+  .reco .round { display: none !important; }
+  .reco__row a:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+}
+@media (min-width: 1024px) { .reco__row { align-items: stretch !important; } .reco__row li { height: auto; } }
+/* אורי 26.10: הקו הקצר מתחת לתווית באריחים — לבן במקום זהב */
+.tiles .tile__kind::after { background: var(--white); }
+
+/* אורי 26.10: תג הסוג בפסיפס — צהוב המותג עם טקסט כחול כהה (ניגודיות 8.5:1) */
+.reco__chip { background: var(--gold) !important; color: var(--ink) !important; }
+
+/* אורי 26.10: סקשן "12 הקהילות" מוסתר (דסקטופ). נשאר ב-DOM כי הדפדוף ב"הקהילה של היום" קורא ממנו את הנתונים */
+@media (min-width: 1024px) { #communities { display: none !important; } }
+/* אורי 26.10: התג קטן יותר — 12px/18px (קודם נדרס ל-16px בכלל של .reco__meta > span) */
+@media (min-width: 1024px) { .reco__meta > .reco__chip { margin: 0 0 8px; padding: 1px 8px; font: 500 12px/18px var(--sans) !important; letter-spacing: .2px; } }
+
+/* אורי 26.10: התפריט "היישובים" נצמד לקצה השמאלי של הגריד (כמו קצה התוכן בעמוד), לא ממורכז מתחת לפריט.
+   ה-dd כבר לא ממוקם, אז התפריט נמדד מול .hdr (sticky) */
+@media (min-width: 1024px) {
+  .tabs__dd { position: static; }
+  .tabs__menu { top: calc(100% + 8px); left: max(var(--gut), calc((100% - var(--max)) / 2)) !important; right: auto !important; inset-inline: auto; transform: none !important; }
+}

@@ -483,6 +483,19 @@
     pvCard.addEventListener('pointerleave', function () { pvCard.classList.remove('is-zoom'); rows.forEach(function (r) { r.classList.remove('is-hover'); }); });
   }
 
+  /* ---------- ציר הזמן: הצילום מקשר לפוסט של הפריט הפתוח, עם זום עדין — כמו הכרטיס בפרסומים (אורי, 26.10) ----------
+     נשאר מוסתר מקורא מסך ובלי עצירת Tab: הקישור הנגיש הוא הכפתור "להמשך קריאה" בפריט עצמו */
+  (function () {
+    var fig = document.getElementById('tlFigure'); if (!fig) return;
+    var activeBtn = function () { return document.querySelector('.tl-panel:not([hidden]) .tl-item.is-active .tl-item__body a.btn'); };
+    fig.addEventListener('click', function () { var b = activeBtn(); if (b) window.location.href = b.getAttribute('href'); });
+    fig.addEventListener('pointerenter', function () {
+      var im = document.getElementById('tlImg'); if (im && im.getAnimations) im.getAnimations().forEach(function (a) { a.cancel(); });
+      fig.classList.add('is-zoom'); var b = activeBtn(); if (b) b.classList.add('is-hover');
+    });
+    fig.addEventListener('pointerleave', function () { fig.classList.remove('is-zoom'); document.querySelectorAll('.tl-item__body a.btn.is-hover').forEach(function (b) { b.classList.remove('is-hover'); }); });
+  })();
+
   /* ---------- 8. פס היישובים: הצילום ברקע ההירו מתחלף לצילום של היישוב ---------- */
   (function () {
     var hero = document.getElementById('hero'), base = hero && hero.querySelector('.hero__photo'), scrim = hero && hero.querySelector('.hero__scrim');

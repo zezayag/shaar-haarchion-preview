@@ -585,3 +585,22 @@ html.is-places-out .places:focus-within .place, html.is-places-out .places:focus
 }
 /* אורי: בתפריט הנפתח "לפי שנת ההקמה" מיושר לשמאל — מעל עמודת השנים, מול "12 היישובים" מימין */
 .subnav__sub { justify-content: space-between; }
+/* אורי: "הריווח בכל הרזולוציות ככה" (כמו בדסקטופ 1379: ~24 מעל הספרות, ~16 מימין) — עד עכשיו זה השתנה עם גודל השנה
+   (9 במחשב נייד קטן, 29 במקבוק, 17 בטלפון). הריווח נמדד מהקו (8px) עד הספרה עצמה:
+   מעל — 24px: מקזזים את האוויר שבתוך שורת הספרות (‎.1435em); מימין — 16px: מקזזים את האוויר של הספרה האחרונה (‎.0309em) */
+.treasures .treasure__year { margin-top: calc(32px - .1435em); padding-inline-start: calc(24px - .0309em); }
+
+/* ציר הזמן: מצב לפני הכניסה (motion.js מסיר את המחלקה כשהסקשן נכנס למסך; בלי JS / בהדפסה — הכל גלוי) */
+.tl-intro-pending .decades-nav, .tl-intro-pending .tl-panel:not([hidden]) .tl-item, .tl-intro-pending .tl-all, .tl-intro-pending #tlImg, .tl-intro-pending #tlCap { opacity: 0; }
+.tl-intro-pending .tl-photo__frame { clip-path: inset(0 0 0 100%); }
+@media print { .tl-intro-pending .decades-nav, .tl-intro-pending .tl-item, .tl-intro-pending .tl-all, .tl-intro-pending #tlImg, .tl-intro-pending #tlCap { opacity: 1; } .tl-intro-pending .tl-photo__frame { clip-path: none; } }
+
+/* ציר הזמן: הצילום לחיץ (מוביל לפוסט של הפריט הפתוח) — סמן יד, זום עדין 1.03 על הצילום בלבד, והכפתור בפריט מגיב יחד איתו (כמו בפרסומים) */
+.timeline .tl-photo { cursor: pointer; }
+.timeline .tl-photo.is-empty { cursor: default; }
+.timeline .tl-photo__frame { overflow: hidden; }
+.timeline .tl-photo__frame > img { transition: transform 600ms cubic-bezier(.2, 0, 0, 1); }
+.timeline .tl-photo.is-zoom .tl-photo__frame > img { transform: scale(1.03); }
+.tl-item__body .btn.is-hover { background: var(--blue); }
+.tl-item__body .btn.is-hover::before { opacity: .08; }
+@media (prefers-reduced-motion: reduce) { .timeline .tl-photo.is-zoom .tl-photo__frame > img { transform: none; } }
