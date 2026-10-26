@@ -40,8 +40,8 @@
   .tile__cap b { font-weight: 500; }
 
   /* לוגו + משפט פתיחה */
-  .t-logo { grid-area: logo; background: var(--white); padding: clamp(20px, 3vw, 40px); justify-content: space-between; }
-  .t-logo img { flex: 1 1 auto; min-height: 0; width: 100%; max-width: 480px; object-fit: contain; object-position: right center; }
+  .t-logo { grid-area: logo; background: var(--white); padding: clamp(20px, 3vw, 40px); justify-content: center; align-items: center; } /* אורי 26.10: בלי שורת ההסבר — הלוגו לבד, ממורכז */
+  .t-logo img { flex: 1 1 auto; min-height: 0; width: 100%; max-width: 520px; object-fit: contain; object-position: center; }
   .t-logo p { margin: 16px 0 0; font-family: var(--display); font-size: clamp(20px, 1.7vw, 28px); line-height: 1.25; max-width: 22em; }
 
   /* ספר המותג */
@@ -63,6 +63,15 @@
   .sw--gold { background: var(--gold); color: var(--ink); }
   .sw--sand { background: var(--sand); color: var(--ink); }
   .sw--paper { background: var(--paper); color: var(--ink); }
+  /* אורי 26.10: מעבר עכבר על צבע — הפס שלו מתרחב קצת בגובה, באותו מבנה */
+  .swatches { transition: grid-template-rows 320ms var(--ease); }
+  .swatches:has(.sw--ink:hover) { grid-template-rows: 2.05fr 1.2fr 1fr 1fr 1fr 1fr; }
+  .swatches:has(.sw--blue:hover) { grid-template-rows: 1.6fr 1.65fr 1fr 1fr 1fr 1fr; }
+  .swatches:has(.sw--sky:hover) { grid-template-rows: 1.6fr 1.2fr 1.45fr 1fr 1fr 1fr; }
+  .swatches:has(.sw--gold:hover) { grid-template-rows: 1.6fr 1.2fr 1fr 1.45fr 1fr 1fr; }
+  .swatches:has(.sw--sand:hover) { grid-template-rows: 1.6fr 1.2fr 1fr 1fr 1.45fr 1fr; }
+  .swatches:has(.sw--paper:hover) { grid-template-rows: 1.6fr 1.2fr 1fr 1fr 1fr 1.45fr; }
+  @media (prefers-reduced-motion: reduce) { .swatches { transition: none; } }
 
   /* טיפוגרפיה */
   .t-type { grid-area: type; background: var(--white); padding: clamp(16px, 2vw, 28px); justify-content: space-between; }
@@ -94,7 +103,7 @@
   .cta-bg { position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity 320ms ease; pointer-events: none; }
   .cta-bg--1 { background: linear-gradient(rgba(133, 128, 118, .9), rgba(133, 128, 118, 0) 120px), linear-gradient(#B9B3A4, #B9B3A4), url("1st/assets/img/hero/ruhama-1944-3.jpg") center 40% / cover; background-blend-mode: multiply, multiply, normal; }
   .cta-bg--2 { background: var(--white); }
-  .cta-bg--2::before { content: ""; position: absolute; inset: 0; background: url("2nd/assets/img/arch/council-building-lawn-up-640.jpg") center 40% / cover; opacity: .07; }
+  .cta-bg--2::before { content: ""; position: absolute; inset: 0; background: url("2nd/assets/img/arch/nahaloz-1953-1-640.jpg") center 40% / cover; opacity: .13; /* אורי 26.10: תמונה מורגשת יותר */ }
   .cta-h { position: relative; transition: color 300ms ease; }
   .t-cta:has([data-s="1"]:is(:hover, :focus-visible)) .cta-bg--1,
   .t-cta:has([data-s="2"]:is(:hover, :focus-visible)) .cta-bg--2 { opacity: 1; }
@@ -111,6 +120,11 @@
   .cta--n[data-s="3"]:is(:hover, :focus-visible) .cta-orbit { opacity: 1; animation: cta-orbit 4s linear infinite; }
   .cta--n[data-s="3"]:hover { transform: none; }
   @keyframes cta-orbit { to { transform: rotate(360deg); } }
+  /* אורי 26.10: גם המספר עצמו מקבל את הכפתור של הסקיצה (3 נשאר כמו שהוא) */
+  .cta--n { transition: transform 280ms var(--ease), background-color 200ms ease, color 200ms ease, box-shadow 200ms ease; }
+  .cta--n[data-s="1"]:is(:hover, :focus-visible) { background: var(--blue); color: var(--white); font-weight: 400; transform: none; }
+  .cta--n[data-s="2"]:is(:hover, :focus-visible) { background: var(--blue); color: var(--white); font-family: "Heebo", system-ui, sans-serif; font-weight: 500; transform: none;
+    box-shadow: 0 1px 2px rgba(31, 19, 74, .16), 0 1px 3px 1px rgba(31, 19, 74, .08); }
   @media (prefers-reduced-motion: reduce) { .cta--n[data-s="3"]:is(:hover, :focus-visible) .cta-orbit { animation: none; } .cta-bg, .cta-h, .t-cta { transition: none; } }
 
   /* תצלומי ארכיון — מתחלפים */
@@ -132,6 +146,9 @@
   .zoom img { width: 100%; height: 100%; object-fit: cover; transition: transform 400ms var(--ease); }
   .t-book .zoom:hover img { transform: scale(1.02); }
   .t-wf .zoom img { height: auto; object-fit: initial; }
+  .zoom.stack { position: relative; } /* אורי 26.10: גם התצלומים והסטייל גייד נפתחים בגדול */
+  .t-sg .zoom img { object-position: center top; }
+  .t-photo .zoom:hover img.is-on, .t-sg .zoom:hover img { transform: scale(1.02); }
   .lb { width: 100vw; height: 100svh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; color: var(--paper); overflow: hidden; }
   .lb::backdrop { background: rgba(31, 19, 74, .92); }
   .lb[open] { display: grid; place-items: center; animation: lb-in 220ms var(--ease); }
@@ -195,7 +212,6 @@
 <main class="bento">
   <section class="tile t-logo" aria-label="שער הארכיון">
     <img src="img/logo-paper.png" width="1306" height="428" alt="שער הארכיון · מועצה אזורית שער הנגב">
-    <p>לפני שנכנסים לסקיצה: החומרים שממנה היא נבנתה.</p>
   </section>
 
   <figure class="tile t-book" style="margin:0">
@@ -205,7 +221,7 @@
 
   <figure class="tile t-wf" style="margin:0">
     <button type="button" class="tile__media zoom" data-zoom="img/wireframe.jpg" data-tall aria-label="הגדלה: השלד של עמוד הבית"><img src="img/wireframe.jpg" width="1440" height="4960" alt="השלד של עמוד הבית, מההירו ועד הפוטר"></button>
-    <figcaption class="tile__cap"><b>השלד</b><span class="more">: מבנה עמוד הבית</span></figcaption>
+    <figcaption class="tile__cap"><b>מבנה עמוד הבית</b></figcaption>
   </figure>
 
   <section class="tile t-pal" aria-label="פלטת הצבעים">
@@ -242,18 +258,18 @@
   </section>
 
   <figure class="tile t-photo" style="margin:0">
-    <div class="tile__media stack">
+    <button type="button" class="tile__media stack zoom" aria-label="הגדלה: תצלום הארכיון המוצג">
       <img class="is-on" src="img/dorot-1941-1.jpg" alt="תצלום ארכיון בגוון ספיה מימי היישובים">
       <img src="img/niram-1949-1.jpg" alt="" loading="lazy">
       <img src="img/nahaloz-1953-1.jpg" alt="" loading="lazy">
       <img src="img/orhaner-1960-1.jpg" alt="" loading="lazy">
-    </div>
-    <figcaption class="tile__cap"><b>תצלומי ארכיון</b><span class="more"> בספיה, מפיקיוויקי</span></figcaption>
+    </button>
+    <figcaption class="tile__cap"><b>תצלומי ארכיון בלבד</b></figcaption>
   </figure>
 
   <figure class="tile t-sg" style="margin:0">
-    <div class="tile__media"><img src="img/styleguide.jpg" width="1400" height="1750" alt="הסטייל גייד: הלוגו, הצבע הראשי והגופן"></div>
-    <figcaption class="tile__cap"><b>הסטייל גייד</b><span class="more">: מה עובר מהספר לאתר</span></figcaption>
+    <button type="button" class="tile__media zoom" data-zoom="img/styleguide.jpg" aria-label="הגדלה: הסטייל גייד"><img src="img/styleguide.jpg" width="1400" height="1750" alt="הסטייל גייד: הלוגו, הצבע הראשי והגופן"></button>
+    <figcaption class="tile__cap"><b>הסטייל גייד</b><span class="more"> על בסיס ספר המותג</span></figcaption>
   </figure>
 </main>
 <dialog class="lb" id="lb" aria-label="תצוגה מקדימה">
@@ -272,7 +288,8 @@
     var lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg');
     [].forEach.call(document.querySelectorAll('.zoom'), function (z) {
       z.addEventListener('click', function () {
-        lbImg.src = z.dataset.zoom; lbImg.alt = z.querySelector('img').alt;
+        var cur = z.querySelector('img.is-on') || z.querySelector('img'); // בתצלומים המתחלפים: התצלום שמוצג עכשיו
+        lbImg.src = z.dataset.zoom || cur.getAttribute('src'); lbImg.alt = cur.alt || 'תצלום ארכיון';
         lb.classList.toggle('lb--tall', z.hasAttribute('data-tall'));
         lb.showModal();
         lb.querySelector('.lb__fig').scrollTop = 0; // השלד נפתח מההירו
