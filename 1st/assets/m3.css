@@ -968,10 +968,11 @@
 
 /* הלשוניות: 9 עמודות שוות, בלי מסגרות ובלי משטחים — רק הספרות (COLBO 24, ספרות טבלאיות) */
 .timeline .decades { gap: 0; }
+.timeline { --tl-year-idle: rgba(31, 19, 74, .70); } /* אורי 2.11: שנות עשורים לא פעילות והמפריד שלפני הראשונה — דיו 70% (6.06:1 על נייר) */
 .timeline .decades .decade {
   display: flex; align-items: center; justify-content: center; gap: 0;
   height: 56px; padding: 0 8px; margin: 0; border: 0; border-radius: 28px;
-  background: transparent; box-shadow: none; color: var(--ink-soft); transform: none;
+  background: transparent; box-shadow: none; color: var(--tl-year-idle); transform: none;
   font-family: var(--display); font-size: 24px; font-weight: 400; line-height: 1; letter-spacing: 0;
   font-variant-numeric: tabular-nums; text-decoration: none; cursor: pointer;
   position: relative; isolation: isolate; overflow: visible;
@@ -1082,7 +1083,7 @@ html:not(.js) .timeline .decades .decade[aria-current="true"] { box-shadow: inse
 .tl-spine__dot { position: absolute; left: -5px; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--sand); transition: background-color 150ms cubic-bezier(.2, 0, 0, 1); }
 .tl-spine__dot.is-on { background: var(--gold); }
 /* "חוזרים להתחלה": מפריד אנכי קצר מימין לעשור הראשון שחזר משמאל */
-.timeline .decades .decade.is-wrap .decade__y::after { content: ""; position: absolute; right: 0; top: 50%; width: 1px; height: 24px; margin-top: -12px; background: var(--ink-soft); }
+.timeline .decades .decade.is-wrap .decade__y::after { content: ""; position: absolute; right: 0; top: 50%; width: 1px; height: 24px; margin-top: -12px; background: var(--tl-year-idle); }
 @media (prefers-reduced-motion: reduce) { .tl-spine__dot { transition: none; } }
 /* מטא עם אייקון סוג תוכן (פוסטי התיעוד של היישובים) */
 .tl-item__body .meta:has(.icon) { display: flex; align-items: center; gap: 8px; }
@@ -1176,7 +1177,7 @@ html:not(.js) .timeline .decades .decade[aria-current="true"] { box-shadow: inse
 /* אורי: התקציר בכרטיס — שתי שורות בלבד (שלוש נקודות בסוף); הטקסט המלא בפוסט */
 .timeline .tl-item__body p:not(.meta) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
 /* אורי: כותרת שנשברת — לא להשאיר מילה אחת בשורה השנייה; שבירה מאוזנת (עוד מילה-שתיים יורדות) */
-.timeline .tl-item__title { text-wrap: balance; }
+.timeline .tl-item__title { text-wrap: wrap; } /* אורי 2.11: הכותרת נשברת רק כשהשורה מלאה (בלי איזון שורות) */
 /* אורי: שנת הפריט גדולה ב-2px (18 → 20) */
 .timeline .tl-item__year, .timeline .tl-item__year--range { font-size: 20px; }
 /* אורי: עוד 2px (20 → 22) */
@@ -1230,6 +1231,8 @@ html:not(.js) .timeline .decades .decade[aria-current="true"] { box-shadow: inse
 .tl-photo__credit { display: block; margin-top: 4px; font-family: var(--display); font-size: 14px; line-height: 1.4; color: var(--ink-soft); }
 /* אורי: הצילום בפרסומים האחרונים כמו בציר הזמן — בלי מסגרת לבנה משמאל; הצילום נוגע בקצה המסך */
 .recent .preview { padding-inline-end: 0; }
+/* אורי 2.11: הכרטיס יוצא עד קצה המסך (אין שוליים חיצוניים), ולכן הטקסט מקבל שוליים פנימיים משמאל — 24px כמו שאר צדדי הכרטיס; הצילום נשאר נוגע בקצה */
+.recent #pvText { padding-inline-end: 24px; }
 /* אורי: כשהשורה דבוקה — 16px רקע מלא מתחת לקו (כמו הרווח מעל הצילום משמאל), ומתחתיו הילת הטשטוש הדועכת (24px) */
 .timeline .decades-nav::after {
   inset: 0 calc(-1 * var(--gutter)) -40px;

@@ -1,0 +1,95 @@
+/* הצעות להירו של עמוד יישוב (דורות) — שלוש גישות Google, דסקטופ. על הטוקנים של 1st, בלי צבעים חדשים. מידות לפי Material 3. */
+:root { --aw: min(var(--content), calc(100vw - 2 * var(--gutter))); --m3-label: 500 14px/20px var(--text); --m3-body: 400 16px/24px var(--text); }
+body { background: var(--paper); }
+.aw { width: var(--aw); margin-inline: auto; }
+.site-header__menu { display: none; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+i { font-style: normal; opacity: .75; }
+.opt { padding: 0 0 72px; border-bottom: 8px solid var(--sand); }
+.opt:first-of-type { padding-top: var(--header-h); }
+.opt__label { margin: 0; padding: 14px var(--gutter); background: var(--ink); color: var(--white); font: 400 18px/1.3 var(--display); }
+.opt__label b { color: var(--gold); margin-inline-end: 6px; }
+.opt__label small { display: block; margin-top: 4px; font: var(--m3-label); font-size: 14px; opacity: .85; }
+.logo { width: 56px; height: 56px; flex: none; border-radius: 50%; background: var(--blue); display: grid; place-items: center; }
+.logo img { width: 36px; height: 36px; object-fit: contain; }
+.crumbs ol { display: flex; flex-wrap: wrap; align-items: center; list-style: none; margin: 0; padding: 0; }
+.crumbs li { display: inline-flex; align-items: center; }
+.crumbs li + li::before { content: "\2039" / ""; opacity: .7; font-size: 18px; }
+.crumbs a, .crumbs [aria-current] { display: inline-flex; align-items: center; min-height: 40px; padding: 0 10px; border-radius: 20px; font: var(--m3-label); color: inherit; text-decoration: none; }
+.crumbs a:hover { background: rgba(31, 19, 74, .08); }
+.crumbs [aria-current] { font-weight: 700; }
+.acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.tonal, .outl { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 20px 0 16px; border-radius: 20px; font: var(--m3-label); text-decoration: none; color: var(--ink); }
+.tonal { background: var(--sky); }
+.outl { box-shadow: inset 0 0 0 1px var(--ink-soft); }
+.tonal:hover, .outl:hover { filter: brightness(.97); }
+.tonal .icon, .outl .icon { width: 18px; height: 18px; }
+
+/* ---------- א · עריכתי ---------- */
+.hA { padding-top: 16px; }
+.hA__media { margin: 8px 0 0; position: relative; height: 380px; border-radius: 28px; overflow: hidden; background: var(--sand); }
+.hA__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: sepia(.35) contrast(1.05); }
+.hA__media figcaption { position: absolute; inset-inline-start: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 8px; background: rgba(255, 255, 255, .9); color: var(--ink); font: var(--m3-label); }
+.hA__media figcaption .icon { width: 18px; height: 18px; }
+.hA__panel { position: relative; margin: -96px 48px 0; padding: 32px 40px 28px; border-radius: 28px; background: var(--white); box-shadow: var(--md-elev-2); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px 40px; align-items: start; }
+.hA__id { grid-column: 1; display: flex; align-items: center; gap: 20px; }
+.hA__id .kicker { margin: 0 0 4px; font: var(--m3-label); color: var(--ink-soft); }
+.hA__id h1 { margin: 0; font: 300 clamp(48px, 5.4vw, 72px)/1 var(--display); letter-spacing: -.01em; }
+.hA__desc { grid-column: 1; margin: 0; font: 400 18px/1.6 var(--display); max-width: 30em; }
+.hA__panel .acts { grid-column: 1; }
+.hA__facts { grid-column: 2; grid-row: 1 / span 3; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.hA__facts li { display: grid; gap: 2px; padding: 16px; border-radius: 12px; background: var(--paper); align-content: start; }
+.hA__facts .icon { width: 24px; height: 24px; color: var(--blue); margin-bottom: 8px; }
+.hA__facts small { font: var(--m3-label); font-size: 13px; color: var(--ink-soft); }
+.hA__facts b { font: 400 20px/1.2 var(--display); }
+
+/* ---------- ב · גיליון מקום ---------- */
+.hB { display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 24px; padding-top: 24px; align-items: stretch; }
+.hB__sheet { background: var(--white); border-radius: 16px; box-shadow: var(--md-elev-1); padding: 12px 8px 8px; display: flex; flex-direction: column; }
+.hB__sheet .crumbs { padding: 0 8px; }
+.hB__title { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 16px 8px; }
+.hB__title h1 { margin: 0; font: 400 40px/1.1 var(--display); }
+.hB__title p { margin: 6px 0 0; font: var(--m3-body); color: var(--ink-soft); }
+.round { display: flex; justify-content: space-around; padding: 12px 8px 16px; border-bottom: 1px solid var(--sand); }
+.round a { display: grid; justify-items: center; gap: 6px; min-width: 72px; color: var(--blue); text-decoration: none; font: var(--m3-label); }
+.round a span { width: 48px; height: 48px; border-radius: 50%; background: var(--sky); color: var(--ink); display: grid; place-items: center; transition: filter 150ms linear; }
+.round a:hover span { filter: brightness(.95); }
+.round .icon { width: 24px; height: 24px; }
+.hB__desc { margin: 0; padding: 16px 16px 8px; font: var(--m3-body); }
+.hB__list { list-style: none; margin: 0; padding: 0; }
+.hB__list li { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 16px; min-height: 56px; padding: 8px 16px; }
+.hB__list li + li { border-top: 1px solid var(--sand); }
+.hB__list .icon { width: 24px; height: 24px; color: var(--ink-soft); }
+.hB__list span { font: var(--m3-body); color: var(--ink-soft); }
+.hB__list b { font: 400 17px/1.3 var(--display); }
+.hB__media { display: grid; grid-template-rows: minmax(0, 1fr) 140px; gap: 8px; min-height: 520px; }
+.hB__media img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.35) contrast(1.05); border-radius: 16px; display: block; }
+.hB__media .strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.hB__media .strip .more { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border-radius: 16px; background: var(--sky); color: var(--ink); font: var(--m3-label); }
+.hB__media .strip .more .icon { width: 28px; height: 28px; }
+
+/* ---------- ג · לוח ידע ---------- */
+.hC { padding-top: 16px; }
+.hC__mosaic { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; height: 360px; margin-top: 8px; }
+.hC__mosaic img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.35) contrast(1.05); display: block; }
+.hC__mosaic .a { grid-row: 1 / span 2; border-radius: 28px 8px 8px 28px; }
+.hC__mosaic .b { border-radius: 8px 28px 8px 8px; }
+.hC__mosaic .c { position: relative; border-radius: 8px 8px 28px 8px; overflow: hidden; }
+.hC__mosaic .c em { position: absolute; inset: auto 12px 12px auto; display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 8px; background: rgba(255, 255, 255, .92); color: var(--ink); font: var(--m3-label); font-style: normal; }
+.hC__mosaic .c em .icon { width: 18px; height: 18px; }
+.hC__head { display: flex; align-items: center; gap: 20px; padding: 24px 0 8px; }
+.hC__head h1 { margin: 0; font: 400 44px/1.1 var(--display); }
+.chipk { display: inline-flex; align-items: center; height: 28px; margin: 6px 0 0; padding: 0 12px; border-radius: 8px; background: var(--sky); font: var(--m3-label); }
+.hC__head .acts { margin-inline-start: auto; }
+.hC__tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--sand); margin-top: 8px; }
+.hC__tabs a { position: relative; display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; font: var(--m3-label); font-size: 15px; color: var(--ink-soft); text-decoration: none; }
+.hC__tabs a[aria-selected="true"] { color: var(--blue); }
+.hC__tabs a[aria-selected="true"]::after { content: ""; position: absolute; inset-inline: 12px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; background: var(--blue); }
+.hC__tabs a:hover { background: rgba(31, 19, 74, .06); }
+.hC__body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; padding: 24px 0 0; align-items: start; }
+.hC__body p { margin: 0; font: 400 20px/1.6 var(--display); }
+.hC__facts { margin: 0; display: grid; }
+.hC__facts div { display: grid; grid-template-columns: 160px 1fr; gap: 16px; padding: 14px 0; border-top: 1px solid var(--sand); }
+.hC__facts div:first-child { border-top: 0; padding-top: 0; }
+.hC__facts dt { font: var(--m3-body); color: var(--ink-soft); }
+.hC__facts dd { margin: 0; font: 400 18px/1.4 var(--display); }

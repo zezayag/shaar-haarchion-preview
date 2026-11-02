@@ -1,0 +1,69 @@
+/* תבנית עמוד כתבה (דסקטופ) — מעל archive.css (הירו, פירורים, כרטיסים) ועל הטוקנים של design/1st: בלי צבעים חדשים.
+   ui-ux-pro-max: שורה של 65 עד 75 תווים, גובה שורה 1.5 עד 1.75, איזון כותרות, תוכן עניינים עם aria-current, מטרות לחיצה 40+, מיקוד גלוי. */
+
+/* ---- הירו כתבה ---- */
+.aH { --media-h: 420px; }
+.aH .hA__media img { object-position: center 35%; }
+.aH .crumbs .crumb-last { display: block; max-width: 22em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 40px; }
+.aH__panel { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+.aH__meta { display: flex; align-items: center; gap: 12px; }
+.aH__years { font: 400 48px/1 var(--display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; } /* השנה ראשונה וגדולה מכל פריט בשורה (אורי) */
+.aH__dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-soft); flex: none; }
+.aH__panel h1 { margin: 0; max-width: 20em; font-family: var(--display); font-weight: 300; font-size: clamp(36px, 4.2vw, 58px); line-height: 1.1; letter-spacing: -.01em; text-wrap: balance; }
+.aH__lead { margin: 0; max-width: 36em; font: 400 21px/1.6 var(--display); text-wrap: pretty; }
+.aH__by { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font: var(--m3-label); color: var(--ink-soft); }
+.aH__by time, .aH__by #rt { font-variant-numeric: tabular-nums; }
+.aH__author { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; min-height: 40px; }
+.logo--sm { width: 32px; height: 32px; }
+.logo--sm img { width: 20px; height: 20px; }
+.aH__top { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 4px 16px; width: 100%; } /* יישובי הכתבה לפני סוג ושנה, באותה שורה (אורי) */
+.aH__row { width: 100%; padding-top: 16px; border-top: 1px solid var(--sand); }
+.aH__places { flex: 0 1 auto; min-width: 0; display: flex; align-items: center; font: var(--m3-label); }
+.aH__places ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; }
+.aH__places li + li::before { content: "·"; margin-inline: 4px; color: var(--ink-soft); }
+.pchip { position: relative; display: inline-flex; align-items: center; min-height: 32px; padding: 0 2px; border-radius: 4px; color: var(--ink); font: var(--m3-label); text-decoration: none; transition: color 150ms linear; } /* קישורי טקסט באותו סגנון כמו סוג הפוסט (אורי) */
+.pchip::after { content: ""; position: absolute; inset: -8px 0; }
+.pchip:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
+.pchip:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+/* ---- גוף הכתבה: טור קריאה + תוכן עניינים ---- */
+.art { display: grid; grid-template-columns: minmax(0, 36em) 240px; justify-content: center; gap: 72px; align-items: start; padding-block: 56px 72px; }
+.art__body { grid-column: 1; grid-row: 1; }
+.art__side { grid-column: 2; grid-row: 1; } /* בקוד תוכן העניינים קודם לגוף (סדר טאב והקראה), ובמסך הוא בצד */
+.art__body > * { max-width: 100%; }
+.art__body > h2:first-child { margin-top: 0; } /* הכתבה נפתחת ישר בכותרת הראשונה */
+.art__body h3 { margin: 1.8em 0 .5em; font-family: var(--display); font-weight: 400; font-size: 22px; line-height: 1.3; color: var(--blue); text-wrap: balance; }
+.art__body h2 { margin: 2.2em 0 .6em; font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1.25; text-wrap: balance; }
+.art__body p:not(.authorbox__k):not(.authorbox p) { margin: 0 0 1.1em; font: 400 19px/1.75 var(--text); color: var(--ink); }
+.art__fig { margin: 32px 0; padding: 24px; background: var(--white); } /* מסגרת לבנה כמו התצוגה המקדימה בעמוד הבית; הכיתוב, אם יש, בתוך המסגרת (אורי) */
+.art__fig img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; background: var(--sand); filter: sepia(.25); }
+.art__video video { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: var(--ink); }
+.art__video video:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.art__fig figcaption { margin-top: 12px; font: var(--m3-label); font-size: 14px; color: var(--ink-soft); }
+
+.art__tags { margin-top: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--sand); } /* הקו מתחת לנושאים (אורי) */
+.art__body .art__th { margin: 0 0 12px; font: var(--m3-label); color: var(--ink-soft); }
+.art__tags ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { position: relative; display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 16px; background: var(--white); box-shadow: inset 0 0 0 1px var(--sand); color: var(--ink); font: var(--m3-label); text-decoration: none; transition: background-color 150ms linear; }
+.tag::after { content: ""; position: absolute; inset: -8px 0; }
+.tag:hover { background: var(--sky); }
+.tag:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+.authorbox { display: flex; gap: 20px; align-items: flex-start; margin-top: 24px; padding: 0; background: none; } /* שורה פשוטה בלי רקע ובלי מסגרת (אורי) */
+.authorbox__k { margin: 0 0 2px; font: var(--m3-label); font-size: 13px; color: var(--ink-soft); }
+.art__body .authorbox h2 { margin: 0 0 8px; font-size: 22px; }
+.authorbox p:not(.authorbox__k) { margin: 0; font: 400 16px/1.6 var(--text); color: var(--ink); }
+
+.art__side { position: sticky; top: calc(var(--header-h) + 24px); }
+.toc h2 { margin: 0 0 12px; font: var(--m3-label); color: var(--ink-soft); }
+.toc ol { list-style: none; margin: 0; padding: 0; border-inline-start: 2px solid var(--sand); }
+.toc a { display: block; padding: 10px 14px; margin-inline-start: -2px; border-inline-start: 2px solid transparent; font: 400 15px/1.4 var(--text); color: var(--ink-soft); text-decoration: none; transition: color 150ms linear, border-color 150ms linear; }
+.toc a:hover { color: var(--ink); }
+.toc a[aria-current="true"] { color: var(--ink); font-weight: 500; border-inline-start-color: var(--blue); }
+.toc a:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
+
+
+/* ---- חדשים בארכיון (אותו מבנה כמו בעמוד הבית) ---- */
+.aRecent { border-top: 1px solid var(--sand); }
+
+@media (prefers-reduced-motion: reduce) { .pchip, .tag, .toc a { transition: none; } }

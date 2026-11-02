@@ -127,6 +127,13 @@
     box-shadow: 0 1px 2px rgba(31, 19, 74, .16), 0 1px 3px 1px rgba(31, 19, 74, .08); }
   @media (prefers-reduced-motion: reduce) { .cta--n[data-s="3"]:is(:hover, :focus-visible) .cta-orbit { animation: none; } .cta-bg, .cta-h, .t-cta { transition: none; } }
 
+  /* סקיצות 2 ו-3 לא נבחרו: מספר מעומעם עם איקס; רק 1 נשארת כרגיל (אורי 2.11) */
+  .cta--n.is-off { background: transparent; color: var(--paper); opacity: .5; box-shadow: inset 0 0 0 2px rgba(244, 242, 236, .5); cursor: default; user-select: none; }
+  .cta--n.is-off:hover { background: transparent; transform: none; }
+  .cta--n.is-off::before, .cta--n.is-off::after { content: ""; position: absolute; inset-inline-start: 50%; top: 50%; width: 76%; height: 3px; margin-inline-start: -38%; border-radius: 2px; background: var(--paper); }
+  .cta--n.is-off::before { transform: translateY(-50%) rotate(45deg); }
+  .cta--n.is-off::after { transform: translateY(-50%) rotate(-45deg); }
+
   /* תצלומי ארכיון — מתחלפים */
   .t-photo { grid-area: photo; }
   .stack { position: relative; }
@@ -251,9 +258,9 @@
     <span class="cta-bg cta-bg--2" aria-hidden="true"></span>
     <p class="cta-h" id="cta-h">צפייה בסקיצות</p>
     <nav class="cta-row" aria-labelledby="cta-h">
-      <a class="cta cta--n" data-s="1" href="1st/index.html" target="_blank" rel="noopener" aria-label="סקיצה 1, נפתחת בלשונית חדשה">1</a>
-      <a class="cta cta--n" data-s="2" href="2nd/index.html" target="_blank" rel="noopener" aria-label="סקיצה 2, נפתחת בלשונית חדשה">2</a>
-      <a class="cta cta--n" data-s="3" href="3rd/index.html" target="_blank" rel="noopener" aria-label="סקיצה 3, נפתחת בלשונית חדשה">3<span class="cta-orbit" aria-hidden="true"><span></span></span></a>
+      <a class="cta cta--n" data-s="1" href="sitemap.html" aria-label="סקיצה 1, הסקיצה שנבחרה. מעבר למפת האתר">1</a>
+      <span class="cta cta--n is-off" role="img" aria-label="סקיצה 2, לא נבחרה">2</span>
+      <span class="cta cta--n is-off" role="img" aria-label="סקיצה 3, לא נבחרה">3</span>
     </nav>
   </section>
 

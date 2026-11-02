@@ -1,0 +1,261 @@
+/* תבנית עמוד ארכיון (דסקטופ) — דוגמה v1, מעוצבת לפי Material 3 על הטוקנים של design/1st (style.css, m3.css): בלי צבעים חדשים.
+   מידות לפי המפרט: צ'יפ 32 (אזור לחיצה 48), פינות 8; תפריט פינות 4 + רמה 2, פריט 48; שורת חיפוש 56 פינות מלאות; כרטיס מלא פינות 12; כפתור טונאלי 40.
+   ui-ux-pro-max: צ'יפים עוטפים ולא נחתכים, מצבי לחיצה גלויים, מצב ריק עם פעולה, הכרזת תוצאות (aria-live), סרגל דביק שלא מכסה תוכן, ניווט מקלדת בתפריטים. */
+:root { --aw: min(var(--content), calc(100vw - 2 * var(--gutter))); --m3-label: 500 14px/20px var(--text); --m3-body: 400 16px/24px var(--text); }
+html { scroll-padding-top: calc(var(--header-h) + 72px); }
+body { background: var(--paper); }
+.aw { width: var(--aw); margin-inline: auto; }
+.site-header__menu { display: none; }
+/* לוגו לבן מעל התמונה לפני גלילה; בצבעיו הרגילים אחרי גלילה (אורי) */
+.site-header__logo img { transition: filter 200ms linear; }
+.site-header.is-over .site-header__logo img { filter: brightness(0) invert(1); } /* תפריט המגירה הוא לטלפון/טאבלט; כאן דסקטופ בלבד */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+
+/* ---- 1. הירו (אפשרות א): תצלום מעוגל בשוליים + לוח משטח חופף ---- */
+.crumbs ol { display: flex; flex-wrap: wrap; align-items: center; list-style: none; margin: 0; padding: 0; }
+.crumbs li { display: inline-flex; align-items: center; }
+.crumbs li + li::before { content: ""; width: 18px; height: 18px; flex: none; background: currentColor; opacity: .7; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15 6l-6 6 6 6' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15 6l-6 6 6 6' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat; } /* חץ שמצביע שמאלה (כיוון ההתקדמות בעברית), מצויר כמסכה ולכן לא מתהפך אוטומטית כמו התו ‹ */
+.crumbs a, .crumbs [aria-current] { display: inline-flex; align-items: center; min-height: 40px; padding: 0 10px; border-radius: 20px; font: var(--m3-label); letter-spacing: .1px; color: var(--white); text-decoration: none; }
+.crumbs a { transition: background-color 150ms linear; }
+.crumbs a:hover { background: rgba(255, 255, 255, .14); }
+.crumbs a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+.crumbs [aria-current] { font-weight: 700; }
+.hA { --media-h: 300px; position: relative; padding: 0; }
+/* פירורי הלחם בתחתית התמונה, מעל הלוח, בקצה השמאלי (אורי) */
+.hA__crumbs { position: absolute; z-index: 2; top: calc(var(--media-h) - 96px - 46px); inset-inline: 0; margin-inline: auto; color: var(--white); display: flex; justify-content: flex-end; }
+.hA__crumbs[hidden] { display: none; }
+.hA__crumbs .crumbs { margin-inline-end: 38px; } /* טקסט הפירורים מיושר לקצה השמאלי של הלוח (שוליים 48 פחות ריפוד הקישור 10) — אורי */
+/* תמונה ברוחב מלא (100%), גם מתחת לכותרת השקופה — אורי */
+.hA__media { margin: 0; position: relative; height: var(--media-h); overflow: hidden; background: var(--sand); }
+.hA__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(133, 128, 118, .9) 0, rgba(133, 128, 118, 0) 130px), linear-gradient(to top, rgba(31, 19, 74, .65) 0, rgba(31, 19, 74, 0) 300px); pointer-events: none; }
+.hA__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: sepia(.35) contrast(1.05); display: block; }
+.hA__panel { position: relative; z-index: 3; margin: -96px 48px 0; padding: 40px; border-radius: 28px; background: var(--white); box-shadow: var(--md-elev-2); display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px 40px; align-items: start; }
+.hA__panel.has-facts { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr; }
+.hA__id { grid-column: 1; display: flex; align-items: center; gap: 20px; }
+.hA__id h1 { margin: 0; font-family: var(--display); font-weight: 300; font-size: clamp(44px, 5vw, 68px); line-height: 1.05; letter-spacing: -.01em; }
+.hA__id h1.is-long { font-size: clamp(30px, 3.4vw, 44px); }
+.logo { width: 56px; height: 56px; flex: none; border-radius: 50%; background: var(--blue); display: grid; place-items: center; }
+.logo[hidden] { display: none; }
+.logo img { width: 36px; height: 36px; object-fit: contain; }
+.hA__desc { grid-column: 1; margin: 0; font: 400 18px/1.6 var(--display); max-width: 30em; }
+.acts { grid-column: 1; display: flex; flex-wrap: wrap; gap: 4px 20px; align-self: end; margin-bottom: -6px; } /* מיושרים לתחתית הלוח, בקו התחתון של האריחים (אורי) */
+/* כפתורי טקסט של Material: בלי רקע ובלי מסגרת, כחול, אייקון קטן וחץ (אורי) */
+.tlink { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 10px; margin-inline-start: -10px; border-radius: 20px; color: var(--blue); font: var(--m3-label); font-size: 15px; text-decoration: none; transition: background-color 150ms linear; }
+.tlink:hover { background: rgba(17, 118, 156, .06); }
+.tlink:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.tlink .icon { width: 18px; height: 18px; }
+.tlink .tlink__go { width: 16px; height: 16px; }
+.acts[hidden] { display: none; }
+.tonal { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 20px 0 16px; border-radius: 20px; font: var(--m3-label); text-decoration: none; color: var(--ink); background: var(--sky); }
+.tonal::before { content: ""; position: absolute; inset: 0; z-index: -1; background: currentColor; opacity: 0; transition: opacity 150ms linear; }
+.tonal:hover::before { opacity: .08; }
+.tonal:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.tonal .icon { width: 18px; height: 18px; }
+.hA__facts { grid-column: 2; grid-row: 1 / span 3; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.hA__facts[hidden] { display: none; }
+.hA__facts li { display: grid; gap: 2px; padding: 16px; border-radius: 0; background: var(--paper); align-content: start; }
+.hA__facts .icon { width: 24px; height: 24px; color: var(--blue); margin-bottom: 8px; }
+.hA__facts small { font: var(--m3-label); font-size: 13px; color: var(--ink-soft); }
+.hA__facts b { font: 400 20px/1.2 var(--display); font-variant-numeric: tabular-nums; }
+.hA__facts i, .hA__id i { font-style: normal; opacity: .75; }
+.hA + .af { margin-top: 32px; }
+
+/* ---- 2. סרגל סינון ומיון (דביק): צ'יפים של Material 3 ---- */
+.af { position: sticky; top: var(--header-h); z-index: 30; background: var(--paper); }
+.af.is-stuck { box-shadow: var(--md-elev-1); }
+.af__in { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 8px 48px; box-sizing: border-box; } /* 48 = שוליי הלוח של ההירו: הסרגל והכרטיסים בגריד של ההירו (אורי) */
+/* צ'יפ סינון עם תפריט: מסגרת; כשפעיל — תכלת עם ✓ */
+.dd { position: relative; }
+.dd__btn { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 8px 0 12px; border: 1px solid var(--ink-soft); border-radius: 8px; background: var(--white); color: var(--ink); font: var(--m3-label); letter-spacing: .1px; cursor: pointer; }
+.dd__btn::after { content: ""; position: absolute; inset: -8px 0; }
+.dd__btn::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: currentColor; opacity: 0; transition: opacity 150ms linear; }
+.dd__btn:hover::before { opacity: .05; }
+.dd__btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.dd__btn[aria-expanded="true"]::before { opacity: .1; }
+.dd__btn.is-set { background: var(--sky); border-color: transparent; }
+.dd:not(.af__sort) .dd__btn.is-set .dd__k { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } /* כמו ב-Google Flights: הערך שנבחר מחליף את התווית */
+.dd__ck { display: none; width: 18px; height: 18px; margin-inline-start: -4px; }
+.dd__btn.is-set .dd__ck { display: block; }
+.dd__btn .icon:not(.dd__ck) { width: 20px; height: 20px; fill: currentColor; transition: transform 200ms cubic-bezier(.2, 0, 0, 1); } /* חץ משולש מלא, כמו ב-Google Flights */
+.dd__btn[aria-expanded="true"] .icon:not(.dd__ck) { transform: rotate(180deg); }
+/* תפריט Material: פינות 4, רמה 2, פריט 48 */
+.dd__menu { position: absolute; z-index: 40; inset-inline-start: 0; top: calc(100% + 8px); min-width: 240px; max-height: 336px; overflow: auto; margin: 0; padding: 8px 0; list-style: none; background: var(--white); border-radius: 8px; box-shadow: 0 1px 3px rgba(31, 19, 74, .3), 0 4px 8px 3px rgba(31, 19, 74, .15); }
+.dd__menu[hidden] { display: none; }
+.dd__menu li { position: relative; display: flex; align-items: center; gap: 16px; min-height: 48px; padding: 0 16px; font: 400 14px/20px var(--text); letter-spacing: .25px; cursor: pointer; }
+.dd__menu li::before { content: ""; width: 20px; height: 20px; flex: none; box-sizing: border-box; border: 2px solid var(--ink-soft); border-radius: 50%; } /* כפתור רדיו כמו ב-Google Flights: בחירה יחידה */
+.dd__menu li[aria-selected="true"]::before { border-color: var(--blue); background: radial-gradient(circle, var(--blue) 0 4px, transparent 5px); }
+.dd__menu li span { flex: 1; }
+.dd__menu li small { font: var(--m3-label); font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.dd__menu li:hover, .dd__menu li.is-hl { background: rgba(31, 19, 74, .06); }
+.dd__menu li[aria-selected="true"] { color: var(--ink); font-weight: 500; }
+.dd__menu li[aria-disabled="true"] { opacity: .45; cursor: default; }
+.dd__menu li[aria-disabled="true"]:hover { background: none; }
+.af__sort .dd__menu { inset-inline-start: auto; inset-inline-end: 0; }
+/* מיון וניקוי: כפתורי טקסט */
+.af__sort { margin-inline-start: auto; }
+.af__sort .dd__btn { height: 40px; border: 0; background: transparent; padding: 0 8px 0 12px; border-radius: 20px; color: var(--blue); font-size: 14px; }
+.af__sort .dd__btn::after { inset: -4px 0; }
+.af__sort .dd__btn.is-set { background: transparent; }
+.af__clear { height: 40px; padding: 0 12px; border: 0; border-radius: 20px; background: none; color: var(--blue); font: var(--m3-label); cursor: pointer; }
+.af__clear:hover { background: rgba(17, 118, 156, .05); }
+.af__clear:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.af__clear[hidden] { display: none; }
+
+/* ---- 3. רשימת הפוסטים ---- */
+.al { padding: 32px 48px 24px; box-sizing: border-box; }
+.al__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; font-family: var(--display); }
+.al__count { margin: 0; font-weight: 400; font-size: 22px; }
+.al__order { font: var(--m3-label); color: var(--ink-soft); }
+.ag { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.ac { position: relative; display: flex; flex-direction: column; background: var(--white); border-radius: 4px; overflow: hidden; isolation: isolate; }
+.ac:not(:has(.ac__img)) { align-self: start; }
+.ac__img { aspect-ratio: 8 / 7; background: var(--sand); overflow: hidden; }
+.ac__img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(.25); transition: transform 600ms cubic-bezier(.2, 0, 0, 1); }
+@media (hover: hover) and (pointer: fine) { .ac:hover .ac__img img { transform: scale(1.03); } } /* זום עדין, כמו תמונת ציר הזמן בעמוד הבית */
+.ac__body { display: flex; flex-direction: column; gap: 12px; padding: 18px 24px 24px; flex: 1; }
+.ac__meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ac__year { font-family: var(--display); font-weight: 400; font-size: 24px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ac__type { display: inline-flex; align-items: center; gap: 6px; font: var(--m3-label); color: var(--ink-soft); }
+.ac__type .icon { width: 20px; height: 20px; }
+.ac h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 22px; line-height: 1.3; color: var(--ink); min-height: 2.6em; transition: color 150ms linear; } /* מקום קבוע לשתי שורות, כדי שהתמונות בשורה יתחילו באותו קו */
+@media (hover: hover) and (pointer: fine) { .ac:hover h3 { color: var(--blue); } } /* כמו ledger בעמוד הבית: רק הכותרת הופכת לכחולה, בלי צל ובלי זום */
+.ac:focus-within h3 { color: var(--blue); }
+.ac h3 a { color: inherit; text-decoration: none; }
+.ac h3 a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.ac h3 a:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.ac p { margin: 0; font: 400 18px/28px var(--text); color: var(--ink); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+
+/* ---- 4. טען עוד ---- */
+.aload { display: grid; justify-items: center; gap: 8px; padding: 32px 0 8px; }
+.aload[hidden] { display: none; }
+.aload__btn { min-height: 52px; padding: 0 36px; border: 0; border-radius: 26px; background: var(--blue); color: var(--white); font-family: var(--display); font-size: 18px; cursor: pointer; transition: background-color 150ms linear, border-radius 200ms cubic-bezier(.34, 1.56, .64, 1); }
+.aload__btn:hover { background: var(--ink); }
+.aload__btn:active { border-radius: 14px; }
+.aload__btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.aload small { color: var(--ink-soft); font: var(--m3-label); font-variant-numeric: tabular-nums; }
+
+/* ---- 6. מצב ריק ---- */
+.aempty { display: grid; justify-items: center; text-align: center; gap: 12px; padding: 56px 24px; background: var(--white); border-radius: 4px; }
+.aempty[hidden] { display: none; }
+.aempty svg.icon { width: 40px; height: 40px; color: var(--ink-soft); }
+.aempty h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 28px; }
+.aempty p { margin: 0; max-width: 34em; color: var(--ink-soft); font: var(--m3-body); }
+.aempty__go { display: inline-flex; align-items: center; min-height: 48px; margin-top: 8px; padding: 0 28px; border-radius: 24px; background: var(--blue); color: var(--white); font-family: var(--display); font-size: 18px; text-decoration: none; }
+.aempty button.aempty__go { border: 0; cursor: pointer; font-size: inherit; }
+.aempty button.aempty__go[hidden] { display: none; }
+.aempty__go:hover { background: var(--ink); }
+.aempty__go:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---- 5. מידע כללי על ה-Term ---- */
+.ainfo { padding: 24px 0 72px; }
+.ainfo__in { max-width: 46em; margin-inline: auto; padding-top: 40px; border-top: 1px solid var(--sand); }
+.ainfo h2 { margin: 0 0 12px; font-family: var(--display); font-weight: 400; font-size: 28px; }
+.ainfo p { margin: 0; font-size: 18px; line-height: 1.7; color: var(--ink); }
+.ainfo__acts { margin: 16px 0 0; align-self: auto; }
+.ainfo small { display: block; margin-top: 16px; color: var(--ink-soft); font-size: 14px; }
+
+/* ---- כניסת ההירו (עמודי ארכיון וכתבה), ui-ux-pro-max: רק transform ו-opacity (בלי clip-path שמצייר מחדש בכל פריים), שני רכיבים מרכזיים בלבד.
+   1. התצלום נכנס מלמעלה למטה: יורד פנימה ומתבהר (בלי וילון). 2. הלוח עולה עם כל תוכנו כיחידה אחת. 3. כל התוכן שמתחת עולה יחד פעם אחת.
+   האטה להגעה (expo-out), בלי עיכובים לכל פריט. גלוי כברירת מחדל. בלי תנועה כשמבקשים הפחתת תנועה. is-entering מוסרת אחרי הכניסה ולכן סינון לא מפעיל אותה שוב. ---- */
+@keyframes hA-img { from { opacity: 0; transform: translateY(-5%) scale(1.05); } }
+@keyframes hA-rise { from { opacity: 0; transform: translateY(16px); } }
+@keyframes hA-fade { from { opacity: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .hA.is-entering .hA__media img { will-change: transform, opacity; animation: hA-img 1000ms cubic-bezier(.16, 1, .3, 1) 60ms backwards; } /* התצלום יורד פנימה מלמעלה ומתבהר, בלי וילון ובלי קצה (אורי) */
+  .hA.is-entering .hA__crumbs { animation: hA-fade 700ms ease-out 500ms backwards; }
+  .hA.is-entering .hA__panel { will-change: transform, opacity; animation: hA-rise 800ms cubic-bezier(.16, 1, .3, 1) 380ms backwards; }
+  .hA.is-entering ~ .af, .hA.is-entering ~ .al, .hA.is-entering ~ .ainfo, .hA.is-entering ~ .art, main:has(.hA.is-entering) > .aRecent { animation: hA-rise 800ms cubic-bezier(.16, 1, .3, 1) 650ms backwards; }
+}
+@media (prefers-reduced-motion: reduce) { .ac:hover .ac__img img { transform: none; } .ac, .ac h3, .ac__img img, .dd__btn .icon, .aload__btn, .af, .crumbs a { transition: none; } }
+
+/* ---- תפריט היישובים בכותרת: זהה לעמוד הבית (מועתק מ-design/1st/assets/responsive.css, רק חלק הדסקטופ והבסיס) ---- */
+/* ---------- תפריט נפתח מתחת ל"היישובים" (אורי) — Material menu: משטח נייר מורם, שורות 48px עם קו חול ---------- */
+.site-header nav li.has-sub { position: relative; display: flex; align-items: center; }
+.subnav__toggle {
+  width: 32px; height: 32px; margin-inline-start: -6px; display: inline-grid; place-items: center;
+  border: 0; border-radius: 16px; background: transparent; color: inherit; cursor: pointer; position: relative;
+}
+.subnav__toggle .icon { width: 16px; height: 16px; transform: rotate(-90deg); transition: transform 200ms cubic-bezier(.2, 0, 0, 1); }
+.has-sub.is-open .subnav__toggle .icon { transform: rotate(90deg); }
+.subnav__toggle:hover { background: rgba(255, 255, 255, .12); }
+.site-header:not(.is-over) .subnav__toggle:hover { background: rgba(31, 19, 74, .08); }
+.subnav__toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.subnav { display: none; }
+.subnav ol { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 24px; border-top: 1px solid var(--sand); }
+.subnav li { break-inside: avoid; border-bottom: 1px solid var(--sand); }
+.site-header nav .subnav a, .site-header.is-over nav .subnav a {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-height: 48px; padding: 12px 0; border-radius: 0;
+  color: var(--ink); font-family: var(--display); font-size: 18px; text-decoration: none; background: none;
+}
+.site-header nav .subnav a::before { content: none; }
+.site-header nav .subnav a:hover .n, .site-header nav .subnav a:focus-visible .n { color: var(--blue); }
+.site-header nav .subnav a:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.subnav .y { font-size: 16px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.site-header nav .subnav .subnav__council {
+  display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; margin-bottom: 12px;
+  border-radius: 24px; background: var(--blue); color: var(--white);
+}
+.site-header nav .subnav .subnav__council:hover { background: var(--blue); color: var(--white); box-shadow: var(--md-elev-1); }
+.subnav__sub { margin: 0 0 4px; font-family: var(--display); font-size: 16px; color: var(--ink-soft); }
+@media (min-width: 1024px) {
+  .subnav {
+    position: absolute; top: calc(100% + 8px); right: -16px; width: 440px; z-index: 60;
+    padding: 16px 20px 12px; background: var(--paper); color: var(--ink); border-radius: 16px; box-shadow: var(--md-elev-2);
+    opacity: 0; transform: translateY(-4px); visibility: hidden; transition: opacity 150ms linear, transform 200ms cubic-bezier(.2, 0, 0, 1), visibility 0s 200ms;
+  }
+  /* גשר בלתי נראה בין הקישור לתפריט, כדי שהריחוף לא יינתק במעבר */
+  .subnav::before { content: ""; position: absolute; inset: -12px 0 auto; height: 12px; }
+  .has-sub:hover .subnav, .has-sub.is-open .subnav {
+    display: block; opacity: 1; transform: none; visibility: visible; transition: opacity 150ms linear, transform 200ms cubic-bezier(.2, 0, 0, 1), visibility 0s;
+  }
+  .subnav { display: block; }
+}
+@media (max-width: 1023px) {
+  .site-header nav li.has-sub { flex-wrap: wrap; }
+  .site-header nav li.has-sub > a { flex: 1; }
+  .subnav__toggle { width: 48px; height: 48px; margin-inline: 0 var(--gutter); border-radius: 24px; color: var(--ink); }
+  .subnav { flex: 1 1 100%; padding: 4px var(--gutter) 16px; }
+  .has-sub.is-open .subnav { display: block; }
+}
+@media (prefers-reduced-motion: reduce) { .subnav, .subnav__toggle .icon { transition: none !important; } }
+/* אורי: "כפתור אחד ולא שניים, כמו החיפוש" — בדסקטופ החץ בתוך הגלולה של "היישובים" (שכבת המצב מכסה את שניהם) */
+.subnav__chev { display: none; }
+@media (min-width: 1024px) {
+  .subnav__toggle { display: none; }
+  .site-header nav li.has-sub > a { gap: 6px; }
+  .subnav__chev { display: block; width: 16px; height: 16px; transform: rotate(-90deg); transition: transform 200ms cubic-bezier(.2, 0, 0, 1); }
+  .has-sub:hover .subnav__chev, .has-sub.is-open .subnav__chev { transform: rotate(90deg); }
+}
+@media (prefers-reduced-motion: reduce) { .subnav__chev { transition: none; } }
+/* אורי: בדסקטופ שלוש עמודות; מעבר עכבר על יישוב כמו בפוטר — קו כחול נמתח מימין לשמאל על קו השיער, השם והשנה בכחול */
+@media (min-width: 1024px) {
+  .subnav { width: 600px; }
+  .subnav ol { columns: 3; column-gap: 28px; }
+}
+.site-header nav .subnav ol a { position: relative; overflow: visible; }
+.site-header nav .subnav ol a::after {
+  content: ""; position: absolute; inset-inline: 0; bottom: -1px; height: 1px; background: var(--blue);
+  transform: scaleX(0); transform-origin: right center; transition: transform 150ms cubic-bezier(.2, 0, 0, 1);
+}
+.site-header nav .subnav ol a:hover::after, .site-header nav .subnav ol a:focus-visible::after { transform: scaleX(1); transition-duration: 300ms; }
+.site-header nav .subnav ol a:hover .y, .site-header nav .subnav ol a:focus-visible .y { color: var(--blue); }
+@media (prefers-reduced-motion: reduce) { .site-header nav .subnav ol a::after { transition: none; } }
+/* ui-ux-pro-max (אורי: "תסדרי עם uxuipro"): סולם 8 — ריפוד 24 מכל צד, 16 בין הכותרת לרשימה, 32 בין העמודות;
+   היררכיה — "12 היישובים" מודגש + "לפי שנת ההקמה" משני (כמו בפוטר); יישור — קצה התפריט מתחיל בקצה הגלולה של "היישובים";
+   שורות ≥ 48px; מיקוד גלוי; Esc סוגר; במגע — הקשה פותחת (לא רק ריחוף) */
+@media (min-width: 1024px) {
+  .subnav { right: 0; top: calc(100% + 8px); width: 616px; padding: 20px 24px 16px; border-radius: 16px; }
+  .subnav ol { column-gap: 32px; }
+}
+.subnav__sub { display: flex; align-items: baseline; gap: 8px; margin: 0 0 12px; }
+.subnav__sub b { font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--ink); }
+.subnav__sub span { font-family: var(--display); font-size: 16px; color: var(--ink-soft); }
+.site-header nav .subnav ol a { padding: 12px 0; }
+/* אורי: כשהכותרת דבוקה התפריט ישב על הקו התחתון שלה — עכשיו נפתח 8px מתחת לכותרת (לא מתחת לגלולה) */
+@media (min-width: 1024px) {
+  .subnav { top: calc(100% + (var(--header-h, 64px) - 100%) / 2 + 8px); }
+  .subnav::before { inset: auto 0 100%; height: calc((var(--header-h, 64px) - 44px) / 2 + 12px); }
+}
+
+@media (max-width: 1023px) { body::before { content: "תבנית דסקטופ בלבד — הרחיבו את החלון ל-1024 ומעלה"; display: block; padding: 12px 16px; background: var(--gold); color: var(--ink); text-align: center; font-size: 15px; } }

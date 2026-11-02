@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>מפת האתר · מה מוכן</title>
+<link rel="icon" type="image/png" href="1st/assets/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/fonts/colbo/colbo.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap">
+<style>
+/* מפת האתר: מה מוכן ומה לא (דסקטופ ומובייל). אותם טוקנים כמו הסקיצה (design/1st): בלי צבעים חדשים.
+   ui-ux-pro-max: צבע לא לבד (גם טקסט ואייקון), יעדי לחיצה 44+, מיקוד גלוי, קריאה גם בלי JS ברמת הכותרות. */
+:root { --ink: #1F134A; --ink-soft: rgba(31, 19, 74, .78); --blue: #11769C; --paper: #F4F2EC; --sand: #DED6C4; --sky: #B3E0EB; --gold: #EBAD29; --white: #fff; --display: COLBO, Heebo, sans-serif; --text: Heebo, system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 18px/1.6 var(--text); }
+a { color: inherit; }
+.wrap { width: min(1240px, calc(100vw - 48px)); margin-inline: auto; padding-block: 40px 72px; }
+.top h1 { margin: 0 0 8px; font: 300 clamp(34px, 4.4vw, 56px)/1.1 var(--display); letter-spacing: -.01em; }
+.top p { margin: 0; max-width: 46em; color: var(--ink-soft); }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; margin-block: 28px 8px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0; padding: 0; list-style: none; font: 500 15px/1.3 var(--text); }
+.legend li { display: inline-flex; align-items: center; gap: 8px; }
+.dot { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+.dot--done { background: var(--blue); }
+.dot--review { background: var(--gold); }
+.dot--todo { background: transparent; border: 2px dashed var(--ink-soft); }
+.seg { display: inline-flex; padding: 4px; background: var(--white); border-radius: 24px; box-shadow: inset 0 0 0 1px var(--sand); margin-inline-start: auto; }
+.seg button { min-height: 40px; padding: 0 18px; border: 0; border-radius: 20px; background: transparent; color: var(--ink); font: 500 15px/1 var(--text); cursor: pointer; transition: background-color 150ms linear; }
+.seg button:hover { background: var(--paper); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+.seg button:focus-visible, .node a:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.sum { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0 0 28px; padding: 0; list-style: none; color: var(--ink-soft); font: 500 15px/1.4 var(--text); }
+.sum b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ---- העץ: גריד של 5 עמודות בדסקטופ (כמו בתרשים), קווים ב-SVG ---- */
+.map { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 72px 20px; }
+.map__lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.map__lines path { fill: none; stroke: var(--ink-soft); stroke-width: 2; stroke-linejoin: round; }
+.node { position: relative; z-index: 1; display: flex; flex-direction: column; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(31, 19, 74, .12); transition: box-shadow 150ms linear, opacity 200ms linear; }
+.node--link:hover { box-shadow: 0 2px 8px rgba(31, 19, 74, .22); }
+.node--todo { background: transparent; box-shadow: inset 0 0 0 2px var(--sand); border: 0; }
+.node__bar { display: flex; height: 8px; }
+.node__bar i { flex: 1; }
+.node__bar .s-done { background: var(--blue); }
+.node__bar .s-review { background: var(--gold); }
+.node__bar .s-todo { background: repeating-linear-gradient(135deg, var(--sand) 0 6px, transparent 6px 12px); }
+.node__body { display: flex; flex-direction: column; gap: 4px; padding: 16px 16px 18px; flex: 1; }
+.node h2 { margin: 0; font: 400 21px/1.25 var(--display); }
+.node h2 a { text-decoration: none; }
+.node h2 a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.node__kind { margin: 0; color: var(--ink-soft); font: 500 13px/1.3 var(--text); }
+.st { display: grid; gap: 6px; margin: 12px 0 0; padding: 0; list-style: none; }
+.st li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font: 500 14px/1.3 var(--text); }
+.st .dev { color: var(--ink-soft); }
+.pill { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px; border-radius: 14px; font: 500 13px/1.2 var(--text); white-space: nowrap; }
+.pill--done { background: var(--sky); }
+.pill--review { background: var(--gold); }
+.pill--todo { background: transparent; box-shadow: inset 0 0 0 1px var(--ink-soft); color: var(--ink-soft); }
+.node__note { margin: 10px 0 0; color: var(--ink-soft); font: 400 13px/1.45 var(--text); }
+.node__links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 10px 0 0; padding: 0; list-style: none; font: 500 14px/1.3 var(--text); }
+.node__links a { display: inline-flex; align-items: center; min-height: 32px; color: var(--blue); text-decoration: none; }
+.node__links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+/* מתג מכשיר: מציג רק את המכשיר שנבחר ומעמעם עמודים שלא נבנו בו */
+.map[data-view="desktop"] .st li[data-dev="mobile"], .map[data-view="mobile"] .st li[data-dev="desktop"] { display: none; }
+.map[data-view="desktop"] .node__bar i[data-dev="mobile"], .map[data-view="mobile"] .node__bar i[data-dev="desktop"] { display: none; }
+.node.is-dim { opacity: .55; }
+.pos-root { grid-column: 3; grid-row: 1; }
+.pos-a1 { grid-column: 1; grid-row: 2; } .pos-a2 { grid-column: 2; grid-row: 2; } .pos-a3 { grid-column: 3; grid-row: 2; }
+.pos-reg { grid-column: 4; grid-row: 2; } .pos-404 { grid-column: 5; grid-row: 2; }
+.pos-post { grid-column: 2; grid-row: 3; }
+.enter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin: 0 0 32px; }
+.enter__go { display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 28px; border-radius: 28px; background: var(--blue); color: var(--white); font: 700 22px/1 var(--display); text-decoration: none; transition: background-color 150ms linear; }
+.enter__go:hover { background: var(--ink); }
+.enter__back { color: var(--blue); font: 500 16px/1.3 var(--text); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+.enter__back:hover { text-decoration: underline; text-underline-offset: 4px; }
+.enter a:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.foot { margin-top: 36px; color: var(--ink-soft); font: 400 14px/1.5 var(--text); }
+
+/* ---- מובייל וטאבלט צר: רשימה אנכית עם קו עץ ---- */
+@media (max-width: 899px) {
+  .wrap { width: min(640px, calc(100vw - 32px)); padding-block: 28px 56px; }
+  .seg { margin-inline-start: 0; width: 100%; }
+  .seg button { flex: 1; padding: 0 8px; font-size: 14px; }
+  .map { display: flex; flex-direction: column; gap: 14px; }
+  .map__lines { display: none; }
+  .map > .node { margin-inline-start: 0; }
+  .map > .node:not(.pos-root) { margin-inline-start: 20px; position: relative; }
+  .map > .node:not(.pos-root)::before { content: ""; position: absolute; inset-block: -14px 50%; inset-inline-start: -20px; width: 20px; border-inline-start: 2px solid var(--ink-soft); border-block-end: 2px solid var(--ink-soft); border-end-start-radius: 8px; }
+  .map > .pos-post { margin-inline-start: 44px; }
+  .map > .pos-post::before { inset-inline-start: -20px; }
+}
+@media (prefers-reduced-motion: reduce) { .node, .seg button { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>מפת האתר: מה מוכן</h1>
+    <p>כל כרטיס הוא עמוד או תבנית באתר. לחיצה על עמוד שנבנה פותחת אותו. הצבע והטקסט בכל כרטיס מראים את המצב בדסקטופ ובמובייל (מובייל כולל טאבלט).</p>
+  </header>
+  <div class="bar">
+    <ul class="legend" aria-label="מקרא">
+      <li><span class="dot dot--done" aria-hidden="true"></span>בנוי</li>
+      <li><span class="dot dot--review" aria-hidden="true"></span>בנוי, ממתין לאישור</li>
+      <li><span class="dot dot--todo" aria-hidden="true"></span>לא נבנה</li>
+    </ul>
+    <div class="seg" role="group" aria-label="הצג לפי מכשיר">
+      <button type="button" data-view="all" aria-pressed="true">דסקטופ ומובייל</button>
+      <button type="button" data-view="desktop" aria-pressed="false">דסקטופ</button>
+      <button type="button" data-view="mobile" aria-pressed="false">מובייל וטאבלט</button>
+    </div>
+  </div>
+  <ul class="sum" id="sum" aria-live="polite"></ul>
+  <p class="enter"><a class="enter__go" href="1st/index.html">כניסה לאתר<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a><a class="enter__back" href="index.html">חזרה לסקיצות</a></p>
+
+  <main>
+    <h2 class="vh" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">עצי העמודים</h2>
+    <div class="map" id="map" data-view="all"><svg class="map__lines" id="lines" aria-hidden="true"></svg></div>
+  </main>
+  <p class="foot">מצב נכון ל-2.11.2026, לפי העבודה בפועל. מובייל וטאבלט של עמוד הבית ממתינים לאישור הלקוחה. עמודי הארכיון והכתבה לדסקטופ בלבד (מובייל לא בהיקף עד כה).</p>
+</div>
+
+<script>
+(function () {
+  /* מצבים: done = בנוי, review = בנוי וממתין לסקירה/אישור, todo = לא נבנה */
+  var ST = { done: 'בנוי', review: 'ממתין לאישור', todo: 'לא נבנה' };
+  var NODES = [
+    { id: 'root', pos: 'root', title: 'עמוד ראשי: מועצה', kind: 'לובי קיבוצים ויישובים', d: 'done', m: 'review',
+      note: 'מובייל וטאבלט בנויים וממתינים לאישור הלקוחה.', href: '1st/index.html', links: [['בטלפון', 'phone.html']] },
+    { id: 'a1', pos: 'a1', title: 'ארכיון מועצה, קיבוץ או יישוב', kind: 'Post archive', d: 'review', m: 'todo',
+      note: 'נסקר עצמאית (7.6), התיקונים בוצעו, סקירה חוזרת טרם נעשתה.', href: 'archive-page-v1/index.html?type=council', links: [['המועצה', 'archive-page-v1/index.html?type=council'], ['יישוב (דורות)', 'archive-page-v1/index.html?type=settlement']] },
+    { id: 'a2', pos: 'a2', title: 'ארכיון לפי שנה', kind: 'Post archive', d: 'review', m: 'todo',
+      note: 'אותה תבנית ארכיון, עם הירו של עשור.', href: 'archive-page-v1/index.html?type=decade', links: [] },
+    { id: 'a3', pos: 'a3', title: 'ארכיון תגיות', kind: 'Post archive', d: 'review', m: 'todo',
+      note: 'אותה תבנית ארכיון, עם הירו של נושא (7 באוקטובר).', href: 'archive-page-v1/index.html?type=tag', links: [] },
+    { id: 'reg', pos: 'reg', title: 'עמוד רגיל', kind: 'עמוד תנאים ונגישות', d: 'todo', m: 'todo', note: 'טרם נבנה.', href: null, links: [] },
+    { id: 'e404', pos: '404', title: 'תבנית הודעה', kind: 'עמוד 404', d: 'todo', m: 'todo', note: 'טרם נבנה.', href: null, links: [] },
+    { id: 'post', pos: 'post', title: 'פרסום בודד', kind: 'Single post', d: 'review', m: 'todo',
+      note: 'נסקר עצמאית (8.2), התיקונים בוצעו. נפתח מכל ארכיון.', href: 'archive-page-v1/article.html', links: [] }
+  ];
+  var map = document.getElementById('map'), lines = document.getElementById('lines');
+  var DEV = [['desktop', 'דסקטופ', 'd'], ['mobile', 'מובייל', 'm']]; /* 'מובייל' כולל טאבלט */
+  NODES.forEach(function (n) {
+    var el = document.createElement('article');
+    el.className = 'node pos-' + n.pos + ' node--' + (n.href ? 'link' : 'nolink') + (n.d === 'todo' && n.m === 'todo' ? ' node--todo' : '');
+    el.id = 'n-' + n.id;
+    var bar = '<div class="node__bar" aria-hidden="true">' + DEV.map(function (v) { return '<i class="s-' + n[v[2]] + '" data-dev="' + v[0] + '"></i>'; }).join('') + '</div>';
+    var title = n.href ? '<a href="' + n.href + '">' + n.title + '</a>' : n.title;
+    var st = '<ul class="st">' + DEV.map(function (v) { var s = n[v[2]]; return '<li data-dev="' + v[0] + '"><span class="dev">' + v[1] + '</span><span class="pill pill--' + s + '"><span class="dot dot--' + s + '" aria-hidden="true"></span>' + ST[s] + '</span></li>'; }).join('') + '</ul>';
+    var links = n.links.length ? '<ul class="node__links">' + n.links.map(function (l) { return '<li><a href="' + l[1] + '">' + l[0] + '</a></li>'; }).join('') + '</ul>' : '';
+    el.innerHTML = bar + '<div class="node__body"><h2>' + title + '</h2><p class="node__kind">' + n.kind + '</p>' + st + '<p class="node__note">' + n.note + '</p>' + links + '</div>';
+    map.appendChild(el);
+  });
+  /* סיכום */
+  function sum() {
+    var total = NODES.length, f = function (k) { return NODES.filter(function (n) { return n[k] !== 'todo'; }).length; };
+    var fd = function (k) { return NODES.filter(function (n) { return n[k] === 'done'; }).length; };
+    document.getElementById('sum').innerHTML = '<li>דסקטופ: <b>' + f('d') + ' מתוך ' + total + '</b> נבנו (' + fd('d') + ' אושרו)</li><li>מובייל וטאבלט: <b>' + f('m') + ' מתוך ' + total + '</b> נבנו (' + fd('m') + ' אושרו)</li>';
+  }
+  sum();
+  /* מתג מכשיר */
+  var seg = document.querySelectorAll('.seg button');
+  function view(v) {
+    map.setAttribute('data-view', v);
+    seg.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.view === v ? 'true' : 'false'); });
+    NODES.forEach(function (n) {
+      var dim = (v === 'desktop' && n.d === 'todo') || (v === 'mobile' && n.m === 'todo');
+      document.getElementById('n-' + n.id).classList.toggle('is-dim', dim);
+    });
+    requestAnimationFrame(draw);
+  }
+  seg.forEach(function (b) { b.addEventListener('click', function () { view(b.dataset.view); }); });
+  /* קווי העץ (דסקטופ): מההורה אל הילדים בקווים ישרים וזוויות ישרות */
+  function draw() {
+    lines.innerHTML = '';
+    if (window.matchMedia('(max-width: 899px)').matches) return;
+    var base = map.getBoundingClientRect();
+    function r(id) { var b = document.getElementById('n-' + id).getBoundingClientRect(); return { cx: b.left + b.width / 2 - base.left, top: b.top - base.top, bottom: b.bottom - base.top }; }
+    var root = r('root'), kids = ['a1', 'a2', 'a3', 'reg', 'e404'].map(r), post = r('post');
+    function bus(from, to, y) {
+      var xs = to.map(function (k) { return k.cx; }).concat(from.cx), min = Math.min.apply(null, xs), max = Math.max.apply(null, xs);
+      var d = 'M' + from.cx + ' ' + from.bottom + 'V' + y + 'M' + min + ' ' + y + 'H' + max;
+      to.forEach(function (k) { d += 'M' + k.cx + ' ' + y + 'V' + k.top; });
+      return d;
+    }
+    var yTop = (root.bottom + kids[0].top) / 2;
+    /* מהארכיונים אל הפרסום הבודד: מהתחתית של שלוש הכרטיסים אל אמצע, ואז אל הפרסום */
+    var arch = kids.slice(0, 3), yBottom = (arch[0].bottom + post.top) / 2;
+    var xs = arch.map(function (k) { return k.cx; }), min = Math.min.apply(null, xs), max = Math.max.apply(null, xs);
+    var d2 = '';
+    arch.forEach(function (k) { d2 += 'M' + k.cx + ' ' + k.bottom + 'V' + yBottom; });
+    d2 += 'M' + min + ' ' + yBottom + 'H' + max + 'M' + post.cx + ' ' + yBottom + 'V' + post.top;
+    [bus(root, kids, yTop), d2].forEach(function (d) { var p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('d', d); lines.appendChild(p); });
+  }
+  window.addEventListener('resize', draw);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  window.addEventListener('load', draw);
+  draw();
+})();
+</script>
+</body>
+</html>

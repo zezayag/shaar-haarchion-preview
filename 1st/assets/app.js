@@ -107,7 +107,9 @@
     });
     list.hidden = false;
     // גובה הרשימה: עד קצת מעל תחתית המסך, ומשם גלילה
-    list.style.maxHeight = Math.max(160, window.innerHeight - list.getBoundingClientRect().top - 16) + 'px';
+    // אורי: הרשימה לא נחתכת בקצה התחתון של ההירו: הגובה עד הקצה הקרוב מבין תחתית המסך ותחתית ההירו, ומשם גלילה בתוך הרשימה
+    var hr = list.closest('.hero'), edge = Math.min(window.innerHeight, hr ? hr.getBoundingClientRect().bottom : window.innerHeight);
+    list.style.maxHeight = Math.max(112, edge - list.getBoundingClientRect().top - 16) + 'px';
     input.setAttribute('aria-expanded', 'true');
     status.textContent = shown.length === 1 ? 'הצעה אחת זמינה.' : shown.length + ' הצעות זמינות.';
   }
@@ -121,10 +123,10 @@
   var TOPIC_URL = { 'הקמת המועצה האזורית שער הנגב': '/founding-of-the-council/', 'קריית החינוך': '/regional-center/', 'המרכז האזורי': '/regional-center/',
     'מכללת ספיר': '/sapir-college/', 'שותפות שער הנגב–סן דייגו': '/san-diego-partnership/', 'רועי רוטברג': '/roi-rotberg/',
     // עמודים שעוד לא קיימים בעמוד הבית — כתובות זמניות עד שייבנו בוורדפרס
-    '7 באוקטובר': '/topic/october-7/', 'מפעלי שער הנגב': '/shaar-hanegev-factories/', 'בית הספר האזורי': '/regional-school/', 'שדרות': '/sderot/' };
+    '7 באוקטובר': '../archive-page-v1/index.html?type=tag', 'מפעלי שער הנגב': '/shaar-hanegev-factories/', 'בית הספר האזורי': '/regional-school/', 'שדרות': '/sderot/' };
   function urlFor(s) {
     if (s.k === 'יישוב') return PLACE_URL[s.t] || null;
-    if (s.k === 'עשור') return '/topic/' + s.q + 's/';
+    if (s.k === 'עשור') return '../archive-page-v1/index.html?type=all&decade=' + s.q;
     if (s.k === 'נושא') return TOPIC_URL[s.t] || null;
     if (s.k === 'הצעה') return s.href || null; // כל הצעה ← לעמוד שלה
     if (s.post) return s.href || null;
@@ -233,7 +235,17 @@
       im.src = IMG + t.img; im.alt = ''; im.loading = 'lazy'; im.width = 160; im.height = 120;
       b.appendChild(im);
       b.tabIndex = n === 0 ? 0 : -1;
-      b.addEventListener('click', function () { if (n !== ti) showTreasure(n, n > ti ? 1 : -1); });
+      b.addEventListener('click', function () {
+        if (n !== ti) showTreasure(n, n > ti ? 1 : -1);
+        // 2.11 (אורי): בטלפון/טאבלט (<1024) בלחיצה על ממוזערת התמונה הגדולה עולה לראש, 16px מתחת לכותרת האתר
+        if (innerWidth < 1024) {
+          var fr = document.querySelector('#trStage .treasure__frame'), hd = document.getElementById('siteHeader');
+          if (fr && hd) {
+            var to = Math.max(0, fr.getBoundingClientRect().top + window.pageYOffset - hd.offsetHeight - 16);
+            window.scrollTo({ top: to, behavior: (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'instant' : 'smooth' });
+          }
+        }
+      });
       // עצירת Tab אחת לדף המגע; חצים (RTL: שמאל = הבא), Home / End
       b.addEventListener('keydown', function (e) {
         var k = { ArrowLeft: 1, ArrowRight: -1, ArrowDown: 1, ArrowUp: -1 }[e.key], to = null;
@@ -321,6 +333,22 @@
     row.replaceWith(btn);
     btn.addEventListener('click', function () { activate(li, true); });
   }
+  // אורי (2.11): פתיחת פריט בדסקטופ מעלה אותו לראש הרשימה, עם הקצה העליון בגובה הצילום הדביק (אותו רווח מתחת לשורת העשורים).
+  // לעולם לא גוללים רחוק מדי: כשהצילום מגיע לסוף הרשימה הוא נדחף ונחתך מתחת לתפריט, לכן הגלילה נעצרת לפני כן והפריט נשאר נמוך יותר
+  function alignOpenItem(li) {
+    var stickyTop = parseFloat(getComputedStyle(tlFigure).top) || 0, sy = window.pageYOffset;
+    var want = li.getBoundingClientRect().top + sy - stickyTop;
+    var box = tlFigure.parentNode.getBoundingClientRect();
+    var limit = box.bottom + sy - tlFigure.offsetHeight - stickyTop;
+    var to = Math.max(0, Math.min(want, limit));
+    if (Math.abs(to - sy) > 1) window.scrollTo({ top: to, behavior: tlReduce() ? 'instant' : 'smooth' });
+  }
+  // אורי (2.11): בטאבלט (600–1023) הפריט הפתוח עולה גם הוא לראש: 16px מתחת לשורת העשורים הצפה, כמו בדסקטופ (הצילום בתוך הפריט, אז אין מה לחתוך)
+  function alignOpenItemTablet(li) {
+    var nv = tablist.parentNode, stuck = (parseFloat(getComputedStyle(nv).top) || 0) + nv.offsetHeight + 16, sy = window.pageYOffset;
+    var to = Math.max(0, li.getBoundingClientRect().top + sy - stuck);
+    if (Math.abs(to - sy) > 1) window.scrollTo({ top: to, behavior: tlReduce() ? 'instant' : 'smooth' });
+  }
   // הצילום תמיד שייך לפריט הפתוח (אין החלפה בריחוף)
   function activate(li, user, kind) {
     // סקירה 25.10: פריט פתוח למעלה נסגר ⇐ השורה שנלחצה הייתה קופצת מתחת לסמן. שומרים את מקומה במסך
@@ -335,12 +363,15 @@
       body.hidden = !on;
       if (on && wasHidden && user) emit({ type: 'open', el: body });
     });
-    if (anchor) { var dy = anchor.getBoundingClientRect().top - before; if (Math.abs(dy) > 1) window.scrollBy({ top: dy, behavior: 'instant' }); }
     setPhoto(li, kind);
+    if (anchor) {
+      if (!tlMq.matches) alignOpenItem(li);
+      else alignOpenItemTablet(li); // 2.11 (אורי): גם בטלפון הפריט הפתוח עולה לראש, 16px מתחת לשורת העשורים (היה: שמירת מקום השורה על המסך)
+    }
     // v40 (אורי): הכיתוב מתחת לצילום = שנת הפריט הפתוח ("שנת 1950"), לא העשור
     var yr = li.querySelector('.tl-item__year');
     // אורי: "שנת 1941 – יישוב דורות" — כשהפריט שייך ליישוב (קישור ‎/community/…), השם נלקח מפס היישובים; פריט של המועצה — רק השנה
-    var lk = li.querySelector('.tl-item__body a[href^="/community/"]'), pl = lk && document.querySelector('.places .place:not(.place--council) a[href="' + lk.getAttribute('href') + '"] .name');
+    var lk = li.querySelector('.tl-item__body a[href*="place="]'), pl = lk && document.querySelector('.places .place:not(.place--council) a[href="' + lk.getAttribute('href') + '"] .name');
     if (yr) { tlCap.textContent = 'שנת ' + yr.textContent.trim() + (pl ? ' – יישוב ' + pl.textContent.trim() : ''); if (li.dataset.credit) { var cr = document.createElement('small'); cr.className = 'tl-photo__credit'; cr.textContent = li.dataset.credit; tlCap.appendChild(cr); } } // קרדיט לצילום ברישיון CC
   }
   function selectDecadeBase(d, opts) {
@@ -472,6 +503,26 @@
     a.addEventListener('focus', function () { preview(i); });
   });
   if (rows.length) rows[0].classList.add('is-active');
+  // 2.11 (אורי): בטלפון (≤599) אין ריחוף — הפריט הדלוק עובר בגלילה: זה שמרכזו הכי קרוב לאמצע האזור הנראה (מתחת לכותרת) נדלק במקומו, והקודם נכבה
+  (function () {
+    var mq = window.matchMedia ? matchMedia('(max-width: 599px)') : { matches: false }, queued = false, hd = document.getElementById('siteHeader');
+    if (!rows.length) return;
+    function pick() {
+      queued = false;
+      if (!mq.matches) return;
+      var top = hd ? hd.offsetHeight : 0, lr = ledger.getBoundingClientRect();
+      if (lr.bottom < top || lr.top > innerHeight) return;
+      var line = top + (innerHeight - top) / 2, best = 0, bd = Infinity;
+      rows.forEach(function (r, i) { var b = r.getBoundingClientRect(), d = Math.abs(b.top + b.height / 2 - line); if (d < bd) { bd = d; best = i; } });
+      if (window.pageYOffset + innerHeight >= document.documentElement.scrollHeight - 2 && rows[rows.length - 1].getBoundingClientRect().bottom <= innerHeight) best = rows.length - 1;
+      if (!rows[best].classList.contains('is-active')) preview(best);
+    }
+    function queue() { if (!queued) { queued = true; requestAnimationFrame(pick); } }
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
+    if (mq.addEventListener) mq.addEventListener('change', queue);
+    queue();
+  })();
   // הכרטיס (צילום + תקציר) מקשר לפוסט של השורה הפעילה — כמו ההדפס באוצרות. נשאר מוסתר מקורא מסך ובלי עצירת Tab:
   // הקישור הנגיש הוא השורה עצמה. מעבר עכבר: זום עדין על הצילום והכותרת בשורה הפעילה נצבעת, כמו באוצרות
   var pvCard = document.querySelector('.preview');
@@ -586,22 +637,33 @@
 (function () {
   var header = document.getElementById('siteHeader'), btn = header && header.querySelector('.site-header__menu');
   if (!btn) return;
+  // 2.11 (אורי): במקום גיליון מתחת לכותרת — מגירת ניווט בנוסח סקיצה 2 (scrim + פאנל מהצד, מיקוד נשאר בתוכה)
+  var drawer = document.getElementById('drawer');
   function set(open) {
-    header.classList.toggle('is-menu', open);
+    drawer.classList.toggle('is-open', open); drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+    document.documentElement.classList.toggle('is-drawer', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    btn.setAttribute('aria-label', open ? 'סגירת התפריט' : 'תפריט');
+    if (open) { var a = drawer.querySelector('.drawer__panel a'); a && a.focus(); }
   }
-  btn.addEventListener('click', function () { set(!header.classList.contains('is-menu')); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && header.classList.contains('is-menu')) { set(false); btn.focus(); } });
-  document.addEventListener('click', function (e) { if (header.classList.contains('is-menu') && !header.contains(e.target)) set(false); });
-  header.querySelectorAll('nav a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
-  window.addEventListener('resize', function () { if (innerWidth >= 1024) set(false); });
+  btn.addEventListener('click', function () { set(true); });
+  drawer.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', function () { set(false); btn.focus(); }); });
+  drawer.querySelectorAll('.drawer__panel a').forEach(function (a) { a.addEventListener('click', function () { if (a.getAttribute('href').charAt(0) === '#') set(false); }); });
+  document.addEventListener('keydown', function (e) {
+    if (!drawer.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { set(false); btn.focus(); return; }
+    if (e.key === 'Tab') {
+      var f = drawer.querySelectorAll('.drawer__panel button, .drawer__panel a'), first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  window.addEventListener('resize', function () { if (innerWidth >= 1024 && drawer.classList.contains('is-open')) set(false); });
 })();
 
 /* v44 (אורי, אפשרות ב): בטלפון/טאבלט פס היישובים = גלולת המועצה בלבד; לחיצה פותחת גיליון תחתון (Material bottom sheet)
    עם המועצה ו-12 היישובים ושנות ההקמה. בדסקטופ — הקישור רגיל */
 (function () {
-  var mq = window.matchMedia ? matchMedia('(max-width: 1023px)') : { matches: false };
+  var mq = window.matchMedia ? matchMedia('(max-width: 599px)') : { matches: false };
   var places = document.querySelector('.places'); if (!places) return;
   var council = places.querySelector('.place--council a'); if (!council) return;
   var sheet = document.createElement('div');
@@ -613,14 +675,24 @@
     '<div class="places-sheet__panel" role="dialog" aria-modal="true" aria-labelledby="psTitle">' +
     '<button type="button" class="places-sheet__handle" data-close aria-label="סגירה"><span aria-hidden="true"></span></button>' +
     '<div class="places-sheet__head"><h2 id="psTitle">12 הקהילות של שער הנגב</h2></div>' +
-    '<a class="places-sheet__council" href="' + council.getAttribute('href') + '">המועצה האזורית שער הנגב<svg class="icon" aria-hidden="true"><use href="#i-next"/></svg></a>' +
-    '<p class="places-sheet__sub">לפי שנת ההקמה</p><ol>' + rows + '</ol></div>';
+    '<p class="places-sheet__sub">לפי שנת ההקמה</p><ol>' + rows + '</ol>' +
+    '<a class="places-sheet__council" href="' + council.getAttribute('href') + '">מועצה אזורית שער הנגב<svg class="icon" aria-hidden="true"><use href="#i-next"/></svg></a></div>'; // 2.11 (אורי): כפתור המועצה אחרון, בלי ה"א
   document.body.appendChild(sheet);
   council.setAttribute('aria-haspopup', 'dialog');
+  // 2.11 (אורי): ידית גרירה מעל פס המועצה (טלפון בלבד, מוסתרת ב-CSS ברוחב ≥600): לחיצה או גרירה למעלה פותחות את הגיליון
+  var grip = document.createElement('button');
+  grip.type = 'button'; grip.className = 'places__grip'; grip.setAttribute('aria-label', 'פתיחת רשימת 12 הקהילות'); grip.setAttribute('aria-haspopup', 'dialog');
+  grip.innerHTML = '<span aria-hidden="true"></span>';
+  places.insertBefore(grip, places.firstChild);
+  var gy = null;
+  grip.addEventListener('pointerdown', function (e) { gy = e.clientY; });
+  window.addEventListener('pointermove', function (e) { if (gy !== null && gy - e.clientY > 24) { gy = null; grip.dataset.dragged = '1'; open(); } });
+  window.addEventListener('pointerup', function () { gy = null; });
+  grip.addEventListener('click', function () { if (grip.dataset.dragged) { delete grip.dataset.dragged; return; } open(); });
   function open() {
     sheet.hidden = false; document.documentElement.classList.add('sheet-open');
     council.setAttribute('aria-expanded', 'true');
-    requestAnimationFrame(function () { sheet.classList.add('is-open'); sheet.querySelector('.places-sheet__council').focus(); });
+    requestAnimationFrame(function () { sheet.classList.add('is-open'); (sheet.querySelector('.places-sheet__panel ol a') || sheet.querySelector('.places-sheet__council')).focus(); });
   }
   function close() {
     sheet.classList.remove('is-open'); document.documentElement.classList.remove('sheet-open');
@@ -640,7 +712,7 @@
 /* v44 (אורי): תפריט נפתח מתחת ל"היישובים" בכותרת — המועצה ו-12 היישובים עם שנות ההקמה.
    דסקטופ: מעבר עכבר / מיקוד / כפתור החץ; מובייל: אקורדיון בתוך התפריט (כפתור החץ). Esc סוגר */
 (function () {
-  var link = document.querySelector('#siteNav a[href="/community/"]'), places = document.querySelector('.places');
+  var link = document.querySelector('#siteNav a[data-nav="places"]'), places = document.querySelector('.places');
   if (!link || !places) return;
   var li = link.parentNode; li.classList.add('has-sub');
   var council = places.querySelector('.place--council a');
@@ -674,4 +746,23 @@
   function sync() { q = false; var y = window.scrollY, out = root.classList.contains('is-places-out'); root.classList.toggle('is-places-out', out ? y > 120 : y > 160); }
   window.addEventListener('scroll', function () { if (!q) { q = true; requestAnimationFrame(sync); } }, { passive: true });
   sync();
+})();
+
+/* אורי 2.11: כפתור 'חיפוש בארכיון' בכותרת (וההגעה מעמודי הארכיון והכתבה עם #hero) מגלל כך ששדה החיפוש בהירו נשאר מתחת לכותרת עם מקום להצעות, ואז מפעיל את השדה וההצעות נפתחות; לא נגלל עד 0 (אורי: 'הרצוי') */
+(function () {
+  var btn = document.querySelector('.site-header .btn--search'), q = document.getElementById('q'), form = document.getElementById('searchForm');
+  if (!q || !form) return;
+  function goSearch() {
+    var GAP = window.innerWidth < 600 ? 88 : 190; /* מרחק שדה החיפוש מראש המסך: בטלפון צמוד מתחת לכותרת, כדי שיישאר מקום להצעות עם המקלדת */
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var to = Math.max(0, Math.round(form.getBoundingClientRect().top + window.pageYOffset - GAP));
+    window.scrollTo({ top: to, behavior: reduce ? 'instant' : 'smooth' });
+    var t0 = Date.now(); /* מיקוד רק אחרי שהגלילה הגיעה, כדי שההצעות לא יעצרו אותה */
+    (function wait() {
+      if (Math.abs(window.pageYOffset - to) <= 2 || reduce || Date.now() - t0 > 3000) { q.focus({ preventScroll: true }); return; }
+      requestAnimationFrame(wait);
+    })();
+  }
+  if (btn) btn.addEventListener('click', function (e) { e.preventDefault(); goSearch(); });
+  if (location.hash === '#hero') setTimeout(goSearch, 300);
 })();
