@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>הדמיית מכשיר · סקיצה 1</title>
+<style>
+  /* דף הדמיה לבדיקות פנימיות (לא לפרסום ללקוח): מציג את הסקיצה בתוך מסגרת בגודל מכשיר, בכל גודל חלון.
+     הסקיצה בתוך המסגרת רואה את גודל המכשיר האמיתי (media queries לפי המסגרת); המסגרת עצמה מוקטנת להתאמה לחלון.
+     דגם נוסף: לשנות את DEVICES בסקריפט, או להוסיף לכתובת ?w=375&h=667 */
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; justify-items: center; align-content: start; gap: 16px; padding: 16px; background: #E9E6DD; color: #1F134A; font-family: system-ui, "Heebo", sans-serif; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; font-size: 15px; }
+  .bar b { font-weight: 600; direction: ltr; unicode-bidi: isolate; }
+  .bar button, .bar a { min-height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: #fff; color: #1F134A; font: inherit; text-decoration: none; display: inline-flex; align-items: center; cursor: pointer; box-shadow: 0 1px 2px rgba(31, 19, 74, .18); }
+  .bar button:hover, .bar a:hover { background: #F4F2EC; }
+  .bar button[aria-pressed="true"] { background: #1F134A; color: #fff; }
+  .bar button:focus-visible, .bar a:focus-visible { outline: 3px solid #11769C; outline-offset: 2px; }
+  .phone { border-radius: 36px; padding: 10px; background: #1F134A; box-shadow: 0 24px 50px -20px rgba(31, 19, 74, .55); transform-origin: top center; }
+  .phone iframe { display: block; border: 0; border-radius: 28px; background: #fff; }
+</style>
+</head>
+<body>
+<div class="bar" id="bar">
+  <button type="button" data-d="phone" aria-pressed="false">טלפון</button>
+  <button type="button" data-d="tp" aria-pressed="false">טאבלט עומד</button>
+  <button type="button" data-d="tl" aria-pressed="false">טאבלט שוכב</button>
+  <button type="button" data-d="l1440" aria-pressed="false">נייד 1440</button>
+  <button type="button" data-d="l1560" aria-pressed="false">נייד 1560</button>
+  <button type="button" data-d="d1920" aria-pressed="false">נייח 1920</button>
+  <span><b id="dim"></b> · <span id="zoom"></span></span>
+  <button type="button" id="reload">רענון</button>
+  <a href="1st/index.html" target="_blank" rel="noopener">פתיחה בלשונית</a>
+</div>
+<div class="wrap" id="wrap"><div class="phone" id="phone"><iframe id="f" title="סקיצה 1 בגודל מכשיר" src="1st/index.html"></iframe></div></div>
+<script>
+  // דגמים: טלפון = אייפון 15/16 בסאפרי (רוחב 393, גובה נראה ≈660 אחרי הסרגלים); טאבלט 768×1024 / 1024×768
+  // דסקטופ: גובה לפי יחס נפוץ — נייד 1440×900 ו-1560×975 (16:10), נייח 1920×1080 (16:9)
+  var DEVICES = { phone: [393, 660], tp: [768, 1024], tl: [1024, 768], l1440: [1440, 900], l1560: [1560, 975], d1920: [1920, 1080] };
+  var q = new URLSearchParams(location.search);
+  var cur = q.get('w') && q.get('h') ? [+q.get('w'), +q.get('h')] : DEVICES[localStorageGet('dev')] || DEVICES.phone;
+  var f = document.getElementById('f'), phone = document.getElementById('phone'), wrap = document.getElementById('wrap');
+  function localStorageGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function localStorageSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function fit() {
+    var availW = innerWidth - 32, availH = innerHeight - document.getElementById('bar').offsetHeight - 16 - 32;
+    var s = Math.min(1, availW / (cur[0] + 20), Math.max(.3, availH) / (cur[1] + 20));
+    s = Math.max(.25, s);
+    phone.style.zoom = s;
+    document.getElementById('zoom').textContent = Math.round(s * 100) + '%';
+  }
+  function set(w, h, key) {
+    cur = [w, h]; f.width = w; f.height = h;
+    document.getElementById('dim').textContent = w + '×' + h;
+    document.querySelectorAll('[data-d]').forEach(function (b) { b.setAttribute('aria-pressed', String(DEVICES[b.dataset.d][0] === w && DEVICES[b.dataset.d][1] === h)); });
+    if (key) localStorageSet('dev', key);
+    fit();
+  }
+  document.querySelectorAll('[data-d]').forEach(function (b) { b.addEventListener('click', function () { var d = DEVICES[b.dataset.d]; set(d[0], d[1], b.dataset.d); }); });
+  document.getElementById('reload').addEventListener('click', function () { f.contentWindow.location.reload(); });
+  window.addEventListener('resize', fit);
+  set(cur[0], cur[1]);
+</script>
+</body>
+</html>
