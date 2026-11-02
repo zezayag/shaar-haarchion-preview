@@ -52,7 +52,7 @@
   function heroFor() {
     /* סדר עדיפות (אורי): יישוב, אחריו תגית, אחריו עשור. סוג פוסט לא קובע הירו. בלי אף אחד מהם: חיפוש חופשי או הירו כללי */
     if (state.place.length) return placeHero(state.place[0]);
-    if (state.tag) return { title: '7 באוקטובר', desc: 'עדויות וזיכרונות של הקהילות מהיום שבו הכול השתנה, בקצב שלהן ובמילים שלהן.', bg: 'arch/anemone-march-2006-037.jpg', tag: true, crumbs: ['ארכיון', 'נושאים', '7 באוקטובר'], nav: '/topic/october-7/' };
+    if (state.tag) return { title: '7 באוקטובר', desc: 'עדויות וזיכרונות של הקהילות מהיום שבו הכול השתנה, בקצב שלהן ובמילים שלהן.', bg: 'arch/anemone-march-2006-037.jpg', about: 'ב־7 באוקטובר 2023 תקפו מחבלי חמאס את יישובי הנגב המערבי שליד רצועת עזה, ובהם יישובים במועצה האזורית שער הנגב. כפר עזה ונחל עוז היו בין היישובים שנפגעו קשה. ראש המועצה, אופיר ליבשטיין, נרצח באותו בוקר כשיצא להגן על כפר עזה.\n\nבנושא הזה מרוכזים בארכיון עדויות, תצלומים ומסמכים של הקהילות מהיום ההוא ואחריו. אפשר לסנן אותם לפי יישוב, עשור וסוג החומר, ולקרוא כל פריט בקצב שלכם.', tag: true, crumbs: ['ארכיון', 'נושאים', '7 באוקטובר'], nav: '/topic/october-7/' };
     if (state.decade.length) return decadeHero(state.decade[0]);
     if (state.q.trim() && !state.kind.length) return { title: 'תוצאות חיפוש', search: true, bg: 'hero/erez-1950-1.jpg', crumbs: ['ארכיון', 'תוצאות חיפוש'], nav: '/?s=' };
     return allHero();
@@ -85,7 +85,7 @@
     document.title = h.title + ' · שער הארכיון (דוגמת תבנית)';
     var c = h.card;
     $('panel').classList.toggle('has-facts', !!c);
-    $('logo').hidden = !h.logo; $('acts').hidden = !c; $('infoActs').hidden = !c; $('facts').hidden = !c;
+    $('logo').hidden = false; /* הלוגו בכל סוגי ההירו (אורי) */ $('acts').hidden = !c; $('infoActs').hidden = !c; $('facts').hidden = !c;
     if (c) {
       var links = '<a class="tlink" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.map) + '" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>צפייה במפה<span class="visually-hidden"> ב־Google Maps (נפתח בלשונית חדשה)</span><svg class="icon tlink__go" aria-hidden="true"><use href="#i-next"/></svg></a><a class="tlink" href="' + (c.site || '#') + '"' + (c.site ? ' target="_blank" rel="noopener"' : '') + '><svg class="icon" aria-hidden="true"><use href="#f-link"/></svg>' + c.more + (c.site ? '<span class="visually-hidden"> (נפתח בלשונית חדשה)</span>' : '') + '<svg class="icon tlink__go" aria-hidden="true"><use href="#i-next"/></svg></a>';
       $('acts').innerHTML = links; $('infoActs').innerHTML = links;
@@ -228,9 +228,13 @@
     var h = heroFor();
     var infoOn = !!(h.card || h.tag); /* גוש 'על ...' רק ליישוב, למועצה ולתגית, שיש להם תיאור אמיתי; בעשור, בחיפוש ובארכיון הכללי מוסתר */
     document.querySelector('.ainfo').hidden = !infoOn;
+    $('allPosts').hidden = !h.tag; /* בעמוד נושא: קישור לכל הפרסומים (אורי) */
     if (infoOn) {
       $('infoH').textContent = 'על ' + (h.card ? (h.title.length > 12 ? 'המועצה' : h.title) : h.title);
-      $('infoT').textContent = h.about || (h.card ? h.desc.split('. ')[0] + '.' : h.desc);
+      var parts = (h.about || (h.card ? h.desc.split('. ')[0] + '.' : h.desc)).split('\n\n'); /* פסקה ריקה בין שתי פסקאות */
+      $('infoT').textContent = parts[0];
+      var t2 = $('infoT2'); if (!t2) { t2 = document.createElement('p'); t2.id = 'infoT2'; $('infoT').after(t2); }
+      t2.textContent = parts[1] || ''; t2.hidden = !parts[1];
     }
     syncURL();
   }

@@ -105,16 +105,18 @@ body { background: var(--paper); }
 /* ---- 3. רשימת הפוסטים ---- */
 .al { padding: 32px 48px 24px; box-sizing: border-box; }
 .al__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; font-family: var(--display); }
+.al__head .tlink { margin-inline-start: 0; margin-inline-end: -10px; }
+.al__head .tlink[hidden] { display: none; }
 .al__count { margin: 0; font-weight: 400; font-size: 22px; }
 .al__order { font: var(--m3-label); color: var(--ink-soft); }
 .ag { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .ac { position: relative; display: flex; flex-direction: column; background: var(--white); border-radius: 4px; overflow: hidden; isolation: isolate; }
 .ac:not(:has(.ac__img)) { align-self: start; }
-.ac__img { aspect-ratio: 8 / 7; background: var(--sand); overflow: hidden; }
+.ac__img { order: -1; margin-bottom: 16px; aspect-ratio: 8 / 7; background: var(--sand); overflow: hidden; } /* התמונה למעלה, ואחריה התוכן (אורי); רק בתצוגה, סדר ה-DOM נשאר */
 .ac__img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(.25); transition: transform 600ms cubic-bezier(.2, 0, 0, 1); }
 @media (hover: hover) and (pointer: fine) { .ac:hover .ac__img img { transform: scale(1.03); } } /* זום עדין, כמו תמונת ציר הזמן בעמוד הבית */
-.ac__body { display: flex; flex-direction: column; gap: 12px; padding: 18px 24px 24px; flex: 1; }
-.ac__meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ac__body { display: flex; flex-direction: column; padding: 24px; flex: 1; } /* ריווח על סולם 8: 24 מסביב (גם מעל התמונה), 16 בין תמונה למטא, 8 בין מטא לכותרת */
+.ac__meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
 .ac__year { font-family: var(--display); font-weight: 400; font-size: 24px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
 .ac__type { display: inline-flex; align-items: center; gap: 6px; font: var(--m3-label); color: var(--ink-soft); }
 .ac__type .icon { width: 20px; height: 20px; }
@@ -152,6 +154,7 @@ body { background: var(--paper); }
 .ainfo__in { max-width: 46em; margin-inline: auto; padding-top: 40px; border-top: 1px solid var(--sand); }
 .ainfo h2 { margin: 0 0 12px; font-family: var(--display); font-weight: 400; font-size: 28px; }
 .ainfo p { margin: 0; font-size: 18px; line-height: 1.7; color: var(--ink); }
+.ainfo p + p { margin-top: 16px; }
 .ainfo__acts { margin: 16px 0 0; align-self: auto; }
 .ainfo small { display: block; margin-top: 16px; color: var(--ink-soft); font-size: 14px; }
 
