@@ -71,7 +71,7 @@ a { color: inherit; }
 .today { color: var(--ink-soft); font: 500 18px/1 var(--text); font-variant-numeric: tabular-nums; }
 .stages { margin: 56px 0 24px; }
 .stages h2 { margin: 0 0 20px; font: 300 32px/1.1 var(--display); letter-spacing: -0.01em; }
-.stages ol { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin: 0; padding: 0; list-style: none; counter-reset: st; }
+.stages ol { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin: 0; padding: 0; list-style: none; counter-reset: st; }
 .stage { position: relative; display: flex; flex-direction: column; gap: 6px; min-height: 148px; padding: 18px 18px 16px; border-radius: 16px; background: var(--white); box-shadow: 0 1px 3px rgba(31, 19, 74, .12); counter-increment: st; }
 .stage::before { content: counter(st); display: grid; place-items: center; width: 32px; height: 32px; margin-bottom: 6px; border-radius: 50%; background: var(--paper); color: var(--ink); font: 700 16px/1 var(--display); box-shadow: inset 0 0 0 1px var(--sand); }
 .stage--review::before { background: var(--blue); color: var(--white); box-shadow: none; }
@@ -125,7 +125,6 @@ a { color: inherit; }
     <ol>
       <li class="stage stage--review"><h3>ממשק משתמש</h3><p>עיצוב ובניית Frontend</p><span class="pill pill--review"><span class="dot dot--review" aria-hidden="true"></span>ממתין</span></li>
       <li class="stage"><h3>הטמעה</h3><p>בניית האתר ב-WordPress</p></li>
-      <li class="stage"><h3>מודל השלמה</h3><p>חיפוש והשלמה אוטומטית</p></li>
       <li class="stage"><h3>בדיקות</h3><p>איכות ותיקונים</p></li>
       <li class="stage"><h3>הגשה והדרכה</h3><p>מסירה והדרכת צוות</p></li>
       <li class="stage"><h3>פרסום</h3><p>השקת האתר</p></li>
