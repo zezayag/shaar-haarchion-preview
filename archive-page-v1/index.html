@@ -14,8 +14,10 @@
 <link rel="stylesheet" href="../1st/assets/polish.css?v=44a">
 <link rel="stylesheet" href="../1st/assets/m3.css?v=44a">
 <link rel="stylesheet" href="archive.css">
+<link rel="stylesheet" href="cta.css">
 <script defer src="posts.js"></script>
 <script defer src="archive.js"></script>
+<script defer src="scroll.js"></script>
 <script defer src="nav-places.js"></script>
 </head>
 <body>
@@ -103,7 +105,22 @@
 </section>
 
 <!-- 5. מידע כללי על ה-Term (בפועל: שדה "תיאור" של וורדפרס) -->
-<section class="ainfo aw" aria-labelledby="infoH"><div class="ainfo__in"><h2 id="infoH"></h2><p id="infoT"></p><div class="acts ainfo__acts" id="infoActs" hidden></div></div></section>
+<section class="ainfo aw" aria-labelledby="infoH"><div class="ainfo__in"><h2 id="infoH"></h2><p id="infoT"></p><div class="acts ainfo__acts" id="infoActs" hidden></div><div class="al__more" id="allPostsSlot"></div></div></section>
+
+<!-- קריאה להצעות תוכן (אותה רצועה כמו בעמוד הכתבה): אותו מבנה כמו "עשור בפוקוס" בעמוד הבית (כותרת קטנה · כותרת גדולה · סוג תוכן · טקסט · כפתור), לוח דיו עם צילום וסמל המועצה טון על טון -->
+<section class="aCta" aria-labelledby="cta-h">
+  <div class="aCta__board on-dark">
+    <span class="aCta__mark" aria-hidden="true"></span>
+    <figure class="aCta__photo"><img src="../1st/assets/img/arch/niram-1949-3.jpg" width="2000" height="1339" loading="lazy" alt="בניין חדש, משאית ואנשים בדרך עפר, ניר עם, 1949"></figure>
+    <div class="aCta__field">
+      <h2 id="cta-h" class="aCta__label">הצעות לארכיון</h2>
+      <p class="aCta__big">יש לכם חומר לארכיון?</p>
+      <p class="aCta__meta"><svg class="icon" aria-hidden="true"><use href="#f-gallery"/></svg>תצלומים, מסמכים, עדויות וסיפורים</p>
+      <p class="aCta__body">הארכיון נבנה מהזיכרונות של הקהילות. יש אצלכם תצלום ישן, מסמך או סיפור שכדאי לשמר? שלחו לנו והצוות יבדוק.</p>
+      <a class="btn btn--light aCta__btn" href="contact.html?subject=content">הצעת תוכן לארכיון<svg class="icon" aria-hidden="true"><use href="#i-next"/></svg></a>
+    </div>
+  </div>
+</section>
 
 </main>
 
@@ -121,7 +138,7 @@
     </div>
     <nav class="sfoot__col" aria-label="הארכיון">
       <h3>הארכיון</h3>
-      <ul><li><a href="index.html?type=council">המועצה</a></li><li><a href="index.html?type=all">היישובים</a></li><li><a href="index.html?type=tag">7 באוקטובר</a></li><li><a href="/contact/">יצירת קשר</a></li></ul>
+      <ul><li><a href="index.html?type=council">המועצה</a></li><li><a href="index.html?type=all">היישובים</a></li><li><a href="index.html?type=tag">7 באוקטובר</a></li><li><a href="contact.html">יצירת קשר</a></li></ul>
     </nav>
     <nav class="sfoot__places" aria-labelledby="sfoot-places-h">
       <h3 id="sfoot-places-h">12 היישובים <span>לפי א-ב</span></h3>
@@ -144,7 +161,7 @@
   <div class="sfoot__bar">
     <span>© 2026 מועצה אזורית שער הנגב</span>
     <ul class="sfoot__legal"><li><a href="/accessibility/">הצהרת נגישות</a></li><li><a href="/terms/">תנאי שימוש</a></li><li><a href="/privacy/">מדיניות פרטיות</a></li></ul>
-    <a class="sfoot__credit" href="https://webinside.co.il/" target="_blank" rel="noopener">וובאינסייד בניית אתרים</a>
+    <a class="sfoot__credit" href="https://www.webinside.co.il/" target="_blank" rel="noopener">וובאינסייד בניית אתרים</a>
     <a class="sfoot__top" href="#main">חזרה למעלה<svg class="icon" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </footer>

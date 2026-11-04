@@ -13,6 +13,8 @@
   /* תוכן עניינים: רק בעמוד שיש בו #toc */
   var tocList = $('toc'); if (!tocList) return;
   var heads = Array.prototype.slice.call(document.querySelectorAll('#body > h2[id]'));
+  /* אורי: תוכן העניינים מופיע רק כשיש 3 כותרות h2 או יותר */
+  if (heads.length < 3) { var side = document.querySelector('.art__side'); if (side) side.hidden = true; var art = document.querySelector('.art'); if (art) art.classList.add('art--no-toc'); return; }
   tocList.innerHTML = heads.map(function (h) { return '<li><a href="#' + h.id + '">' + h.textContent + '</a></li>'; }).join('');
   var links = Array.prototype.slice.call(tocList.querySelectorAll('a'));
   /* בטאבלט/טלפון תוכן העניינים מתקפל (כמו בכתבה): כפתור "בעמוד · N" פותח וסוגר; בדסקטופ הכפתור מוסתר (CSS) */

@@ -21,32 +21,37 @@
 
   /* תוכן עניינים מכותרות h2 של הכתבה, עם סימון הקטע שבתצוגה */
   var heads = Array.prototype.slice.call(document.querySelectorAll('#body > h2[id]')).filter(function (h) { return !h.classList.contains('art__th'); });
-  $('toc').innerHTML = heads.map(function (h) { return '<li><a href="#' + h.id + '">' + h.textContent + '</a></li>'; }).join('');
-  var links = Array.prototype.slice.call($('toc').querySelectorAll('a'));
-  /* 2.13: בטאבלט/טלפון תוכן העניינים מתקפל: כפתור "בכתבה · N" פותח וסוגר (aria-expanded), לחיצה על סעיף סוגרת; בדסקטופ הכפתור מוסתר (CSS) והרשימה פתוחה תמיד */
-  (function () {
-    var toc = document.querySelector('.toc'), tgl = document.createElement('button');
-    tgl.type = 'button'; tgl.className = 'toc__toggle'; tgl.setAttribute('aria-expanded', 'false'); tgl.setAttribute('aria-controls', 'toc');
-    tgl.innerHTML = '<span>בכתבה</span><small>' + heads.length + ' סעיפים</small><svg class="icon" aria-hidden="true"><use href="#i-next"/></svg>';
-    toc.insertBefore(tgl, $('toc'));
-    function set(open) { toc.classList.toggle('is-open', open); tgl.setAttribute('aria-expanded', open ? 'true' : 'false'); }
-    tgl.addEventListener('click', function () { set(!toc.classList.contains('is-open')); });
-    links.forEach(function (a) { a.addEventListener('click', function () { if (innerWidth < 1024) set(false); }); });
-    toc.addEventListener('keydown', function (e) { if (e.key === 'Escape' && toc.classList.contains('is-open') && innerWidth < 1024) { set(false); tgl.focus(); } });
-  })();
-  function mark(id) { links.forEach(function (a) { if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); }); }
-  if (heads.length) {
-    mark(heads[0].id);
-    /* הקטע הנוכחי: הכותרת האחרונה שחלפה את 30% העליונים של המסך */
-    var spyQ = false;
-    function spy() {
-      spyQ = false;
-      var line = window.innerHeight * 0.3, cur = heads[0];
-      heads.forEach(function (h) { if (h.getBoundingClientRect().top <= line) cur = h; });
-      mark(cur.id);
+  /* אורי: תוכן העניינים (כל הסקשן, בדסקטופ ובמובייל) מופיע רק כשיש 3 כותרות h2 או יותר */
+  var MIN_TOC = 3;
+  if (heads.length < MIN_TOC) { var side = document.querySelector('.art__side'); if (side) side.hidden = true; var art = document.querySelector('.art'); if (art) art.classList.add('art--no-toc'); }
+  else {
+    $('toc').innerHTML = heads.map(function (h) { return '<li><a href="#' + h.id + '">' + h.textContent + '</a></li>'; }).join('');
+    var links = Array.prototype.slice.call($('toc').querySelectorAll('a'));
+    /* 2.13: בטאבלט/טלפון תוכן העניינים מתקפל: כפתור "תוכן עניינים · N" פותח וסוגר (aria-expanded), לחיצה על סעיף סוגרת; בדסקטופ הכפתור מוסתר (CSS) והרשימה פתוחה תמיד */
+    (function () {
+      var toc = document.querySelector('.toc'), tgl = document.createElement('button');
+      tgl.type = 'button'; tgl.className = 'toc__toggle'; tgl.setAttribute('aria-expanded', 'false'); tgl.setAttribute('aria-controls', 'toc');
+      tgl.innerHTML = '<span>תוכן עניינים</span><small>' + heads.length + ' סעיפים</small><svg class="icon" aria-hidden="true"><use href="#i-next"/></svg>';
+      toc.insertBefore(tgl, $('toc'));
+      function set(open) { toc.classList.toggle('is-open', open); tgl.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+      tgl.addEventListener('click', function () { set(!toc.classList.contains('is-open')); });
+      links.forEach(function (a) { a.addEventListener('click', function () { if (innerWidth < 1024) set(false); }); });
+      toc.addEventListener('keydown', function (e) { if (e.key === 'Escape' && toc.classList.contains('is-open') && innerWidth < 1024) { set(false); tgl.focus(); } });
+    })();
+    function mark(id) { links.forEach(function (a) { if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); }); }
+    if (heads.length) {
+      mark(heads[0].id);
+      /* הקטע הנוכחי: הכותרת האחרונה שחלפה את 30% העליונים של המסך */
+      var spyQ = false;
+      function spy() {
+        spyQ = false;
+        var line = window.innerHeight * 0.3, cur = heads[0];
+        heads.forEach(function (h) { if (h.getBoundingClientRect().top <= line) cur = h; });
+        mark(cur.id);
+      }
+      window.addEventListener('scroll', function () { if (!spyQ) { spyQ = true; requestAnimationFrame(spy); } }, { passive: true });
+      window.addEventListener('resize', spy); spy();
     }
-    window.addEventListener('scroll', function () { if (!spyQ) { spyQ = true; requestAnimationFrame(spy); } }, { passive: true });
-    window.addEventListener('resize', spy); spy();
   }
 
   /* שווה קריאה: פוסטים מאותו סוג, תגית, שנה, עשור או יישוב כמו הכתבה (אורי), בלי הכתבה עצמה */

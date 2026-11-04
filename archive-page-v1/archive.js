@@ -1,6 +1,6 @@
 /* תבנית עמוד ארכיון (דסקטופ) — דוגמה v1. נתוני הדוגמה: ARCHIVE_POSTS (28 פוסטים אמיתיים מציר הזמן של 1st).
    סוג העמוד ב-?type=settlement|council|tag|decade|search|all קובע רק את הסינון ההתחלתי.
-   ההירו לפי עדיפות: יישוב (אחד → ההירו שלו, גם עם עשורים וסוגים; שניים ומעלה → "הארכיון"), אחריו תגית, אחריו עשור (אחד → ההירו שלו; שניים ומעלה → חיפוש או "הארכיון"). סוג פוסט לא קובע הירו.
+   ההירו לפי עדיפות: יישוב (אחד → ההירו שלו, גם עם עשורים וסוגים; שניים ומעלה → "הארכיון"), אחריו תגית, אחריו עשור (אחד → ההירו שלו; שניים ומעלה → חיפוש או "הארכיון"). סוג תוכן לא קובע הירו.
    כל שלושת התפריטים (יישוב, עשור, סוג) הם בחירה מרובה; בגלולה, ערך אחד מציג את שמו ויותר מזה מציג מספר ("2 יישובים").
    התפריטים הם בחירה מרובה. מצב הסינון נשמר בכתובת (place, decade, kind, sort, q, shown; ערכים מופרדים בפסיק). */
 (function () {
@@ -52,7 +52,7 @@
   /* ---------- הירו לפי מספר פריטי הסינון ---------- */
   function itemsCount() { return state.place.length + state.decade.length + state.kind.length + (state.tag ? 1 : 0); }
   function heroFor() {
-    /* סדר עדיפות (אורי): יישוב, אחריו תגית, אחריו עשור. סוג פוסט לא קובע הירו. בלי אף אחד מהם: חיפוש חופשי או הירו כללי */
+    /* סדר עדיפות (אורי): יישוב, אחריו תגית, אחריו עשור. סוג תוכן לא קובע הירו. בלי אף אחד מהם: חיפוש חופשי או הירו כללי */
     if (state.place.length) return state.place.length === 1 ? placeHero(state.place[0]) : allHero(); /* שני יישובים או יותר: הירו "הארכיון" (אורי) */
     if (state.tag) return { title: '7 באוקטובר', desc: 'עדויות וזיכרונות של הקהילות מהיום שבו הכול השתנה, בקצב שלהן ובמילים שלהן.', bg: 'arch/anemone-march-2006-037.jpg', about: 'ב־7 באוקטובר 2023 תקפו מחבלי חמאס את יישובי הנגב המערבי שליד רצועת עזה, ובהם יישובים במועצה האזורית שער הנגב. כפר עזה ונחל עוז היו בין היישובים שנפגעו קשה. ראש המועצה, אופיר ליבשטיין, נרצח באותו בוקר כשיצא להגן על כפר עזה.\n\nבנושא הזה מרוכזים בארכיון עדויות, תצלומים ומסמכים של הקהילות מהיום ההוא ואחריו. אפשר לסנן אותם לפי יישוב, עשור וסוג החומר, ולקרוא כל פריט בקצב שלכם.', tag: true, crumbs: ['ארכיון', 'נושאים', '7 באוקטובר'], nav: '/topic/october-7/' };
     if (state.decade.length === 1) return decadeHero(state.decade[0]); /* שני עשורים בלי יישוב: ממשיכים לחיפוש או להירו הכללי */
@@ -136,16 +136,19 @@
     var phone = window.matchMedia ? matchMedia('(max-width: 599px)') : { matches: false };
     function sheet(open) { var on = open && phone.matches; done.hidden = !on; document.documentElement.classList.toggle('dd-open', on); }
     function sel(v) { return multi ? state[key].indexOf(String(v)) >= 0 : String(state[key]) === String(v); }
-    function items() { return Array.prototype.slice.call(menu.children); }
+    function items() { return Array.prototype.slice.call(menu.querySelectorAll('li')); }
     function draw() {
       var rows = options.map(function (o, i) {
         var isAll = multi && o.v === '';
         var on = isAll ? state[key].length === 0 : sel(o.v);
         var n = multi && !isAll ? countFor(key, String(o.v)) : null, off = multi && !isAll && n === 0 && !on;
-        return { off: off, i: i, html: '<li role="option" id="' + id + '-o' + i + '" data-v="' + o.v + '" aria-selected="' + on + '"' + (off ? ' aria-disabled="true"' : '') + '><span>' + o.t + '</span>' + (n != null ? '<small aria-label="' + (n === 1 ? 'פוסט אחד' : n + ' פוסטים') + '">' + n + '</small>' : '') + '</li>' };
+        return { off: off, i: i, rank: isAll ? 0 : on ? 1 : off ? 3 : 2, html: '<li role="option" id="' + id + '-o' + i + '" data-v="' + o.v + '" aria-selected="' + on + '"' + (off ? ' aria-disabled="true"' : '') + '><span>' + o.t + '</span>' + (n != null ? '<small aria-label="' + (n === 1 ? 'פוסט אחד' : n + ' פוסטים') + '">' + n + '</small>' : '') + '</li>' };
       });
-      rows.sort(function (x, y) { return (x.off - y.off) || (x.i - y.i); }); /* אפשרויות עם תוצאות למעלה, ריקות למטה (אורי) */
-      menu.innerHTML = rows.map(function (r) { return r.html; }).join('');
+      rows.sort(function (x, y) { return (x.rank - y.rank) || (x.i - y.i); }); /* סדר (אורי): "כל ..." ראשון, מתחתיו הנבחרים, אחריהם אפשרויות עם תוצאות, ובסוף הריקות */
+      /* אורי: בראש חלון הבחירה בטלפון: הכותרת, ומשמאל "איפוס" (מנקה את כל הסינון) כשיש סינון פעיל. בטאבלט ובדסקטופ הכותרת מוסתרת (CSS) */
+      var act = ['place', 'decade', 'kind'].some(function (k) { return state[k].length; }) || !!state.tag || !!state.q;
+      var head = '<div class="dd__sheethead" role="presentation"><span class="dd__sheettitle">' + label + '</span>' + (act && key !== 'sort' ? '<button type="button" class="dd__reset">איפוס</button>' : '') + '</div>';
+      menu.innerHTML = head + rows.map(function (r) { return r.html; }).join('');
       if (hl >= 0 && !menu.hidden) { var it = items(); if (it[hl]) { it[hl].classList.add('is-hl'); menu.setAttribute('aria-activedescendant', it[hl].id); } }
       var v = '', set = false;
       if (multi) { var sv = state[key]; set = sv.length > 0; v = sv.length === 1 ? (key === 'place' ? PLACES[sv[0]] : sv[0]) : sv.length > 1 ? sv.length + ' ' + NOUN[key] : ''; }
@@ -154,11 +157,59 @@
       btn.classList.toggle('is-set', set);
     }
     function setHl(i) { var it = items(); if (!it.length) return; hl = (i + it.length) % it.length; it.forEach(function (x, n) { x.classList.toggle('is-hl', n === hl); }); menu.setAttribute('aria-activedescendant', it[hl].id); it[hl].scrollIntoView({ block: 'nearest' }); }
-    function open() { dds.forEach(function (d) { if (d !== api) d.close(); }); menu.hidden = false; btn.setAttribute('aria-expanded', 'true'); sheet(true); var s = items().findIndex(function (x) { return x.getAttribute('aria-selected') === 'true'; }); menu.focus(); setHl(s < 0 ? 0 : s); }
-    function close(refocus) { if (menu.hidden) return; menu.hidden = true; hl = -1; btn.setAttribute('aria-expanded', 'false'); menu.removeAttribute('aria-activedescendant'); sheet(false); if (refocus) btn.focus(); }
+    /* אורי: בטלפון הגיליון נפתח בהחלקה מלמטה, נסגר בהחלקה למטה, ואפשר לסגור אותו גם בגרירה מטה (ידית או ראש הרשימה), כמו גיליון היישובים בעמוד הבית */
+    var closing = false, ct = 0, reduce = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+    function open() {
+      dds.forEach(function (d) { if (d !== api) d.close(false, true); });
+      closing = false; clearTimeout(ct); menu.style.transform = ''; menu.style.transition = ''; done.style.transform = ''; done.style.transition = '';
+      menu.hidden = false; btn.setAttribute('aria-expanded', 'true'); sheet(true);
+      if (phone.matches) { void menu.offsetWidth; menu.classList.add('is-in'); document.documentElement.classList.add('dd-in'); } /* אחרי reflow, כך שהמעבר מתחיל מהמצב הסגור */
+      var s = items().findIndex(function (x) { return x.getAttribute('aria-selected') === 'true'; }); menu.focus(); setHl(s < 0 ? 0 : s);
+    }
+    function finish(refocus) {
+      menu.hidden = true; menu.classList.remove('is-in'); menu.style.transform = ''; menu.style.transition = ''; done.style.transform = ''; done.style.transition = '';
+      hl = -1; menu.removeAttribute('aria-activedescendant'); closing = false; sheet(false); document.documentElement.classList.remove('dd-in');
+      if (refocus) btn.focus({ preventScroll: true });
+    }
+    function close(refocus, instant) {
+      if (menu.hidden || closing) return;
+      btn.setAttribute('aria-expanded', 'false');
+      if (!phone.matches || instant || reduce.matches) { finish(refocus); return; }
+      closing = true; menu.classList.remove('is-in'); document.documentElement.classList.remove('dd-in');
+      ct = setTimeout(function () { finish(refocus); }, 300);
+    }
     done.addEventListener('click', function () { close(true); });
     done.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.preventDefault(); close(true); } });
     if (phone.addEventListener) phone.addEventListener('change', function () { if (!menu.hidden) close(true); }); /* מעבר בין טלפון לטאבלט באמצע: סוגרים כדי לא להשאיר גיליון בלי רקע */
+    /* גרירה לסגירה: מהידית (36px העליונים) או מראש הרשימה כשהיא בראשה; מעל 80px סוגר, פחות מזה חוזר למקום. עכבר דרך pointer, מגע דרך touch (touchmove שאינו passive, כדי שהעמוד לא ייגלל) */
+    var y0 = 0, dy = 0, armed = false, dragging = false, byHandle = false;
+    function dStart(y) { if (!phone.matches || menu.hidden || closing) return; armed = true; dragging = false; dy = 0; y0 = y; byHandle = (y - menu.getBoundingClientRect().top) < 44; }
+    function dMove(y, e) {
+      if (!armed) return;
+      var d = y - y0;
+      if (!dragging) {
+        if (d > 6 && (byHandle || menu.scrollTop <= 0)) { dragging = true; menu.style.transition = 'none'; done.style.transition = 'none'; }
+        else { if (d < -6) armed = false; return; }
+      }
+      dy = Math.max(0, d); menu.style.transform = 'translateY(' + dy + 'px)'; done.style.transform = 'translateY(' + dy + 'px)';
+      if (e && e.cancelable) e.preventDefault();
+    }
+    function dEnd() {
+      if (!armed) return; armed = false;
+      if (!dragging) return;
+      dragging = false; swallow = true; setTimeout(function () { swallow = false; }, 0);
+      menu.style.transition = ''; done.style.transition = '';
+      if (dy > 80) { menu.style.transform = 'translateY(100%)'; done.style.transform = 'translateY(calc(100% + 24px))'; closing = true; menu.classList.remove('is-in'); document.documentElement.classList.remove('dd-in'); btn.setAttribute('aria-expanded', 'false'); ct = setTimeout(function () { finish(true); }, 300); }
+      else { menu.style.transform = ''; done.style.transform = ''; }
+    }
+    var swallow = false;
+    menu.addEventListener('click', function (e) { if (swallow) { e.stopPropagation(); e.preventDefault(); } }, true);
+    menu.addEventListener('pointerdown', function (e) { if (e.pointerType === 'mouse') dStart(e.clientY); });
+    window.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse' && armed) dMove(e.clientY, e); });
+    window.addEventListener('pointerup', function (e) { if (e.pointerType === 'mouse') dEnd(); });
+    menu.addEventListener('touchstart', function (e) { dStart(e.touches[0].clientY); }, { passive: true });
+    menu.addEventListener('touchmove', function (e) { dMove(e.touches[0].clientY, e); }, { passive: false });
+    menu.addEventListener('touchend', dEnd); menu.addEventListener('touchcancel', dEnd);
     function pick(i) {
       var li = items()[i]; if (!li || li.getAttribute('aria-disabled') === 'true') return;
       var v = String(li.getAttribute('data-v'));
@@ -166,7 +217,9 @@
       else if (multi) {
         if (v === '') state[key] = [];
         else { var at = state[key].indexOf(v); if (at >= 0) state[key].splice(at, 1); else state[key].push(v); }
-        state.shown = PAGE; hl = i; update(true);
+        state.shown = PAGE; hl = i;
+        /* אורי: בכל המכשירים, אחרי בחירה בתפריט סינון התפריט (או הגיליון בטלפון) נסגר והעמוד גולל לראש */
+        close(true); glide(function () { update(true); });
       } else { state[key] = v; state.shown = PAGE; close(true); update(true); }
     }
     btn.addEventListener('click', function () { menu.hidden ? open() : close(true); });
@@ -181,6 +234,7 @@
       else if (e.key === 'Tab') close(false);
     });
     menu.addEventListener('click', function (e) {
+      if (e.target.closest('.dd__reset')) { close(false, true); glide(function () { clear.click(); }); return; }
       var li = e.target.closest('li'); if (li) { pick(items().indexOf(li)); return; }
       if (phone.matches && e.target === menu && e.clientY < menu.getBoundingClientRect().top) close(true); /* 2.13: לחיצה על הרקע הכהה (מעל הגיליון) סוגרת */
     });
@@ -188,12 +242,52 @@
     dds.push(api); draw();
     return api;
   }
+  /* אורי: אחרי בחירה בתפריט סינון העמוד גולל למצב שבו שורת הסינון דבוקה מתחת לכותרת (הנקודה שבה היא מתחילה להידבק), ולא לראש העמוד. */
+  function barTarget() {
+    /* טלפון: שורת הסינון קבועה בתחתית המסך, ולכן היעד הוא תחילת הרשימה מתחת לכותרת הדבוקה */
+    if (window.matchMedia && matchMedia('(max-width: 599px)').matches) {
+      var al = document.querySelector('.al'), hd = document.querySelector('.site-header'); if (!al) return window.pageYOffset;
+      return Math.max(0, Math.round(al.getBoundingClientRect().top + window.pageYOffset - (hd ? hd.getBoundingClientRect().height : 64) - 8));
+    }
+    var af = document.querySelector('.af'), hero = document.querySelector('.hA'); if (!af || !hero) return window.pageYOffset;
+    var cs = getComputedStyle(af), natural = hero.getBoundingClientRect().bottom + window.pageYOffset + (parseFloat(cs.marginTop) || 0);
+    return Math.max(0, Math.round(natural - (parseFloat(cs.top) || 0)));
+  }
+  /* מעבר שקט: התוכן דוהה (140ms), ה-fn מעדכן את הסינון בזמן שהוא מוסתר, העמוד גולל בעקומה רכה אל השורה הדבוקה (היעד מחושב מחדש בכל פריים, כי ההירו משתנה בגובהו), והתוכן עולה בדהייה. תנועה מופחתת: עדכון וגלילה מיידיים */
+  var glideId = 0;
+  function glide(fn) {
+    var id = ++glideId, root = document.documentElement;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { fn(); window.scrollTo(0, barTarget()); return; }
+    var start = window.pageYOffset, t0 = performance.now(), dur = Math.min(620, 360 + Math.abs(start - barTarget()) * 0.12), done = false;
+    root.classList.add('is-swap');
+    setTimeout(function () { if (id === glideId && !done) { done = true; fn(); } }, 140);
+    function ease(p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
+    function step(now) {
+      if (id !== glideId) return;
+      var p = Math.min(1, (now - t0) / dur);
+      window.scrollTo(0, Math.round(start + (barTarget() - start) * ease(p)));
+      if (p < 1) requestAnimationFrame(step);
+      else { if (!done) { done = true; fn(); window.scrollTo(0, barTarget()); } root.classList.remove('is-swap'); }
+    }
+    requestAnimationFrame(step);
+  }
   var bar = $('bar');
   bar.appendChild(makeDD('place', 'יישוב', [{ v: '', t: 'כל היישובים והמועצה' }].concat(Object.keys(PLACES).map(function (k) { return { v: k, t: PLACES[k] }; })), '', true).root);
   bar.appendChild(makeDD('decade', 'עשור', [{ v: '', t: 'כל העשורים' }].concat(DECADES.map(function (d) { return { v: d, t: d }; })), '', true).root);
-  bar.appendChild(makeDD('kind', 'סוג פוסט', [{ v: '', t: 'כל הסוגים' }].concat(KINDS.map(function (k) { return { v: k, t: k }; })), '', true).root);
-  var clear = document.createElement('button'); clear.type = 'button'; clear.className = 'af__clear'; clear.textContent = 'איפוס סינון'; clear.hidden = true; bar.appendChild(clear);
-  bar.appendChild(makeDD('sort', 'מיון:', [{ v: 'asc', t: 'שנים עולות' }, { v: 'desc', t: 'שנים יורדות' }, { v: 'alpha', t: 'אלפבתי' }], 'af__sort', false).root);
+  bar.appendChild(makeDD('kind', 'סוג תוכן', [{ v: '', t: 'כל הסוגים' }].concat(KINDS.map(function (k) { return { v: k, t: k }; })), '', true).root);
+  var clear = document.createElement('button'); clear.type = 'button'; clear.className = 'af__clear'; clear.setAttribute('aria-label', 'איפוס סינון'); clear.innerHTML = '<svg class="icon af__clear-ic" aria-hidden="true"><use href="#i-close"/></svg><span>איפוס<span class="af__clear-more"> סינון</span></span>'; clear.hidden = true; bar.appendChild(clear);
+  var sortRoot = makeDD('sort', 'מיון', [{ v: 'asc', t: 'שנים עולות' }, { v: 'desc', t: 'שנים יורדות' }, { v: 'alpha', t: 'אלפבתי' }], 'af__sort', false).root;
+  /* אורי: בטלפון המיון יוצא משורת הסינון הדבוקה מתחת לכותרת, ויושב בשורת מספר הפוסטים (נגלל עם הרשימה). בטאבלט ובדסקטופ נשאר בשורת הסינון */
+  var sortMQ = window.matchMedia ? matchMedia('(max-width: 599px)') : { matches: false }, listHead = document.querySelector('.al__head');
+  function placeSort() { if (sortMQ.matches && listHead) { if (sortRoot.parentNode !== listHead) listHead.appendChild(sortRoot); } else if (sortRoot.parentNode !== bar) bar.appendChild(sortRoot); }
+  /* אורי: בטלפון בלבד, הקישור "כל הפרסומים" (בעמודי תגית ונושא) עובר מראש הרשימה אל מתחת לפסקה של בלוק התיאור */
+  var allPosts = $('allPosts'), allSlot = $('allPostsSlot');
+  function placeAllPosts() {
+    if (!allPosts || !allSlot || !listHead) return;
+    if (sortMQ.matches) { if (allPosts.parentNode !== allSlot) allSlot.appendChild(allPosts); }
+    else if (allPosts.parentNode !== listHead) listHead.insertBefore(allPosts, $('count').nextSibling);
+  }
+  placeSort(); placeAllPosts(); if (sortMQ.addEventListener) { sortMQ.addEventListener('change', placeSort); sortMQ.addEventListener('change', placeAllPosts); }
   document.addEventListener('click', function (e) { if (e.target.isConnected && !e.target.closest('.dd')) dds.forEach(function (d) { d.close(false); }); }); /* 2.13 (תיקון): אחרי בחירה בתפריט הרשימה מצוירת מחדש והפריט שנלחץ כבר לא ב-DOM, ולכן closest החזיר null והתפריט נסגר אחרי כל בחירה (גם בדסקטופ); בבחירה מרובה הוא נשאר פתוח */
 
   /* ---------- רינדור ---------- */
@@ -257,7 +351,7 @@
     state.shown += PAGE; update(true, before);
     var a = $('list').querySelector('[data-i="' + before + '"] h3 a'); if (a) a.focus();
   });
-  clear.addEventListener('click', function () { state.place = []; state.decade = []; state.kind = []; state.tag = ''; state.q = ''; state.shown = PAGE; update(true); $('dd-place').focus(); });
+  clear.addEventListener('click', function () { state.place = []; state.decade = []; state.kind = []; state.tag = ''; state.q = ''; state.shown = PAGE; update(true); $('dd-place').focus({ preventScroll: true }); });
   setTimeout(function () { var hr = document.getElementById('hero'); if (hr) hr.classList.remove('is-entering'); }, 2000); /* אחרי כניסת ההירו */
   $('emptyReset').addEventListener('click', function () { clear.click(); });
   /* סרגל הסינון הדביק: צל כשהוא נדבק לכותרת, כדי שהכרטיסים לא ייחתכו בקו שקוף */

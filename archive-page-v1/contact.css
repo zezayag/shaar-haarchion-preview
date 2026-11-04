@@ -1,0 +1,339 @@
+/* עמוד יצירת קשר (2.18): לוח דיו ברוחב מלא כמו עמוד 404 (page.css: .nf__*), חצי טופס וחצי תצלומים מתחלפים.
+   סטייל גייד בלבד: דיו, לבן, חול, תכלת, זהב. בלי צבע שגיאה חדש: שגיאה = מסגרת עבה (טבעת לבנה סביב השדה) + טקסט "שגיאה:".
+   ui-ux-pro-max: תווית גלויה לכל שדה, שגיאה מתחת לשדה + סיכום עם קישורים (role=alert), משוב לשליחה (שולחים → תודה), יעדי לחיצה 44, מיקוד גלוי (זהב על דיו), prefers-reduced-motion. */
+
+/* overflow: clip ולא hidden: hidden הופך את הלוח למכל גלילה ומבטל את הדביקות של התצלומים; clip רק חותך את הסמל שחורג בטלפון */
+.cp__board { position: relative; display: grid; grid-template-columns: 1fr 1fr; min-height: max(640px, 100svh); background: var(--ink); color: var(--white); overflow: clip; }
+.cp__mark { position: absolute; z-index: 0; width: 600px; aspect-ratio: 232 / 200; inset-inline-end: calc(50% - 170px); top: 50%; transform: translateY(-50%); background: var(--sky); opacity: .07; pointer-events: none;
+  -webkit-mask: url("../1st/assets/img/emblem-mark.png") center / contain no-repeat; mask: url("../1st/assets/img/emblem-mark.png") center / contain no-repeat; }
+
+/* ---- תצלומים: ארבעה עומדים, אחד מוצג ושלושה בהמתנה. דהייה 1200ms, קנה מידה 1.00→1.04 לאורך כל השהות (6.7s) ---- */
+/* דבוק בגלילה (אורי): גובה המסך, top 0 כדי שבראש העמוד התצלום יישב מתחת לכותרת השקופה בלי רווח; אחרי גלילה הכותרת האטומה מכסה את 76px העליונים */
+.cp__photos { position: sticky; top: 0; align-self: start; height: 100svh; min-height: 560px; overflow: hidden; background: var(--sand); order: 2; margin: 0; }
+.cp__photos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; filter: grayscale(1) brightness(.8); mix-blend-mode: multiply; opacity: 0; transform: scale(1); }
+.cp__photos img.is-on { opacity: .89; }
+/* מעבר תצלומים כמו בעמוד הבית: הקודם דוהה 460ms מעל החדש, והחדש מתיישב מ-scale(1.035) תוך 736ms */
+.cp__photos img.is-on { z-index: 1; }
+.cp__photos img.is-leave { z-index: 2; opacity: 0; transition: opacity 460ms cubic-bezier(.4, 0, .2, 1); }
+@keyframes cp-settle { from { transform: scale(1.035); } to { transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .cp__photos img.is-settle { animation: cp-settle 736ms cubic-bezier(.16, 1, .3, 1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cp__photos img.is-leave { transition-duration: 200ms; }
+}
+
+/* ---- חצי הטופס ---- */
+.cp__field { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--header-h) + 56px) 72px 80px var(--gutter); padding-inline-start: var(--gutter); padding-inline-end: 72px; }
+.cp__stage { width: 100%; max-width: 40em; }
+/* הכותרת בזהב, כמו "7 באוקטובר" בסקשן 7 באוקטובר בעמוד הבית (m3.css: .oct7__panel--a .focus-decade__label): זהב על דיו 8.43:1 */
+.cp__title { margin: 0; font-family: var(--display); font-weight: 300; font-size: clamp(48px, 5.4vw, 84px); line-height: 1; letter-spacing: -0.02em; color: var(--gold); }
+.cp__lead { margin: 20px 0 0; font-family: var(--display); font-size: 20px; line-height: 1.6; max-width: 26em; }
+.cp__form { display: grid; gap: 24px; margin-top: 44px; }
+.cp__form > * { margin: 0; }
+.cp__form label, .cp__form legend { display: block; margin-bottom: 8px; padding: 0; font: 500 16px/1.4 var(--text); color: var(--white); }
+.cp__form small { font-weight: 400; color: rgba(255, 255, 255, .84); }
+.cp__form input[type="text"], .cp__form input[type="email"], .cp__form input[type="tel"], .cp__form select, .cp__form textarea {
+  width: 100%; min-height: 48px; padding: 12px 16px; border: 0; border-radius: 4px; background: var(--white); color: var(--ink); font: 400 17px/1.4 var(--text); caret-color: var(--blue); }
+.cp__form textarea { resize: vertical; min-height: 144px; }
+.cp__form ::placeholder { color: var(--ink-soft); }
+.cp__form input:focus-visible, .cp__form select:focus-visible, .cp__form textarea:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+/* תיבת בחירה: אותו שדה כמו השאר, חץ בדיו בצד הפתוח (שמאל ב-RTL) */
+.cp__form select { appearance: none; -webkit-appearance: none; padding-inline-end: 16px; padding-inline-start: 44px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%231F134A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-size: 20px; background-position: left 14px center; }
+/* שגיאה: טבעת לבנה עבה סביב השדה (מסגרת עבה, לא צבע חדש); המיקוד בזהב גובר עליה */
+.cp__form [aria-invalid="true"] { outline: 3px solid var(--white); outline-offset: 3px; }
+.cp__form [aria-invalid="true"]:focus-visible { outline-color: var(--gold); }
+.cp__row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.cp__hint { margin: 8px 0 0; font: 400 14px/1.5 var(--text); color: rgba(255, 255, 255, .84); }
+.cp__err { margin: 8px 0 0; font: 500 15px/1.5 var(--text); color: var(--white); }
+.cp__err::before { content: "שגיאה: "; font-weight: 700; }
+.cp__err[hidden], .cp__errsum[hidden], .cp__done[hidden], .cp__form[hidden] { display: none; }
+.cp__errsum { padding: 16px 20px; border: 3px solid var(--white); font: 500 16px/1.5 var(--text); color: var(--white); }
+.cp__errsum ul { margin: 8px 0 0; padding-inline-start: 1.2em; }
+.cp__errsum a { color: var(--white); text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.cp__errsum a:hover { color: var(--sky); }
+.cp__errsum a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+
+/* צירוף קבצים: הקלט מוסתר חזותית (נגיש למקלדת), תווית-גלולה של מתאר פותחת את הבחירה, ושורה חיה אומרת מה נבחר */
+.cp__pickrow { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.cp__pickrow > label:first-child { margin: 0; }
+.cp__pickrow input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.cp__pick { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: 0; padding: 0 16px 0 18px; border: 1px solid rgba(255, 255, 255, .4); border-radius: 22px; color: var(--white); font: 500 16px/1 var(--text); cursor: pointer; transition: background-color 150ms linear, color 150ms linear, border-color 150ms linear, transform 150ms cubic-bezier(.2, 0, 0, 1); }
+.cp__pick .icon { width: 18px; height: 18px; flex: none; }
+.cp__pick:hover { background: var(--sky); color: var(--ink); border-color: var(--sky); }
+.cp__pick:active { transform: scale(.97); }
+.cp__pickrow input:focus-visible + .cp__pick { outline: 3px solid var(--gold); outline-offset: 3px; }
+.cp__pickrow input[aria-invalid="true"] + .cp__pick { outline: 3px solid var(--white); outline-offset: 3px; }
+.cp__pickrow input[aria-invalid="true"]:focus-visible + .cp__pick { outline-color: var(--gold); }
+.cp__picked { font: 400 16px/1.4 var(--text); color: rgba(255, 255, 255, .84); }
+
+/* כפתורים בשפת הגלולה (כמו .aCta__btn): ראשי = מלא לבן, COLBO 18, 48px; משני = מתאר בלבד, 44px, שקט יותר */
+.cp__send, .cp__alt, .cp__done .cp__send { display: inline-flex; align-items: center; gap: 8px; min-height: 0; padding: 0 18px 0 24px; border: 0; border-radius: 24px; background: var(--white); color: var(--ink); font-family: var(--display); font-size: 18px; font-weight: 400; text-decoration: none; cursor: pointer;
+  transition: background-color 150ms cubic-bezier(.2, 0, 0, 1), border-radius 300ms cubic-bezier(.34, 1.4, .64, 1), transform 150ms cubic-bezier(.2, 0, 0, 1), opacity 150ms linear; }
+.cp__send { height: 48px; justify-self: start; }
+.cp__send .icon, .cp__alt .icon { width: 18px; height: 18px; flex: none; }
+.cp__send:hover, .cp__send:focus-visible { background: color-mix(in srgb, currentColor 8%, var(--white)); }
+.cp__send:active { border-radius: 12px; transform: scale(.98); }
+.cp__send:focus-visible, .cp__alt:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.cp__send[aria-disabled="true"] { opacity: .7; cursor: progress; }
+.cp__alt { height: 44px; padding: 0 16px 0 20px; background: transparent; color: var(--white); border: 1px solid rgba(255, 255, 255, .4); }
+.cp__alt:hover { background: var(--sky); color: var(--ink); border-color: var(--sky); }
+.cp__alt:active { border-radius: 12px; transform: scale(.98); }
+.cp__alt .icon { width: 16px; height: 16px; }
+
+/* פנייה למועצה: הבחנה במשפט, מופרדת ברווח ולא בקו */
+.cp__council { margin-top: 32px; }
+.cp__council p { margin: 0 0 14px; font: 400 16px/1.6 var(--text); color: rgba(255, 255, 255, .84); max-width: 30em; }
+
+/* מצב הצלחה: במקום הטופס, באותו חצי; הפתיח יורד כי הוא כבר לא מזמין לכתוב */
+.cp__done { margin-top: 44px; }
+.cp.is-done .cp__lead { display: none; }
+.cp__done h2 { margin: 0; font-family: var(--display); font-weight: 300; font-size: clamp(36px, 3.6vw, 56px); line-height: 1.05; letter-spacing: -0.02em; color: var(--gold); }
+.cp__done p { margin: 16px 0 28px; font-family: var(--display); font-size: 20px; line-height: 1.6; max-width: 26em; }
+.cp__done:focus { outline: 0; }
+
+/* ---- תנועה: כניסה מדורגת של חצי הטופס (כותרת, פתיח, טופס), תצלום ראשון מתבהר; מעבר להצלחה. רק transform ו-opacity ---- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes cp-rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  @keyframes cp-fade { from { opacity: 0; } to { opacity: 1; } }
+  .cp.is-entering .cp__title { animation: cp-rise 700ms cubic-bezier(.16, 1, .3, 1) 120ms backwards; }
+  .cp.is-entering .cp__lead { animation: cp-rise 700ms cubic-bezier(.16, 1, .3, 1) 200ms backwards; }
+  .cp.is-entering .cp__form > * { animation: cp-rise 600ms cubic-bezier(.16, 1, .3, 1) backwards; }
+  .cp.is-entering .cp__form > :nth-child(1) { animation-delay: 300ms; }
+  .cp.is-entering .cp__form > :nth-child(2) { animation-delay: 360ms; }
+  .cp.is-entering .cp__form > :nth-child(3) { animation-delay: 420ms; }
+  .cp.is-entering .cp__form > :nth-child(4) { animation-delay: 480ms; }
+  .cp.is-entering .cp__form > :nth-child(5) { animation-delay: 540ms; }
+  .cp.is-entering .cp__form > :nth-child(6) { animation-delay: 600ms; }
+  .cp.is-entering .cp__form > :nth-child(7) { animation-delay: 660ms; }
+  .cp.is-entering .cp__form > :nth-child(8) { animation-delay: 720ms; }
+  .cp.is-entering .cp__form > :nth-child(n+9) { animation-delay: 780ms; }
+  .cp.is-entering .cp__photos { animation: cp-fade 1000ms ease-out backwards; }
+  .cp__done.is-in { animation: cp-rise 600ms cubic-bezier(.16, 1, .3, 1) backwards; }
+}
+
+/* ---- טאבלט וטלפון: התצלומים לרצועה עליונה, הטופס מתחתיה ---- */
+@media (max-width: 1023px) {
+  .cp__board { grid-template-columns: 1fr; grid-template-rows: 300px auto; min-height: 0; }
+  .cp__photos { order: -1; position: relative; top: auto; height: auto; min-height: 0; }
+  .cp__photos img { object-position: center 22%; }
+  .cp__mark { inset-inline-end: -120px; top: auto; bottom: 40px; transform: none; width: 360px; }
+  .cp__field { padding: 40px var(--gutter) 56px; }
+  .cp__stage { max-width: none; }
+  .cp__title { font-size: clamp(44px, 9vw, 72px); }
+}
+@media (max-width: 599px) {
+  .cp__board { grid-template-rows: 260px auto; }
+  .cp__field { padding: 32px var(--gutter) 48px; }
+  .cp__row { grid-template-columns: 1fr; }
+  .cp__lead { font-size: 18px; }
+  .cp__form { margin-top: 32px; gap: 20px; }
+  .cp__send { width: 100%; justify-content: center; }
+}
+
+/* ===== תיבה אחת (אורי): כל הטופס בכרטיס לבן (כמו לוח ההירו של הארכיון), כל שדה בשורה אחת: התווית מימין והשדה משמאלה ===== */
+.cp__form { background: var(--blue); color: var(--white); border-radius: var(--md-shape-xl); padding: 32px 32px 36px; gap: 14px; } /* כרטיס M3 extra-large בכחול של הפלטה, כמו הלוח הכחול של "עשור בפוקוס" בעמוד הבית (לבן על כחול 5.13:1), על לוח הדיו */
+.cp__form label, .cp__form legend { margin: 0; color: var(--white); font-size: 15px; }
+.cp__form small { color: var(--white); font-weight: 400; }
+.cp__field-item { display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; column-gap: 16px; row-gap: 6px; }
+.cp__field-item > .cp__err { grid-column: 2; margin: 0; }
+.cp__field-item:has(textarea) { align-items: start; }
+.cp__field-item:has(textarea) > label { padding-top: 10px; }
+.cp__form input[type="text"], .cp__form input[type="email"], .cp__form input[type="tel"], .cp__form select, .cp__form textarea {
+  min-height: 48px; padding: 0 20px; border: 0; border-radius: var(--md-shape-full); background: var(--white); color: var(--ink); font-size: 16px; transition: border-radius 300ms cubic-bezier(.34, 1.4, .64, 1); } /* שדה בגלולה מלאה לבנה על הכחול, כמו תיבת החיפוש בעמוד הבית; בפוקוס הצורה מתכווצת (expressive) */
+.cp__form input:focus-visible, .cp__form select:focus-visible, .cp__form textarea:focus-visible { outline: 3px solid var(--white); outline-offset: 2px; border-radius: var(--md-shape-md); }
+/* הודעה: שתי שורות, וגדלה רק כשכותבים עוד שורות (תקני: field-sizing). בדפדפן בלי תמיכה נשארת שתי שורות עם גלילה */
+.cp__form textarea { padding: 12px 20px; border-radius: 24px; min-height: calc(2 * 1.5em + 24px); resize: none; field-sizing: content; max-height: 14em; overflow-y: auto; line-height: 1.5; } /* מינימום שתי שורות (field-sizing: content מתעלם מ-rows) */
+@supports not (field-sizing: content) { .cp__form textarea { resize: vertical; } }
+/* שגיאה בתיבה הלבנה: מסגרת דיו עבה והטקסט "שגיאה:"; המיקוד בכחול גובר */
+.cp__form [aria-invalid="true"] { outline: 3px solid var(--white); outline-offset: 2px; }
+.cp__form [aria-invalid="true"]:focus-visible { outline-color: var(--gold); outline-width: 4px; }
+.cp__form .cp__err { color: var(--white); }
+.cp__form .cp__errsum { border: 3px solid var(--white); background: transparent; color: var(--white); border-radius: var(--md-shape-md); }
+.cp__form .cp__errsum a { color: var(--white); }
+.cp__form .cp__errsum a:hover { color: var(--sky); }
+.cp__form .cp__errsum a:focus-visible { outline-color: var(--white); }
+/* צירוף קבצים: שורה אחת. הכפתור מציג את כמות הקבצים אחרי הבחירה, ובריחוף או במיקוד tooltip עם השמות */
+.cp__filectl { position: relative; display: flex; align-items: center; min-width: 0; }
+.cp__filectl input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.cp__form .cp__pick { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px 0 18px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 22px; background: transparent; color: var(--white); font: 500 16px/1 var(--text); cursor: pointer; }
+.cp__form .cp__pick .icon { width: 18px; height: 18px; flex: none; }
+.cp__form .cp__pick:hover { background: var(--sky); border-color: var(--sky); color: var(--ink); }
+.cp__filectl input:focus-visible + .cp__pick { outline: 3px solid var(--white); outline-offset: 2px; }
+.cp__filectl input[aria-invalid="true"] + .cp__pick { outline: 3px solid var(--white); outline-offset: 2px; }
+.cp__tip { position: absolute; bottom: calc(100% + 8px); inset-inline-start: 0; z-index: 5; max-width: min(320px, 80vw); padding: 8px 12px; border-radius: 8px; background: var(--ink); color: var(--white); font: 400 14px/1.6 var(--text); box-shadow: var(--md-elev-2); pointer-events: none; }
+.cp__tip[hidden] { display: none; }
+.cp__tip ul { margin: 0; padding: 0; list-style: none; }
+.cp__tip li { white-space: nowrap; }
+/* שליחה בתוך התיבה: כפתור כחול בשפת הגלולה; החלופה למועצה מתחת לתיבה, על הדיו */
+.cp__form .cp__send { margin-top: 6px; background: var(--white); color: var(--blue); height: 48px; }
+.cp__form .cp__send:active { border-radius: var(--md-shape-md); }
+.cp__form .cp__send:hover { background: color-mix(in srgb, var(--blue) 8%, var(--white)); }
+.cp__form .cp__send:focus-visible { outline-color: var(--white); }
+.cp__council { margin-top: 24px; }
+@media (max-width: 599px) {
+  .cp__form { padding: 24px 20px 28px; }
+  .cp__field-item { grid-template-columns: minmax(0, 1fr); }
+  .cp__field-item > .cp__err { grid-column: 1; }
+  .cp__field-item:has(textarea) > label { padding-top: 0; }
+}
+.cp__form select { padding-inline: 20px 48px; padding-inline-start: 20px; padding-inline-end: 48px; background-position: left 18px center; }
+
+/* החלופה למועצה בשורה אחת: "לפניות למועצה אזורית שער הנגב" וכפתור "יצירת קשר עם המועצה" (אורי); בטלפון הכפתור יורד לשורה מתחת */
+.cp__council { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.cp__council p { margin: 0; }
+
+/* ===== מבנה חדש לתיבה (אורי): כל שדה בגלולה אחת ברוחב מלא, התווית בתוך השדה וצפה למעלה בפוקוס ובמילוי (Material), בלי עמודת תוויות; צירוף קבצים בגלולה ברוחב מלא; שליחה בגלולה ברוחב מלא ===== */
+.cp__form { gap: 12px; padding: 28px; }
+.cp__field-item { display: block; position: relative; }
+.cp__field-item > label:first-child { position: absolute; inset-inline: 20px; top: 17px; z-index: 1; margin: 0; max-width: calc(100% - 40px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 16px/1.4 var(--text); color: var(--ink-soft); pointer-events: none; transform-origin: top right; transition: transform 200ms cubic-bezier(.2, 0, 0, 1); }
+.cp__field-item > label:first-child small { color: inherit; }
+.cp__field-item:focus-within > label:first-child,
+.cp__field-item:has(input:not(:placeholder-shown)) > label:first-child,
+.cp__field-item:has(textarea:not(:placeholder-shown)) > label:first-child,
+.cp__select > label:first-child { transform: translateY(-10px) scale(.78); }
+.cp__form input[type="text"], .cp__form input[type="email"], .cp__form input[type="tel"], .cp__form select { min-height: 56px; padding: 22px 20px 6px; }
+.cp__form select { padding-inline-end: 52px; }
+.cp__form textarea { padding: 26px 20px 8px; min-height: calc(2 * 1.5em + 34px); border-radius: 28px; }
+.cp__form select:focus-visible, .cp__form input:focus-visible, .cp__form textarea:focus-visible { border-radius: var(--md-shape-lg); }
+.cp__field-item > .cp__err { margin: 6px 20px 0; }
+.cp__field-item:has(textarea) { align-items: initial; }
+.cp__field-item:has(textarea) > label:first-child { padding-top: 0; }
+/* צירוף קבצים: גלולה ברוחב מלא (בלי תווית נפרדת: הגלולה היא התווית) */
+.cp__file { display: block; }
+.cp__filectl { display: block; }
+.cp__form .cp__pick { display: flex; width: 100%; min-height: 56px; padding: 0 20px; justify-content: flex-start; font: 400 16px/1.4 var(--text); border-color: rgba(255, 255, 255, .7); }
+.cp__tip { inset-inline: 0 auto; }
+.cp__form .cp__send { width: 100%; justify-content: center; height: 56px; margin-top: 6px; font-size: 20px; }
+@media (max-width: 599px) {
+  .cp__field-item { display: block; }
+}
+/* tooltip הקבצים: ממורכז מעל הגלולה, והשמות ממורכזים בתוכו (אורי) */
+.cp__tip { inset-inline: auto; left: 50%; right: auto; transform: translateX(-50%); width: max-content; text-align: center; }
+
+/* ===== Google Material Design 3, שלב אחד (אורי): שדות outlined עם תווית שצפה אל קו המסגרת, שדה הודעה מסוג composer עם צירוף קבצים בתחתיתו, כפתור שליחה ממולא בגלולה. על משטח הכחול של הפלטה, בקו לבן ובטקסט לבן ===== */
+.cp__form { padding: 28px; gap: 22px; }
+.cp__form input[type="text"], .cp__form input[type="email"], .cp__form input[type="tel"], .cp__form select {
+  min-height: 56px; padding: 16px; border: 1px solid rgba(255, 255, 255, .8); border-radius: 4px; background: transparent; color: var(--white); caret-color: var(--white); transition: border-color 150ms linear, box-shadow 150ms linear; }
+.cp__form select { padding-inline-end: 48px; background-position: left 16px center; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.cp__form select option { color: var(--ink); background: var(--white); }
+.cp__form input:hover, .cp__form select:hover, .cp__composer:hover { border-color: var(--white); }
+.cp__form input:focus-visible, .cp__form select:focus-visible { outline: 0; border-color: var(--white); box-shadow: inset 0 0 0 1px var(--white); border-radius: 4px; }
+.cp__form [aria-invalid="true"] { outline: 0; border-color: var(--white); box-shadow: inset 0 0 0 3px var(--white); }
+/* תווית: בתוך השדה במנוחה, וצפה אל קו המסגרת כשיש פוקוס או ערך (Material outlined). הרקע בצבע התיבה "חותך" את הקו מאחוריה */
+.cp__field-item > label:first-child { inset-inline-start: 12px; top: 16px; padding: 0 4px; max-width: calc(100% - 24px); color: var(--white); transform-origin: top right; }
+.cp__field-item:focus-within > label:first-child,
+.cp__field-item:has(input:not(:placeholder-shown)) > label:first-child,
+.cp__field-item:has(textarea:not(:placeholder-shown)) > label:first-child,
+.cp__select > label:first-child { transform: translateY(-25px) scale(.78); background: var(--blue); }
+.cp__field-item > label:first-child small { color: inherit; }
+/* composer: שדה ההודעה עם שורת כלים בתחתית */
+.cp__composer { border: 1px solid rgba(255, 255, 255, .8); border-radius: 4px; transition: border-color 150ms linear, box-shadow 150ms linear; }
+.cp__composer:focus-within { border-color: var(--white); box-shadow: inset 0 0 0 1px var(--white); }
+.cp__composer:has([aria-invalid="true"]) { border-color: var(--white); box-shadow: inset 0 0 0 3px var(--white); }
+.cp__form .cp__composer textarea { display: block; width: 100%; min-height: calc(2 * 1.5em + 24px); padding: 16px 16px 6px; border: 0; border-radius: 0; background: transparent; color: var(--white); caret-color: var(--white); box-shadow: none; }
+.cp__form .cp__composer textarea:focus-visible, .cp__form .cp__composer textarea[aria-invalid="true"] { outline: 0; box-shadow: none; border-radius: 0; }
+.cp__tools { display: flex; align-items: center; padding: 0 8px 8px; }
+.cp__filectl { position: relative; display: inline-flex; align-items: center; min-width: 0; }
+.cp__form .cp__pick { display: inline-flex; width: auto; min-height: 40px; padding: 0 16px 0 12px; gap: 8px; border: 0; border-radius: 20px; background: transparent; color: var(--white); font: 500 14px/1 var(--text); cursor: pointer; justify-content: flex-start; transition: background-color 150ms linear; }
+.cp__form .cp__pick:hover { background: rgba(255, 255, 255, .16); color: var(--white); }
+.cp__form .cp__pick .icon { width: 20px; height: 20px; flex: none; }
+.cp__filectl input:focus-visible + .cp__pick { outline: 2px solid var(--white); outline-offset: 0; }
+.cp__tip { inset-inline: auto; inset-inline-start: 0; left: auto; transform: none; width: max-content; text-align: center; bottom: calc(100% + 4px); }
+/* שליחה: כפתור ממולא בגלולה (M3 filled), בקצה השורה; בטלפון ברוחב מלא */
+.cp__form .cp__send { width: auto; min-width: 140px; height: 48px; margin-top: 2px; justify-self: end; justify-content: center; font-size: 18px; }
+.cp__field-item > .cp__err { margin: 6px 16px 0; }
+@media (max-width: 599px) { .cp__form .cp__send { width: 100%; justify-self: stretch; } }
+.cp__form select { background-repeat: no-repeat; background-size: 20px; }
+.cp__field-item > label:first-child { inset-inline: 12px auto; width: max-content; max-width: calc(100% - 24px); }
+
+/* מצב תודה: הכותרת "תודה, קיבלנו" מחליפה את "כתבו לנו" באותה טיפוגרפיה, בלי כותרת כפולה */
+.cp.is-done .cp__title { display: none; }
+.cp.is-done .cp__done { margin-top: 0; }
+.cp__done h2 { font-size: clamp(48px, 5.4vw, 84px); line-height: 1; }
+.cp__done p { margin: 20px 0 32px; }
+@media (max-width: 760px) { .cp__done h2 { font-size: clamp(44px, 9vw, 72px); } }
+
+/* אורי: הטופס בלי תיבת רקע, על לוח הדיו; הרקע הכחול עבר לשורת "לפניות למועצה" */
+.cp__form { background: transparent; padding: 0; border-radius: 0; }
+.cp__field-item > label:first-child, .cp__select > label:first-child { background: var(--ink); }
+.cp__form .cp__send { color: var(--ink); }
+.cp__council { background: var(--blue); border-radius: var(--md-shape-xl); padding: 16px 24px; }
+@media (max-width: 599px) { .cp__council { padding: 16px 20px; } }
+.cp .cp__form .cp__field-item > label:first-child, .cp .cp__form .cp__select > label:first-child { background: var(--ink); }
+
+/* אורי: שורת המועצה ממורכזת, עם יותר רווח ופנים */
+.cp__council { justify-content: center; text-align: center; gap: 14px 24px; padding: 28px 32px; margin-top: 32px; }
+.cp__council p { margin: 0; }
+@media (max-width: 599px) { .cp__council { flex-direction: column; gap: 14px; padding: 24px 20px; } }
+
+/* אורי: כפתור המועצה בלי מסגרת; קו תחתון דק משאיר אותו קישור ברור */
+.cp__alt { border: 0; padding: 0 12px; }
+.cp__alt > :not(.icon):not(.visually-hidden), .cp__alt { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.cp__alt:hover { text-decoration-color: transparent; }
+
+/* אורי: tooltip הקבצים על רקע לבן עם טקסט דיו */
+.cp .cp__tip { background: var(--white); color: var(--ink); box-shadow: var(--md-elev-2, 0 2px 8px rgba(0, 0, 0, .3)); }
+
+/* אורי: שורת המועצה נמוכה יותר; הקישור נשאר 44px (יעד מגע מינימלי) ועוד 8px מלמעלה ומלמטה */
+.cp .cp__council { padding: 8px 24px; margin-top: 28px; border-radius: 20px; }
+@media (max-width: 599px) { .cp .cp__council { padding: 12px 20px; gap: 6px; } }
+
+/* אורי: בטאבלט ובטלפון רצועת התצלומים מקבלת גובה קבוע (קודם התכווצה), מתחילה מתחת להדר, והראש נשאר בפריים */
+@media (max-width: 1023px) {
+  .cp__photos { align-self: stretch; height: 400px; }
+  .cp__photos img { object-position: center 14%; }
+}
+@media (max-width: 599px) {
+  .cp__photos { height: 360px; }
+}
+@media (max-width: 1023px) { .cp__board { grid-template-rows: auto auto; } }
+
+/* אורי: שורת המועצה בטלפון כרטיס ברור: כותרת קטנה מימין, ומתחתיה שורת קישור ברוחב מלא (48px) עם החץ בקצה */
+@media (max-width: 599px) {
+  .cp .cp__council { flex-direction: column; align-items: stretch; justify-content: flex-start; text-align: start; gap: 0; padding: 16px 20px 4px; border-radius: 20px; }
+  .cp .cp__council p { font-size: 15px; line-height: 1.4; opacity: .85; margin: 0 0 8px; }
+  .cp .cp__council .cp__alt { justify-content: space-between; flex-direction: row; width: 100%; height: 52px; padding: 0; border-top: 1px solid rgba(255, 255, 255, .28); border-radius: 0; text-decoration: none; font-size: 18px; font-weight: 500; }
+  .cp .cp__council .cp__alt:hover { background: transparent; color: var(--white); }
+  .cp .cp__council .cp__alt .icon { width: 20px; height: 20px; }
+}
+.cp__lead { text-wrap: balance; }
+
+/* אורי: קו חוצץ גם בתצוגת מחשב וטאבלט, בין הכותרת לקישור (בטלפון הקו אופקי) */
+@media (min-width: 600px) {
+  .cp .cp__council p { padding-inline-end: 24px; border-inline-end: 1px solid rgba(255, 255, 255, .28); line-height: 28px; }
+  .cp .cp__council { gap: 0 20px; }
+}
+
+/* אורי: בטלפון הכותרת והקישור באמצע הכרטיס */
+@media (max-width: 599px) {
+  .cp .cp__council p { text-align: center; }
+  .cp .cp__council .cp__alt { justify-content: center; gap: 10px; }
+}
+
+/* אורי: שורת המועצה בצבע ההדר (נייר). הקישור, החשוב ביותר, בדיו (14.7:1); הכותרת המשנית בכחול הפלטה (4.7:1); קווי חלוקה בדיו עדין */
+.cp .cp__council { background: var(--paper); color: var(--blue); }
+.cp .cp__council p { color: var(--blue); opacity: 1; }
+.cp .cp__council .cp__alt { color: var(--ink); }
+.cp .cp__council .cp__alt:hover { background: var(--sky); color: var(--ink); }
+.cp .cp__council .cp__alt:focus-visible { outline-color: var(--ink); }
+@media (min-width: 600px) { .cp .cp__council p { border-inline-end-color: rgba(31, 19, 74, .22); } }
+@media (max-width: 599px) { .cp .cp__council .cp__alt { border-top-color: rgba(31, 19, 74, .22); } .cp .cp__council .cp__alt:hover { background: transparent; color: var(--ink); } }
+
+/* אורי: כותרת שורת המועצה לא בכחול; דיו רך מהפלטה (ink-soft) */
+.cp .cp__council p { color: var(--ink-soft, rgba(31, 19, 74, .78)); }
+
+/* אורי: יותר ריווח בין כפתור השליחה לשורת המועצה */
+.cp .cp__council { margin-top: 44px; }
+
+/* אורי: כל שורת המועצה לחיצה (קישור מתוח על כל הכרטיס, בלי שינוי עיצוב) */
+.cp .cp__council { position: relative; cursor: pointer; }
+.cp .cp__council .cp__alt::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.cp .cp__council:hover .cp__alt { background: var(--sky); color: var(--ink); }
+@media (max-width: 599px) { .cp .cp__council:hover .cp__alt { background: transparent; } }
+/* אנימציית כניסה לשורת המועצה, אחרי השדות של הטופס */
+@media (prefers-reduced-motion: no-preference) {
+  .cp.is-entering .cp__council { animation: cp-rise 600ms cubic-bezier(.16, 1, .3, 1) 840ms backwards; }
+}

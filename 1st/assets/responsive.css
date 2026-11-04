@@ -749,3 +749,8 @@ html.is-places-out .places:focus-within .places__grip { opacity: 1; pointer-even
 @media (max-width: 1023px) {
   .timeline .tl-item__btn { min-height: 44px; align-content: center; }
 }
+
+/* טלפון: בלי הקו שמעל שורת הזכויות והקישורים המשפטיים בפוטר, כמו בעמודי הארכיון והכתבה (אורי); הקו שמתחת לרשימת היישובים נשאר */
+@media (max-width: 599px) {
+  .sfoot__bar { border-top: 0; }
+}

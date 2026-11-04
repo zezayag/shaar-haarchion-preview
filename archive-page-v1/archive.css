@@ -101,6 +101,8 @@ body { background: var(--paper); }
 .af__clear:hover { background: rgba(17, 118, 156, .05); }
 .af__clear:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 .af__clear[hidden] { display: none; }
+.af__clear .af__clear-ic { display: none; } /* האייקון רק בטלפון */
+.dd__sheethead { display: none; } /* כותרת חלון הבחירה: רק בטלפון */
 
 /* ---- 3. רשימת הפוסטים ---- */
 .al { padding: 32px 48px 24px; box-sizing: border-box; }
@@ -361,22 +363,26 @@ body { background: var(--paper); }
     padding: 36px 8px calc(88px + env(safe-area-inset-bottom)); border-radius: 28px 28px 0 0;
     background: var(--white) linear-gradient(rgba(31, 19, 74, .4), rgba(31, 19, 74, .4)) center 14px / 32px 4px no-repeat; /* ידית הגיליון, כמו בגיליון היישובים בבית */
     box-shadow: 0 -2px 12px rgba(31, 19, 74, .16);
+    transform: translateY(100%); transition: transform 300ms cubic-bezier(.2, 0, 0, 1); overscroll-behavior: contain; /* נפתח בהחלקה מלמטה (is-in) ונסגר בהחלקה למטה, כמו גיליון היישובים בבית */
   }
-  html.dd-open::after { content: ""; position: fixed; inset: 0; z-index: 200; background: rgba(31, 19, 74, .32); } /* הרקע הכהה מאחורי הגיליון (מתחת לגיליון, z 210); לחיצה עליו סוגרת (מאזין המסמך ב-archive.js). היה ::after של התפריט עם z-index שלילי, שצבע גם את רקע הגיליון עצמו */
+  .dd__menu.is-in { transform: none; }
+  /* הרקע הכהה: ::after של שורת הסינון עצמה (fixed על כל המסך, מעל תוכן השורה ומתחת לגיליון z 210 שבתוכה), כך שגם השורה והעמוד מוצללים (אורי); לחיצה עליו סוגרת (מאזין המסמך ב-archive.js: היעד הוא השורה, מחוץ ל-.dd). שורת הסינון sticky ולכן יוצרת הקשר שכבות, ולכן z 220 מעל הכותרת */
+  html.dd-open .af::after { content: ""; position: fixed; inset: 0; z-index: 1; background: rgba(31, 19, 74, .32); opacity: 0; transition: opacity 250ms cubic-bezier(.2, 0, 0, 1); }
+  html.dd-in .af::after { opacity: 1; }
   .dd__menu li { min-height: 52px; padding: 0 16px; font-size: 16px; border-radius: 8px; }
   .dd__done:not([hidden]) {
     display: flex; align-items: center; justify-content: center; position: fixed; z-index: 211; inset-inline: var(--gutter); bottom: calc(16px + env(safe-area-inset-bottom));
     height: 48px; border: 0; border-radius: 24px; background: var(--blue); color: var(--white); font-family: var(--display); font-size: 18px; cursor: pointer;
+    transform: translateY(calc(100% + 24px)); transition: transform 300ms cubic-bezier(.2, 0, 0, 1); /* יורד ועולה יחד עם הגיליון */
   }
+  .dd__menu.is-in ~ .dd__done { transform: none; }
   .dd__done:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
   html.dd-open { overflow: hidden; }
   html.dd-open .af { z-index: 220; } /* שורת הסינון (sticky, z 30) יוצרת הקשר שכבות: בלי זה הרקע הכהה (z 200) יושב מעל הגיליון שבתוכה */
-  @media (prefers-reduced-motion: no-preference) {
-    .dd__menu:not([hidden]) { animation: dd-sheet 260ms cubic-bezier(.2, 0, 0, 1); }
-    html.dd-open::after { animation: hA-fade 200ms linear; }
+  @media (prefers-reduced-motion: reduce) {
+    .dd__menu, .dd__done:not([hidden]), html.dd-open .af::after { transition: none; }
   }
 }
-@keyframes dd-sheet { from { transform: translateY(24px); opacity: 0; } }
 
 /* ---------- 4. רשימת הפוסטים: טאבלט שני טורים, טלפון טור אחד; ריפוד כרטיס 24 על סולם 8 נשאר ---------- */
 @media (max-width: 1023px) {
@@ -388,9 +394,16 @@ body { background: var(--paper); }
   .ainfo__in { padding-top: 32px; }
 }
 @media (max-width: 599px) {
-  .ag { grid-template-columns: minmax(0, 1fr); }
+  /* שני כרטיסים בשורה גם בטלפון (אורי): הריפוד והריווחים מוקטנים בהתאם, ל-12 במקום 24 */
+  .ag { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .ac__body { padding: 12px; }
+  .ac__img { margin-bottom: 12px; }
+  .ac__meta { flex-wrap: wrap; gap: 4px 8px; margin-bottom: 6px; }
+  .ac__year { font-size: 18px; }
+  .ac__type { gap: 4px; font-size: 12px; }
+  .ac__type .icon { width: 16px; height: 16px; }
   .al__count { font-size: 20px; }
-  .ac h3 { min-height: 0; font-size: 20px; }
+  .ac h3 { min-height: 0; font-size: 16px; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
   .ac p { font-size: 17px; line-height: 26px; }
   .aempty { padding: 40px 16px; }
   .aempty h2 { font-size: 24px; }
@@ -435,4 +448,118 @@ body { background: var(--paper); }
   .sfoot__credit { order: 1; margin: 0 !important; padding-inline-start: 24px; border-inline-start: 1px solid rgba(31, 19, 74, .28); min-height: 32px; }
   .sfoot__top { order: 2; flex: 1 1 100%; justify-content: center; margin: 0 !important; min-height: 44px; font-size: 18px; }
   .sfoot__top .icon { width: 18px; height: 18px; }
+}
+
+/* טלפון: אריחי העובדות בהירו (שנת הקמה, אוכלוסייה...) קטנים יותר (אורי): האייקון לצד התווית, והערך בשורה משלו ברוחב מלא, כך שערכים ארוכים ("9,697 תושבים") נכנסים בשורה אחת והאריחים באותו גובה */
+@media (max-width: 599px) {
+  .hA__facts { gap: 8px; }
+  .hA__facts li { grid-template-columns: 16px minmax(0, 1fr); column-gap: 6px; row-gap: 2px; align-items: center; align-content: center; padding: 10px 12px; }
+  .hA__facts .icon { grid-row: 1; width: 16px; height: 16px; margin-bottom: 0; }
+  .hA__facts small { grid-row: 1; font-size: 12px; line-height: 1.3; }
+  .hA__facts b { grid-column: 1 / -1; grid-row: 2; font-size: 16px; line-height: 1.25; }
+}
+
+/* טלפון: המיון בשורת מספר הפוסטים (מחוץ לשורת הסינון הדבוקה) */
+@media (max-width: 599px) {
+  .al__head { align-items: center; }
+  .al__head .af__sort { margin-inline-start: auto; }
+}
+
+/* טלפון: שני קישורי הפעולה בהירו ("צפייה במפה", "לאתר היישוב") בשורה אחת (אורי): בלי חץ הסיום, ריפוד וגופן מוקטנים; קישור יחיד נשאר בשורה */
+@media (max-width: 599px) {
+  .acts { flex-wrap: nowrap; justify-content: flex-start; gap: 0 8px; }
+  .acts .tlink { gap: 4px; padding: 0 8px; margin-inline-start: -8px; font-size: 14px; white-space: nowrap; }
+  .acts .tlink .tlink__go { display: none; }
+}
+
+/* טלפון: שלוש גלולות הסינון בשורה אחת בלי גלילה (אורי): בלי חץ ובלי סימון וי (הבחירה נראית במילוי ובטקסט, "2 יישובים"), רוחב שווה, טקסט עם שלוש נקודות אם צר מדי. הגיליון התחתון נפתח כרגיל */
+@media (max-width: 599px) {
+  .af__in { flex-wrap: nowrap; gap: 8px; }
+  .af__in > .dd:not(.af__sort) { flex: 1 1 0; min-width: 0; }
+  .af__in > .dd:not(.af__sort) .dd__btn { width: 100%; justify-content: center; padding: 0 8px; gap: 4px; }
+  .af__in > .dd:not(.af__sort) .dd__btn svg { display: none; }
+  .af__in > .dd:not(.af__sort) .dd__btn .dd__k, .af__in > .dd:not(.af__sort) .dd__btn .dd__v { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* "איפוס" בקצה שורת הסינון (משמאל): רק המילה "איפוס", בלי אייקון, בצבע אחר מהגלולות (השם הנגיש נשאר "איפוס סינון") */
+  .af__in > .af__clear { position: relative; flex: none; display: inline-flex; align-items: center; height: 32px; min-height: 0; padding: 0 12px; border-radius: 16px; background: none; color: var(--ink-soft); font-size: 14px; font-weight: 400; } /* בלי רקע: רק טקסט באפור הדיו המוחלש של הפלטה, ניגודיות 7:1 על הנייר; בלי אייקון */
+  .af__in > .af__clear:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+  .af__in > .af__clear:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .af__in > .af__clear::after { content: ""; position: absolute; inset: -6px -2px; } /* יעד מגע 44 כמו בגלולות */
+  .af__clear .af__clear-more { display: none; }
+  .al__head { flex-wrap: wrap; gap: 4px 12px; }
+}
+
+/* טלפון: בלי הקו שמעל שורת הזכויות והקישורים המשפטיים בפוטר (אורי); הקו שמתחת לרשימת היישובים נשאר */
+@media (max-width: 599px) {
+  .sfoot__bar { border-top: 0; }
+}
+
+@media (max-width: 369px) {
+  .af__in { gap: 6px; }
+  .af__in > .dd:not(.af__sort) .dd__btn { padding: 0 4px; font-size: 13px; }
+  .af__in > .af__clear { padding: 0 8px; font-size: 13px; }
+}
+
+/* טלפון: שלוש הגלולות כפס מחובר אחד, כמו בקרה מפולחת (אורי, אפשרות 2): מסגרת אחת מעוגלת, מפרידים דקים בין הקטעים, הקטע שנבחר בתכלת. האיפוס מחוץ לפס, כטקסט אפור */
+@media (max-width: 599px) {
+  .af__in { gap: 0; padding: 6px 0; }
+  .af__in > .dd:not(.af__sort) { flex: 1 1 0; min-width: 0; }
+  .af__in > .dd:not(.af__sort) .dd__btn { height: 36px; border-radius: 0; }
+  .af__in > .dd:nth-child(2), .af__in > .dd:nth-child(3) { margin-inline-start: -1px; } /* על העטיפה ולא על הכפתור: כך המסגרות של קטעים סמוכים חופפות לקו בודד */
+  .af__in > .dd:first-child .dd__btn { border-start-start-radius: 18px; border-end-start-radius: 18px; }
+  .af__in > .dd:nth-child(3) .dd__btn { border-start-end-radius: 18px; border-end-end-radius: 18px; }
+  .af__in > .dd:not(.af__sort) .dd__btn.is-set { background: var(--sky); border-color: var(--ink-soft); }
+  .af__in > .dd:not(.af__sort) .dd__btn:focus-visible { position: relative; z-index: 1; }
+  .af__in > .af__clear { margin-inline-start: 8px; }
+}
+
+/* מיון: הנקודתיים לפני הערך רק בטאבלט ובדסקטופ ("מיון: שנים עולות"); בטלפון מוצגת רק המילה "מיון" (אורי), והערך נשאר בשם הנגיש של הכפתור ובתפריט */
+@media (min-width: 600px) { .af__sort .dd__k::after { content: ":"; } }
+@media (max-width: 599px) {
+  .af__sort .dd__v { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+
+/* טלפון: פחות רווח בין הפס המחובר ל"איפוס" (אורי): 8px, והטקסט מיושר לשולי העמוד משמאל */
+@media (max-width: 599px) {
+  .af__in > .af__clear { margin-inline-start: 0; padding-inline: 8px 0; }
+}
+
+/* טלפון: בראש חלון הבחירה כותרת ו"איפוס" (אורי, אפשרות 2): הכותרת מימין, "איפוס" משמאל, מופיע רק כשיש סינון פעיל. הידית עברה לכותרת כדי שתישאר גלויה בגלילה. "איפוס" הוסר משורת הסינון הדבוקה */
+@media (max-width: 599px) {
+  .dd__menu, .af__sort .dd__menu { padding-top: 0; background: var(--white); }
+  .dd__sheethead { display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 2; margin: 0 -8px 4px; padding: 28px 24px 4px; min-height: 64px; background: var(--white); box-sizing: border-box; }
+  .dd__sheethead::before { content: ""; position: absolute; top: 14px; inset-inline-start: 50%; width: 32px; height: 4px; margin-inline-start: -16px; border-radius: 2px; background: rgba(31, 19, 74, .4); }
+  .dd__sheettitle { font: 400 20px/1.2 var(--display); color: var(--ink); }
+  .dd__reset { min-height: 44px; padding: 0 8px; margin-inline-end: -8px; border: 0; border-radius: 22px; background: none; color: var(--ink-soft); font: 400 16px/1 var(--text); cursor: pointer; }
+  .dd__reset:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+  .dd__reset:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .af__in > .af__clear { display: none; }
+}
+
+/* טלפון: הפס המחובר צף (אורי, בהתייעצות עם ui-ux-pro-max): בלי רקע ובלי צל לשורה עצמה; הפס מחזיק משטח לבן משלו וצל Material עדין כשהוא דבוק, כך שהוא נקרא מעל תמונות וכרטיסים (ניגודיות טקסט 15:1 על הלבן). הכלל "Sticky Navigation": שורה צמודה לא מסתירה תוכן, ולכן היא נשארת בזרימה במנוחה */
+@media (max-width: 599px) {
+  .af, .af.is-stuck { background: transparent; box-shadow: none; }
+  .af__in { position: relative; }
+  .af__in::before { content: ""; position: absolute; inset: 6px 0; border-radius: 18px; background: var(--white); pointer-events: none; transition: box-shadow 150ms linear; }
+  .af.is-stuck .af__in::before { box-shadow: var(--md-elev-1); }
+}
+
+/* טלפון: "כל הפרסומים" מתחת לפסקה בבלוק התיאור (אורי), בקצה ההתחלה; בטאבלט ובדסקטופ נשאר בראש הרשימה */
+@media (max-width: 599px) {
+  .al__more { display: flex; justify-content: flex-start; padding: 8px 0 0; }
+  .al__more:empty, .al__more:has(.tlink[hidden]) { display: none; }
+  .al__more .tlink { margin: 0; margin-inline-start: -10px; font-size: 16px; }
+  .al__more .tlink[hidden] { display: none; }
+}
+
+/* אנימציית מעבר אחרי בחירה בסינון (אורי): התוכן דוהה בעדינות, העמוד גולל חלק אל השורה הדבוקה, והתוכן החדש עולה בדהייה; בלי קפיצה. כבוד ל-prefers-reduced-motion */
+.hA, .al, .ainfo, .aCta { transition: opacity 260ms cubic-bezier(.2, 0, 0, 1); }
+html.is-swap .hA, html.is-swap .al, html.is-swap .ainfo, html.is-swap .aCta { opacity: 0; transition-duration: 140ms; }
+@media (prefers-reduced-motion: reduce) { .hA, .al, .ainfo, .aCta { transition: none; } }
+
+/* טלפון: שורת הסינון קבועה בתחתית המסך מרגע הטעינה (אורי), כמו סרגל תחתון של Material: צפה מעל התוכן עם משטח לבן וצל, 12px מעל הקצה התחתון ובנוסף אזור הבטיחות של המכשיר (env safe-area-inset-bottom, למכשירי iPhone עם פס הבית ולמצב עצמאי); באייפון בספארי ובכרום באנדרואיד הדפדפן מזיז את position fixed יחד עם סרגל הכלים התחתון. נשאר מקום בסוף העמוד, כך שהפוטר לא מוסתר. בטאבלט ובדסקטופ השורה נשארת דבוקה למעלה. */
+@media (max-width: 599px) {
+  .af, .af.is-stuck { position: fixed; top: auto; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); inset-inline: 0; margin: 0; z-index: 30; }
+  .hA + .af { margin-top: 0; }
+  .af__in::before, .af.is-stuck .af__in::before { box-shadow: var(--md-elev-2); }
+  .sfoot__bar { padding-bottom: calc(28px + 72px + env(safe-area-inset-bottom, 0px)); }
 }

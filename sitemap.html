@@ -130,16 +130,16 @@ a { color: inherit; }
   var NODES = [
     { id: 'root', pos: 'root', title: 'עמוד ראשי: מועצה', kind: 'לובי קיבוצים ויישובים', d: 'done', m: 'review',
       note: 'מובייל וטאבלט בנויים וממתינים לאישור הלקוחה.', href: '1st/index.html', links: [['בטלפון', 'phone.html']] },
-    { id: 'a1', pos: 'a1', title: 'ארכיון מועצה, קיבוץ או יישוב', kind: 'Post archive', d: 'review', m: 'review',
+    { id: 'a1', pos: 'a1', title: 'ארכיון מועצה, קיבוץ או יישוב', kind: 'Post archive', d: 'done', m: 'review',
       note: 'סינון בבחירה מרובה (שני יישובים מציגים הירו "הארכיון"), יישובים לפי א-ב. טאבלט וטלפון נבנו, כולל גיליון סינון תחתון.', href: 'archive-page-v1/index.html?type=council', links: [['המועצה', 'archive-page-v1/index.html?type=council'], ['יישוב (דורות)', 'archive-page-v1/index.html?type=settlement'], ['שני יישובים', 'archive-page-v1/index.html?type=all&place=dorot,gvim']] },
-    { id: 'a2', pos: 'a2', title: 'ארכיון לפי שנה', kind: 'Post archive', d: 'review', m: 'review',
+    { id: 'a2', pos: 'a2', title: 'ארכיון לפי שנה', kind: 'Post archive', d: 'done', m: 'review',
       note: 'אותה תבנית ארכיון, עם הירו של עשור. טאבלט וטלפון נבנו.', href: 'archive-page-v1/index.html?type=decade', links: [] },
-    { id: 'a3', pos: 'a3', title: 'ארכיון תגיות', kind: 'Post archive', d: 'review', m: 'review',
+    { id: 'a3', pos: 'a3', title: 'ארכיון תגיות', kind: 'Post archive', d: 'done', m: 'review',
       note: 'אותה תבנית ארכיון, עם הירו של נושא (7 באוקטובר). טאבלט וטלפון נבנו.', href: 'archive-page-v1/index.html?type=tag', links: [] },
-    { id: 'contact', pos: 'contact', title: 'יצירת קשר', kind: 'עמוד יצירת קשר והצעות תוכן', d: 'review', m: 'todo', note: 'דסקטופ בלבד. טופס עם בדיקת שדות ואישור שליחה; פרטי הקשר להשלמה על ידי המועצה. אליו מובילה הקריאה "הצעת תוכן לארכיון" בעמוד הכתבה.', href: 'archive-page-v1/contact.html', links: [] },
-    { id: 'reg', pos: 'reg', title: 'עמוד רגיל', kind: 'עמוד תנאים ונגישות', d: 'review', m: 'review', note: 'נבנה עם תוכן לדוגמה (הצהרת נגישות). פרטי רכז הנגישות להשלמה על ידי המועצה.', href: 'archive-page-v1/page.html', links: [] },
-    { id: 'e404', pos: '404', title: 'תבנית הודעה', kind: 'עמוד 404', d: 'review', m: 'review', note: 'לוח דיו וקישורים מהירים.', href: 'archive-page-v1/404.html', links: [] },
-    { id: 'post', pos: 'post', title: 'פרסום בודד', kind: 'Single post', d: 'review', m: 'review',
+    { id: 'contact', pos: 'contact', title: 'יצירת קשר', kind: 'עמוד יצירת קשר והצעות תוכן', d: 'done', m: 'todo', note: 'דסקטופ בלבד. טופס עם בדיקת שדות ואישור שליחה; פרטי הקשר להשלמה על ידי המועצה. אליו מובילה הקריאה "הצעת תוכן לארכיון" בעמוד הכתבה.', href: 'archive-page-v1/contact.html', links: [] },
+    { id: 'reg', pos: 'reg', title: 'עמוד רגיל', kind: 'עמוד תנאים ונגישות', d: 'done', m: 'review', note: 'נבנה עם תוכן לדוגמה (הצהרת נגישות). פרטי רכז הנגישות להשלמה על ידי המועצה.', href: 'archive-page-v1/page.html', links: [] },
+    { id: 'e404', pos: '404', title: 'תבנית הודעה', kind: 'עמוד 404', d: 'done', m: 'review', note: 'לוח דיו וקישורים מהירים.', href: 'archive-page-v1/404.html', links: [] },
+    { id: 'post', pos: 'post', title: 'פרסום בודד', kind: 'Single post', d: 'done', m: 'review',
       note: 'בלי תאריך בהירו, רצועת הצעות תוכן לפני "שווה צפייה". טאבלט וטלפון נבנו, כולל תוכן עניינים מתקפל. נפתח מכל ארכיון.', href: 'archive-page-v1/article.html', links: [] }
   ];
   var map = document.getElementById('map'), lines = document.getElementById('lines');
