@@ -3,7 +3,7 @@
 /* ---- עמוד רגיל: רשימות בגוף הטקסט ופרטי קשר ---- */
 .art__body ul { margin: 0 0 1.4em; padding-inline-start: 1.25em; }
 .art__body li { margin-bottom: .6em; font: 400 19px/1.7 var(--text); color: var(--ink); }
-.pg__contact { display: grid; gap: 8px; padding: 20px 24px; background: var(--sand); }
+.pg__contact { display: grid; gap: 8px; padding: 4px 0; background: none; }
 .art__body .pg__contact { margin-bottom: 24px; }
 
 /* ---- 404: לוח דיו ברוחב מלא (כמו רצועת ההצעות בכתבה ו"עשור בפוקוס" בבית), הכותרת השקופה יושבת מעליו ---- */
