@@ -675,7 +675,7 @@
     '<div class="places-sheet__panel" role="dialog" aria-modal="true" aria-labelledby="psTitle">' +
     '<button type="button" class="places-sheet__handle" data-close aria-label="סגירה"><span aria-hidden="true"></span></button>' +
     '<div class="places-sheet__head"><h2 id="psTitle">12 הקהילות של שער הנגב</h2></div>' +
-    '<p class="places-sheet__sub">לפי שנת ההקמה</p><ol>' + rows + '</ol>' +
+    '<p class="places-sheet__sub">לפי א-ב</p><ol>' + rows + '</ol>' +
     '<a class="places-sheet__council" href="' + council.getAttribute('href') + '">מועצה אזורית שער הנגב<svg class="icon" aria-hidden="true"><use href="#i-next"/></svg></a></div>'; // 2.11 (אורי): כפתור המועצה אחרון, בלי ה"א
   document.body.appendChild(sheet);
   council.setAttribute('aria-haspopup', 'dialog');
@@ -724,7 +724,7 @@
   btn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-next"/></svg>';
   var sub = document.createElement('div');
   sub.className = 'subnav'; sub.id = 'subPlaces';
-  sub.innerHTML = '<p class="subnav__sub"><b>12 היישובים</b><span>לפי שנת ההקמה</span></p><ol>' + rows + '</ol>'; // אורי: בלי כפתור המועצה; כותרת כמו בפוטר
+  sub.innerHTML = '<p class="subnav__sub"><b>12 היישובים</b><span>לפי א-ב</span></p><ol>' + rows + '</ol>'; // אורי: בלי כפתור המועצה; כותרת כמו בפוטר
   link.after(btn); btn.after(sub);
   // אורי: בדסקטופ כפתור אחד כמו החיפוש — החץ בתוך הגלולה של "היישובים" (התפריט נפתח בריחוף/מיקוד); כפתור החץ הנפרד רק במובייל
   link.insertAdjacentHTML('beforeend', '<svg class="icon subnav__chev" aria-hidden="true"><use href="#i-next"/></svg>');

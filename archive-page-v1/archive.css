@@ -5,7 +5,7 @@
 html { scroll-padding-top: calc(var(--header-h) + 72px); }
 body { background: var(--paper); }
 .aw { width: var(--aw); margin-inline: auto; }
-.site-header__menu { display: none; }
+.site-header__menu, .drawer, .dd__done { display: none; } /* רכיבי טאבלט/טלפון (מגירה, כפתור סיום בגיליון הסינון): מוצגים רק ברוחב ≤1023, למטה */
 /* לוגו לבן מעל התמונה לפני גלילה; בצבעיו הרגילים אחרי גלילה (אורי) */
 .site-header__logo img { transition: filter 200ms linear; }
 .site-header.is-over .site-header__logo img { filter: brightness(0) invert(1); } /* תפריט המגירה הוא לטלפון/טאבלט; כאן דסקטופ בלבד */
@@ -261,4 +261,178 @@ body { background: var(--paper); }
   .subnav::before { inset: auto 0 100%; height: calc((var(--header-h, 64px) - 44px) / 2 + 12px); }
 }
 
-@media (max-width: 1023px) { body::before { content: "תבנית דסקטופ בלבד — הרחיבו את החלון ל-1024 ומעלה"; display: block; padding: 12px 16px; background: var(--gold); color: var(--ink); text-align: center; font-size: 15px; } }
+/* ==========================================================================
+   2.13 — התאמה לטאבלט ולטלפון של עמודי הארכיון והכתבה, באותה שפה כמו עמוד הבית (design/1st/assets/responsive.css):
+   expanded ≥ 1024 — הדסקטופ כמו שהוא (שום כלל כאן לא חל עליו)
+   medium 600–1023 — טאבלט · compact < 600 — טלפון
+   הכותרת, המגירה, כפתור החיפוש והפוטר מועתקים מעמוד הבית מילה במילה (אותה התנהגות, אותם גדלים).
+   ui-ux-pro-max: אזורי מגע ≥ 44 עם 8 ביניהם, טקסט גוף ≥ 16, בלי גלילה לצדדים, צ'יפים עוטפים (Chip Collection Reflow),
+   תפריט בטלפון כגיליון תחתון (Material 3 modal bottom sheet) כדי שתפריט ברוחב 240 לא יחרוג מהמסך.
+   ========================================================================== */
+:root { --m-gutter: 24px; }
+
+/* ---------- 1. כותרת האתר ומגירת הניווט (מועתק מעמוד הבית) ---------- */
+@media (max-width: 1023px) {
+  :root { --gutter: var(--m-gutter); }
+  .site-header { gap: 8px; }
+  .site-header nav { display: none; } /* הניווט עבר למגירה (#drawer) */
+  .site-header__menu {
+    display: inline-grid; place-items: center; width: 48px; height: 48px; margin-inline-start: auto;
+    border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; position: relative; isolation: isolate;
+  }
+  .site-header__menu::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: currentColor; opacity: .18; z-index: -1; transition: opacity 150ms linear; }
+  .site-header__menu:hover::before { opacity: .26; }
+  .site-header__menu:active::before { opacity: .32; }
+  .site-header__menu:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .site-header__menu .icon { width: 24px; height: 24px; }
+  .site-header__menu .i-close { display: none; }
+  html.is-drawer { overflow: hidden; }
+  .drawer { display: block; position: fixed; inset: 0; z-index: 80; visibility: hidden; transition: visibility 0s linear 200ms; }
+  .drawer.is-open { visibility: visible; transition: none; }
+  .drawer__scrim { position: absolute; inset: 0; background: rgba(31, 19, 74, .4); opacity: 0; transition: opacity 200ms ease; }
+  .drawer__panel { position: absolute; top: 0; bottom: 0; inset-inline-start: 0; width: min(320px, 86vw); background: var(--white); color: var(--ink); padding: 8px 0 24px; overflow-y: auto; overscroll-behavior: contain;
+    transform: translateX(100%); transition: transform 200ms cubic-bezier(.3, 0, .8, .15); box-shadow: var(--md-elev-2); }
+  .drawer.is-open .drawer__scrim { opacity: 1; transition-duration: 300ms; }
+  .drawer.is-open .drawer__panel { transform: none; transition: transform 300ms cubic-bezier(.2, 0, 0, 1); }
+  .drawer__head { display: flex; align-items: center; gap: 8px; padding: 0 8px 8px; }
+  .drawer__head img { width: 142px; height: auto; }
+  @media (max-width: 599px) { .drawer__head img { width: 118px; } }
+  .drawer__close { width: 48px; height: 48px; border-radius: 50%; border: 0; background: none; display: grid; place-items: center; cursor: pointer; color: var(--ink); transition: background-color 150ms ease; }
+  .drawer__close:hover { background: rgba(31, 19, 74, .08); }
+  .drawer__close .icon { width: 24px; height: 24px; }
+  .drawer a { display: flex; align-items: center; min-height: 48px; padding: 0 24px; margin-inline-end: 12px; border-radius: 24px 0 0 24px;
+    font-family: var(--display); font-size: 18px; line-height: 1.2; color: var(--ink); text-decoration: none; transition: background-color 150ms ease; }
+  .drawer a:hover { background: rgba(31, 19, 74, .08); }
+  .drawer a[aria-current="page"] { background: rgba(179, 224, 235, .5); color: var(--blue); }
+  .drawer a:focus-visible, .drawer__close:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
+  .drawer hr { border: 0; border-top: 1px solid rgba(31, 19, 74, .16); margin: 8px 0; }
+  .drawer__label { display: block; padding: 8px 24px 4px; font-family: var(--display); font-size: 15px; line-height: 20px; color: var(--ink-soft); }
+  @media (prefers-reduced-motion: reduce) { .drawer__scrim, .drawer__panel, .drawer.is-open .drawer__panel { transition: none; } }
+  .site-header .btn--search { order: 2; }
+  .site-header__menu { order: 3; margin-inline-start: 0; }
+  .site-header__logo { margin-inline-end: auto; }
+}
+@media (max-width: 599px) {
+  .site-header__logo { width: 118px; }
+  .site-header .btn--search { width: auto; padding: 0 18px 0 20px; justify-content: center; gap: 8px; }
+  .site-header .btn--search .btn__label { white-space: nowrap; }
+  .site-header .btn--search .btn__more { display: none; }
+}
+
+/* ---------- 2. הירו: התצלום נמוך יותר, הלוח ברוחב הגריד (שוליים 24 כמו בבית), פירורי לחם ביעד לחיצה 44 ---------- */
+@media (max-width: 1023px) {
+  .crumbs a, .crumbs [aria-current] { min-height: 44px; }
+  .hA__crumbs { top: calc(var(--media-h) - 96px - 50px); }
+  .hA__crumbs .crumbs { margin-inline-end: 22px; } /* ריפוד הלוח 32 פחות ריפוד הקישור 10 */
+  .hA__panel { margin: -96px 0 0; padding: 32px; gap: 16px 32px; }
+  .tlink { min-height: 44px; }
+  .hA + .af { margin-top: 24px; }
+}
+@media (max-width: 599px) {
+  .hA { --media-h: 260px; }
+  .hA__crumbs { top: calc(var(--media-h) - 72px - 52px); }
+  .hA__crumbs .crumbs { margin-inline-end: 14px; } /* ריפוד הלוח 24 פחות 10 */
+  .hA__panel { margin: -72px 0 0; padding: 24px; border-radius: 20px; gap: 12px; }
+  .hA__panel.has-facts { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .hA__id { gap: 14px; }
+  .hA__id h1 { font-size: 36px; }
+  .hA__id h1.is-long { font-size: 28px; }
+  .logo { width: 48px; height: 48px; }
+  .logo img { width: 30px; height: 30px; }
+  .hA__desc { font-size: 17px; line-height: 1.55; }
+  .acts { margin-bottom: 0; gap: 0 12px; }
+  .hA__facts { grid-column: 1; grid-row: auto; margin-top: 4px; }
+  .hA__facts li { padding: 12px; }
+  .hA__facts b { font-size: 18px; }
+  .hA + .af { margin-top: 16px; }
+}
+
+/* ---------- 3. סרגל הסינון: בשוליי הגריד, הצ'יפים עוטפים לשורות (בלי גלילה לצד), יעדי לחיצה 44 ---------- */
+@media (max-width: 1023px) {
+  .af__in { padding: 8px 0; gap: 8px; }
+  .af__clear { min-height: 44px; }
+  .af__sort .dd__btn { height: 44px; }
+}
+/* טלפון: התפריט הוא גיליון תחתון (Material 3 modal bottom sheet): ידית, רשימה שנגללת בתוכו, כפתור "סיום", רקע כהה; Esc, לחיצה על הרקע או "סיום" סוגרים */
+@media (max-width: 599px) {
+  .af__sort { margin-inline-start: auto; }
+  .dd__menu, .af__sort .dd__menu {
+    position: fixed; z-index: 210; inset-inline: 0; top: auto; bottom: 0; min-width: 0; max-height: 72svh;
+    padding: 36px 8px calc(88px + env(safe-area-inset-bottom)); border-radius: 28px 28px 0 0;
+    background: var(--white) linear-gradient(rgba(31, 19, 74, .4), rgba(31, 19, 74, .4)) center 14px / 32px 4px no-repeat; /* ידית הגיליון, כמו בגיליון היישובים בבית */
+    box-shadow: 0 -2px 12px rgba(31, 19, 74, .16);
+  }
+  html.dd-open::after { content: ""; position: fixed; inset: 0; z-index: 200; background: rgba(31, 19, 74, .32); } /* הרקע הכהה מאחורי הגיליון (מתחת לגיליון, z 210); לחיצה עליו סוגרת (מאזין המסמך ב-archive.js). היה ::after של התפריט עם z-index שלילי, שצבע גם את רקע הגיליון עצמו */
+  .dd__menu li { min-height: 52px; padding: 0 16px; font-size: 16px; border-radius: 8px; }
+  .dd__done:not([hidden]) {
+    display: flex; align-items: center; justify-content: center; position: fixed; z-index: 211; inset-inline: var(--gutter); bottom: calc(16px + env(safe-area-inset-bottom));
+    height: 48px; border: 0; border-radius: 24px; background: var(--blue); color: var(--white); font-family: var(--display); font-size: 18px; cursor: pointer;
+  }
+  .dd__done:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  html.dd-open { overflow: hidden; }
+  html.dd-open .af { z-index: 220; } /* שורת הסינון (sticky, z 30) יוצרת הקשר שכבות: בלי זה הרקע הכהה (z 200) יושב מעל הגיליון שבתוכה */
+  @media (prefers-reduced-motion: no-preference) {
+    .dd__menu:not([hidden]) { animation: dd-sheet 260ms cubic-bezier(.2, 0, 0, 1); }
+    html.dd-open::after { animation: hA-fade 200ms linear; }
+  }
+}
+@keyframes dd-sheet { from { transform: translateY(24px); opacity: 0; } }
+
+/* ---------- 4. רשימת הפוסטים: טאבלט שני טורים, טלפון טור אחד; ריפוד כרטיס 24 על סולם 8 נשאר ---------- */
+@media (max-width: 1023px) {
+  .al { padding: 24px 0 16px; }
+  .al__head { margin-bottom: 16px; }
+  .ag { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .aload { padding: 24px 0 8px; }
+  .ainfo { padding: 16px 0 56px; }
+  .ainfo__in { padding-top: 32px; }
+}
+@media (max-width: 599px) {
+  .ag { grid-template-columns: minmax(0, 1fr); }
+  .al__count { font-size: 20px; }
+  .ac h3 { min-height: 0; font-size: 20px; }
+  .ac p { font-size: 17px; line-height: 26px; }
+  .aempty { padding: 40px 16px; }
+  .aempty h2 { font-size: 24px; }
+  .ainfo h2 { font-size: 24px; }
+  .ainfo p { font-size: 17px; }
+}
+
+/* ---------- 5. פוטר (מועתק מעמוד הבית: מותג, היישובים ב-2 עמודות, הארכיון; שורת התחתית נשברת) ---------- */
+@media (max-width: 1023px) {
+  .sfoot__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 24px; row-gap: 40px; padding: 48px 0 40px; }
+  .sfoot__brand { grid-column: 1 / -1; }
+  .sfoot__places { grid-column: span 4; }
+  .sfoot__col { grid-column: span 2; }
+  .sfoot__logo img { width: 240px; }
+  .sfoot__bar { flex-wrap: wrap; gap: 12px 24px; }
+  .sfoot__col a, .sfoot__legal a, .sfoot__top, .sfoot__cta { min-height: 44px; } /* יעדי מגע 44 (ui-ux-pro-max: Touch Target Size) */
+  .sfoot__credit { display: inline-flex; align-items: center; min-height: 32px; margin-inline-start: auto; font-family: var(--display); font-size: 16px; color: var(--ink-soft); text-decoration: none; margin-left: 0 !important; }
+  .sfoot__credit:hover, .sfoot__credit:focus-visible { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
+}
+@media (max-width: 599px) {
+  .sfoot__grid { grid-template-columns: minmax(0, 1fr); }
+  .sfoot__places, .sfoot__col { grid-column: 1 / -1; }
+  .sfoot__places ol { column-gap: 20px; }
+  .sfoot__places .n { font-size: 18px; }
+  .sfoot__col ul { display: flex; flex-wrap: wrap; gap: 0 20px; }
+  .sfoot__col a { min-height: 48px; }
+  .sfoot__legal { flex: 1 1 100%; flex-wrap: wrap; gap: 0 20px; }
+  .sfoot__credit { margin-inline-start: 0; min-height: 48px; margin-right: 0; }
+  .sfoot__credit + .sfoot__top { margin-inline-start: auto; min-height: 48px; }
+}
+@media (min-width: 700px) and (max-width: 1023px) {
+  /* בלוק המותג בשורה אחת (לוגו, פסקה, כפתור) כמו בבית; מתחת ל-700 (בבית הכלל מתחיל ב-600) הפסקה נדחסת למילה בשורה, ולכן שם הבלוק נשאר מוערם */
+  .sfoot__brand { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto; column-gap: 40px; align-items: center; }
+  .sfoot__brand .sfoot__logo { grid-column: 1; grid-row: 1; }
+  .sfoot__brand .sfoot__logo img { width: 200px; }
+  .sfoot__brand p { grid-column: 2; grid-row: 1; margin-top: 0; max-width: none; align-self: center; }
+  .sfoot__brand .sfoot__cta { grid-column: 3; grid-row: 1; margin-top: 0; justify-self: end; align-self: center; }
+}
+@media (min-width: 600px) and (max-width: 1023px) {
+  .sfoot__bar { flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 24px; font-size: 14px; }
+  .sfoot__bar > span, .sfoot__legal a, .sfoot__credit { font-size: 14px; }
+  .sfoot__credit { order: 1; margin: 0 !important; padding-inline-start: 24px; border-inline-start: 1px solid rgba(31, 19, 74, .28); min-height: 32px; }
+  .sfoot__top { order: 2; flex: 1 1 100%; justify-content: center; margin: 0 !important; min-height: 44px; font-size: 18px; }
+  .sfoot__top .icon { width: 18px; height: 18px; }
+}

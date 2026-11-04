@@ -36,7 +36,7 @@ a { color: inherit; }
 .sum b { color: var(--ink); font-variant-numeric: tabular-nums; }
 
 /* ---- העץ: גריד של 5 עמודות בדסקטופ (כמו בתרשים), קווים ב-SVG ---- */
-.map { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 72px 20px; }
+.map { position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 72px 20px; }
 .map__lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .map__lines path { fill: none; stroke: var(--ink-soft); stroke-width: 2; stroke-linejoin: round; }
 .node { position: relative; z-index: 1; display: flex; flex-direction: column; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(31, 19, 74, .12); transition: box-shadow 150ms linear, opacity 200ms linear; }
@@ -69,7 +69,7 @@ a { color: inherit; }
 .node.is-dim { opacity: .8; } /* ניגודיות טקסט 5.0:1 (ב-.55 היה 2.8:1) */
 .pos-root { grid-column: 3; grid-row: 1; }
 .pos-a1 { grid-column: 1; grid-row: 2; } .pos-a2 { grid-column: 2; grid-row: 2; } .pos-a3 { grid-column: 3; grid-row: 2; }
-.pos-reg { grid-column: 4; grid-row: 2; } .pos-404 { grid-column: 5; grid-row: 2; }
+.pos-contact { grid-column: 4; grid-row: 2; } .pos-reg { grid-column: 5; grid-row: 2; } .pos-404 { grid-column: 6; grid-row: 2; }
 .pos-post { grid-column: 2; grid-row: 3; }
 .enter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin: 0 0 32px; }
 .enter__go { display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 28px; border-radius: 28px; background: var(--blue); color: var(--white); font: 700 22px/1 var(--display); text-decoration: none; transition: background-color 150ms linear; }
@@ -130,16 +130,17 @@ a { color: inherit; }
   var NODES = [
     { id: 'root', pos: 'root', title: 'עמוד ראשי: מועצה', kind: 'לובי קיבוצים ויישובים', d: 'done', m: 'review',
       note: 'מובייל וטאבלט בנויים וממתינים לאישור הלקוחה.', href: '1st/index.html', links: [['בטלפון', 'phone.html']] },
-    { id: 'a1', pos: 'a1', title: 'ארכיון מועצה, קיבוץ או יישוב', kind: 'Post archive', d: 'review', m: 'todo',
-      note: 'נסקר עצמאית (7.6), התיקונים בוצעו, סקירה חוזרת טרם נעשתה.', href: 'archive-page-v1/index.html?type=council', links: [['המועצה', 'archive-page-v1/index.html?type=council'], ['יישוב (דורות)', 'archive-page-v1/index.html?type=settlement']] },
-    { id: 'a2', pos: 'a2', title: 'ארכיון לפי שנה', kind: 'Post archive', d: 'review', m: 'todo',
-      note: 'אותה תבנית ארכיון, עם הירו של עשור.', href: 'archive-page-v1/index.html?type=decade', links: [] },
-    { id: 'a3', pos: 'a3', title: 'ארכיון תגיות', kind: 'Post archive', d: 'review', m: 'todo',
-      note: 'אותה תבנית ארכיון, עם הירו של נושא (7 באוקטובר).', href: 'archive-page-v1/index.html?type=tag', links: [] },
-    { id: 'reg', pos: 'reg', title: 'עמוד רגיל', kind: 'עמוד תנאים ונגישות', d: 'todo', m: 'todo', note: 'טרם נבנה.', href: null, links: [] },
-    { id: 'e404', pos: '404', title: 'תבנית הודעה', kind: 'עמוד 404', d: 'todo', m: 'todo', note: 'טרם נבנה.', href: null, links: [] },
-    { id: 'post', pos: 'post', title: 'פרסום בודד', kind: 'Single post', d: 'review', m: 'todo',
-      note: 'נסקר עצמאית (8.2), התיקונים בוצעו. נפתח מכל ארכיון.', href: 'archive-page-v1/article.html', links: [] }
+    { id: 'a1', pos: 'a1', title: 'ארכיון מועצה, קיבוץ או יישוב', kind: 'Post archive', d: 'review', m: 'review',
+      note: 'סינון בבחירה מרובה (שני יישובים מציגים הירו "הארכיון"), יישובים לפי א-ב. טאבלט וטלפון נבנו, כולל גיליון סינון תחתון.', href: 'archive-page-v1/index.html?type=council', links: [['המועצה', 'archive-page-v1/index.html?type=council'], ['יישוב (דורות)', 'archive-page-v1/index.html?type=settlement'], ['שני יישובים', 'archive-page-v1/index.html?type=all&place=dorot,gvim']] },
+    { id: 'a2', pos: 'a2', title: 'ארכיון לפי שנה', kind: 'Post archive', d: 'review', m: 'review',
+      note: 'אותה תבנית ארכיון, עם הירו של עשור. טאבלט וטלפון נבנו.', href: 'archive-page-v1/index.html?type=decade', links: [] },
+    { id: 'a3', pos: 'a3', title: 'ארכיון תגיות', kind: 'Post archive', d: 'review', m: 'review',
+      note: 'אותה תבנית ארכיון, עם הירו של נושא (7 באוקטובר). טאבלט וטלפון נבנו.', href: 'archive-page-v1/index.html?type=tag', links: [] },
+    { id: 'contact', pos: 'contact', title: 'יצירת קשר', kind: 'עמוד יצירת קשר והצעות תוכן', d: 'review', m: 'todo', note: 'דסקטופ בלבד. טופס עם בדיקת שדות ואישור שליחה; פרטי הקשר להשלמה על ידי המועצה. אליו מובילה הקריאה "הצעת תוכן לארכיון" בעמוד הכתבה.', href: 'archive-page-v1/contact.html', links: [] },
+    { id: 'reg', pos: 'reg', title: 'עמוד רגיל', kind: 'עמוד תנאים ונגישות', d: 'review', m: 'review', note: 'נבנה עם תוכן לדוגמה (הצהרת נגישות). פרטי רכז הנגישות להשלמה על ידי המועצה.', href: 'archive-page-v1/page.html', links: [] },
+    { id: 'e404', pos: '404', title: 'תבנית הודעה', kind: 'עמוד 404', d: 'review', m: 'review', note: 'לוח דיו וקישורים מהירים.', href: 'archive-page-v1/404.html', links: [] },
+    { id: 'post', pos: 'post', title: 'פרסום בודד', kind: 'Single post', d: 'review', m: 'review',
+      note: 'בלי תאריך בהירו, רצועת הצעות תוכן לפני "שווה צפייה". טאבלט וטלפון נבנו, כולל תוכן עניינים מתקפל. נפתח מכל ארכיון.', href: 'archive-page-v1/article.html', links: [] }
   ];
   var map = document.getElementById('map'), lines = document.getElementById('lines');
   var DEV = [['desktop', 'דסקטופ', 'd'], ['mobile', 'מובייל', 'm']]; /* 'מובייל' כולל טאבלט */
@@ -179,7 +180,7 @@ a { color: inherit; }
     if (window.matchMedia('(max-width: 899px)').matches) return;
     var base = map.getBoundingClientRect();
     function r(id) { var b = document.getElementById('n-' + id).getBoundingClientRect(); return { cx: b.left + b.width / 2 - base.left, top: b.top - base.top, bottom: b.bottom - base.top }; }
-    var root = r('root'), kids = ['a1', 'a2', 'a3', 'reg', 'e404'].map(r), post = r('post');
+    var root = r('root'), kids = ['a1', 'a2', 'a3', 'contact', 'reg', 'e404'].map(r), post = r('post');
     function bus(from, to, y) {
       var xs = to.map(function (k) { return k.cx; }).concat(from.cx), min = Math.min.apply(null, xs), max = Math.max.apply(null, xs);
       var d = 'M' + from.cx + ' ' + from.bottom + 'V' + y + 'M' + min + ' ' + y + 'H' + max;

@@ -61,6 +61,15 @@
   </button>
 </header>
 
+<!-- 2.13: מגירת ניווט בטאבלט/טלפון, זהה לעמוד הבית (Material 3 navigation drawer) -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__scrim" data-close></div>
+  <nav class="drawer__panel" aria-label="תפריט">
+    <div class="drawer__head"><button class="drawer__close" type="button" aria-label="סגירת התפריט" data-close><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button><img src="../1st/assets/img/logo-wordmark-title.svg" alt="שער הארכיון"></div>
+    <a href="../1st/index.html">דף הבית</a><a href="index.html?type=council">המועצה</a><a href="index.html?type=all">היישובים</a><a href="index.html?type=tag">7 באוקטובר</a><a href="index.html?type=all">כל הפרסומים</a><hr><span class="drawer__label" aria-hidden="true">היישובים</span><a href="index.html?type=all&amp;place=or-haner">אור הנר</a><a href="index.html?type=all&amp;place=ivim">איבים</a><a href="index.html?type=all&amp;place=erez">ארז</a><a href="index.html?type=all&amp;place=bror-hayil">ברור חיל</a><a href="index.html?type=all&amp;place=gvim">גבים</a><a href="index.html?type=all&amp;place=dorot">דורות</a><a href="index.html?type=all&amp;place=yachini">יכיני</a><a href="index.html?type=all&amp;place=kfar-aza">כפר עזה</a><a href="index.html?type=all&amp;place=mefalsim">מפלסים</a><a href="index.html?type=all&amp;place=nahal-oz">נחל עוז</a><a href="index.html?type=all&amp;place=nir-am">ניר עם</a><a href="index.html?type=all&amp;place=ruhama">רוחמה</a>
+  </nav>
+</div>
+
 <main id="main" tabindex="-1">
 
 <!-- 1. הירו כתבה: אותה שפה כמו עמוד הארכיון (תצלום ברוחב מלא, לוח חופף), עם סוג ושנים, כותרת, תקציר, שורת מחבר ויישובי הכתבה -->
@@ -82,7 +91,6 @@
       <div class="aH__row">
       <div class="aH__by">
         <span class="aH__author"><span class="logo logo--sm" aria-hidden="true"><img src="../1st/assets/img/emblem-mark.png" alt=""></span><span><span class="visually-hidden">מאת </span>צוות הארכיון</span></span>
-        <span class="aH__dot" aria-hidden="true"></span><time datetime="2026-11-02">2 בנובמבר 2026</time>
         <span class="aH__dot" aria-hidden="true"></span><span id="rt">4 דקות קריאה</span>
       </div>
       </div>
@@ -132,6 +140,21 @@
 </div>
 </article>
 
+<!-- 4ב. קריאה להצעות תוכן: אותו מבנה כמו "עשור בפוקוס" בעמוד הבית (כותרת קטנה · כותרת גדולה · סוג תוכן · טקסט · כפתור), לוח דיו עם צילום וסמל המועצה טון על טון -->
+<section class="aCta" aria-labelledby="cta-h">
+  <div class="aCta__board on-dark">
+    <span class="aCta__mark" aria-hidden="true"></span>
+    <figure class="aCta__photo"><img src="../1st/assets/img/arch/niram-1949-3.jpg" width="2000" height="1339" loading="lazy" alt="בניין חדש, משאית ואנשים בדרך עפר, ניר עם, 1949"><figcaption>ניר עם, 1949</figcaption></figure>
+    <div class="aCta__field">
+      <h2 id="cta-h" class="aCta__label">הצעות לארכיון</h2>
+      <p class="aCta__big">יש לכם חומר לארכיון?</p>
+      <p class="aCta__meta"><svg class="icon" aria-hidden="true"><use href="#f-gallery"/></svg>תצלומים, מסמכים, עדויות וסיפורים</p>
+      <p class="aCta__body">הארכיון נבנה מהזיכרונות של הקהילות. יש אצלכם תצלום ישן, מסמך או סיפור שכדאי לשמר? שלחו לנו והצוות יבדוק.</p>
+      <a class="btn btn--light aCta__btn" href="contact.html?subject=content">הצעת תוכן לארכיון<svg class="icon" aria-hidden="true"><use href="#i-next"/></svg></a>
+    </div>
+  </div>
+</section>
+
 <!-- 5. שווה צפייה: אותו מבנה כמו 'פרסומים אחרונים' בעמוד הבית (רשימה + תצוגה מקדימה) -->
 <section class="section recent wrap aRecent" aria-labelledby="rc-h">
   <div class="section__head">
@@ -167,20 +190,20 @@
       <ul><li><a href="index.html?type=council">המועצה</a></li><li><a href="index.html?type=all">היישובים</a></li><li><a href="index.html?type=tag">7 באוקטובר</a></li><li><a href="/contact/">יצירת קשר</a></li></ul>
     </nav>
     <nav class="sfoot__places" aria-labelledby="sfoot-places-h">
-      <h3 id="sfoot-places-h">12 היישובים <span>לפי שנת ההקמה</span></h3>
+      <h3 id="sfoot-places-h">12 היישובים <span>לפי א-ב</span></h3>
       <ol>
-          <li><a href="index.html?type=all&amp;place=dorot"><span class="n">דורות</span><span class="y">1941</span></a></li>
-          <li><a href="index.html?type=all&amp;place=nir-am"><span class="n">ניר עם</span><span class="y">1943</span></a></li>
-          <li><a href="index.html?type=all&amp;place=ruhama"><span class="n">רוחמה</span><span class="y">1944</span></a></li>
-          <li><a href="index.html?type=all&amp;place=gvim"><span class="n">גבים</span><span class="y">1947</span></a></li>
+          <li><a href="index.html?type=all&amp;place=or-haner"><span class="n">אור הנר</span><span class="y">1957</span></a></li>
           <li><a href="index.html?type=all&amp;place=ivim"><span class="n">איבים</span><span class="y">1947</span></a></li>
-          <li><a href="index.html?type=all&amp;place=bror-hayil"><span class="n">ברור חיל</span><span class="y">1948</span></a></li>
           <li><a href="index.html?type=all&amp;place=erez"><span class="n">ארז</span><span class="y">1949</span></a></li>
-          <li><a href="index.html?type=all&amp;place=mefalsim"><span class="n">מפלסים</span><span class="y">1949</span></a></li>
+          <li><a href="index.html?type=all&amp;place=bror-hayil"><span class="n">ברור חיל</span><span class="y">1948</span></a></li>
+          <li><a href="index.html?type=all&amp;place=gvim"><span class="n">גבים</span><span class="y">1947</span></a></li>
+          <li><a href="index.html?type=all&amp;place=dorot"><span class="n">דורות</span><span class="y">1941</span></a></li>
           <li><a href="index.html?type=all&amp;place=yachini"><span class="n">יכיני</span><span class="y">1950</span></a></li>
           <li><a href="index.html?type=all&amp;place=kfar-aza"><span class="n">כפר עזה</span><span class="y">1951</span></a></li>
+          <li><a href="index.html?type=all&amp;place=mefalsim"><span class="n">מפלסים</span><span class="y">1949</span></a></li>
           <li><a href="index.html?type=all&amp;place=nahal-oz"><span class="n">נחל עוז</span><span class="y">1951</span></a></li>
-          <li><a href="index.html?type=all&amp;place=or-haner"><span class="n">אור הנר</span><span class="y">1957</span></a></li>
+          <li><a href="index.html?type=all&amp;place=nir-am"><span class="n">ניר עם</span><span class="y">1943</span></a></li>
+          <li><a href="index.html?type=all&amp;place=ruhama"><span class="n">רוחמה</span><span class="y">1944</span></a></li>
       </ol>
     </nav>
   </div>

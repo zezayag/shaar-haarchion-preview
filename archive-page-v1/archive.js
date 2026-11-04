@@ -1,13 +1,13 @@
 /* תבנית עמוד ארכיון (דסקטופ) — דוגמה v1. נתוני הדוגמה: ARCHIVE_POSTS (28 פוסטים אמיתיים מציר הזמן של 1st).
    סוג העמוד ב-?type=settlement|council|tag|decade|search|all קובע רק את הסינון ההתחלתי.
-   ההירו נקבע לפי מספר פריטי הסינון הפעילים (יישובים + עשורים + סוגי פוסט + תגית):
-   0 → הירו כללי · 1 → ההירו של אותו פריט (יישוב/מועצה, עשור, תגית; סוג פוסט בלבד → כללי) · 2 ומעלה → ההירו של המועצה.
+   ההירו לפי עדיפות: יישוב (אחד → ההירו שלו, גם עם עשורים וסוגים; שניים ומעלה → "הארכיון"), אחריו תגית, אחריו עשור (אחד → ההירו שלו; שניים ומעלה → חיפוש או "הארכיון"). סוג פוסט לא קובע הירו.
+   כל שלושת התפריטים (יישוב, עשור, סוג) הם בחירה מרובה; בגלולה, ערך אחד מציג את שמו ויותר מזה מציג מספר ("2 יישובים").
    התפריטים הם בחירה מרובה. מצב הסינון נשמר בכתובת (place, decade, kind, sort, q, shown; ערכים מופרדים בפסיק). */
 (function () {
   'use strict';
   var POSTS = window.ARCHIVE_POSTS || [];
   var IMG = '../1st/assets/img/';
-  var PLACES = { council: 'המועצה', dorot: 'דורות', 'nir-am': 'ניר עם', ruhama: 'רוחמה', gvim: 'גבים', ivim: 'איבים', 'bror-hayil': 'ברור חיל', erez: 'ארז', mefalsim: 'מפלסים', yachini: 'יכיני', 'kfar-aza': 'כפר עזה', 'nahal-oz': 'נחל עוז', 'or-haner': 'אור הנר' };
+  var PLACES = { council: 'המועצה', 'or-haner': 'אור הנר', ivim: 'איבים', erez: 'ארז', 'bror-hayil': 'ברור חיל', gvim: 'גבים', dorot: 'דורות', yachini: 'יכיני', 'kfar-aza': 'כפר עזה', mefalsim: 'מפלסים', 'nahal-oz': 'נחל עוז', 'nir-am': 'ניר עם', ruhama: 'רוחמה' }; /* המועצה ראשונה, היישובים לפי א-ב (אורי) */
   /* שנת הקמה אמיתית (מפס היישובים); תאריך עברי, אוכלוסייה וכביש גישה הם ערכי דוגמה בלבד ולכן רק לדורות ולמועצה */
   var PINFO = {
     council: { name: 'המועצה', year: '1950', bg: 'hero/dorot-1941-1.jpg', extra: [['יישובים', '12', 'f-topic'], ['אוכלוסייה', '9,697 תושבים', 'i-people'], ['תחום שיפוט', '176 אלף דונם', 'i-pin']], about: 'מועצה אזורית שער הנגב היא מועצה בצפון־מערב הנגב, שהוקמה ב־1950 ומאגדת שנים־עשר יישובים: קיבוצים, מושב וכפר סטודנטים. היא גובלת ברצועת עזה ממערב, ושטחה כ־180 אלף דונם. בתחומה פועלים קמפוס המכללה האקדמית ספיר וקריית החינוך שער הנגב.', site: 'http://www.sng.org.il', desc: 'המועצה האזורית שער הנגב מאגדת שנים־עשר יישובים בצפון־מערב הנגב. בארכיון תמצאו את הסיפורים, התצלומים והמסמכים של כולם.', map: 'מועצה אזורית שער הנגב', more: 'לאתר המועצה' },
@@ -41,19 +41,21 @@
   var DEF = { place: [], decade: [], kind: [], tag: '', q: '' };
   Object.keys(INIT[typeKey]).forEach(function (k) { DEF[k] = INIT[typeKey][k]; });
   var state = { place: DEF.place.slice(), decade: DEF.decade.slice(), kind: [], tag: DEF.tag, q: DEF.q, sort: 'asc', shown: PAGE };
-  ['place', 'decade', 'kind'].forEach(function (k) { if (qs.has(k)) state[k] = qs.get(k) ? qs.get(k).split(',').slice(0, 1) : []; }); /* בחירה יחידה: ערך אחד בלבד מהכתובת */
+  ['place', 'decade', 'kind'].forEach(function (k) { if (qs.has(k)) state[k] = qs.get(k) ? qs.get(k).split(',').filter(Boolean) : []; }); /* בחירה מרובה: ערכים מופרדים בפסיק */
   if (qs.has('q')) state.q = qs.get('q');
   if (qs.has('sort') && ['asc', 'desc', 'alpha'].indexOf(qs.get('sort')) >= 0) state.sort = qs.get('sort');
   state.place = state.place.filter(function (v) { return PLACES[v]; });
+  state.decade = state.decade.filter(function (v) { return DECADES.indexOf(v) >= 0; });
+  state.kind = state.kind.filter(function (v) { return KINDS.indexOf(v) >= 0; });
   if (qs.has('shown')) state.shown = Math.max(PAGE, Math.min(POSTS.length, +qs.get('shown') || PAGE));
 
   /* ---------- הירו לפי מספר פריטי הסינון ---------- */
   function itemsCount() { return state.place.length + state.decade.length + state.kind.length + (state.tag ? 1 : 0); }
   function heroFor() {
     /* סדר עדיפות (אורי): יישוב, אחריו תגית, אחריו עשור. סוג פוסט לא קובע הירו. בלי אף אחד מהם: חיפוש חופשי או הירו כללי */
-    if (state.place.length) return placeHero(state.place[0]);
+    if (state.place.length) return state.place.length === 1 ? placeHero(state.place[0]) : allHero(); /* שני יישובים או יותר: הירו "הארכיון" (אורי) */
     if (state.tag) return { title: '7 באוקטובר', desc: 'עדויות וזיכרונות של הקהילות מהיום שבו הכול השתנה, בקצב שלהן ובמילים שלהן.', bg: 'arch/anemone-march-2006-037.jpg', about: 'ב־7 באוקטובר 2023 תקפו מחבלי חמאס את יישובי הנגב המערבי שליד רצועת עזה, ובהם יישובים במועצה האזורית שער הנגב. כפר עזה ונחל עוז היו בין היישובים שנפגעו קשה. ראש המועצה, אופיר ליבשטיין, נרצח באותו בוקר כשיצא להגן על כפר עזה.\n\nבנושא הזה מרוכזים בארכיון עדויות, תצלומים ומסמכים של הקהילות מהיום ההוא ואחריו. אפשר לסנן אותם לפי יישוב, עשור וסוג החומר, ולקרוא כל פריט בקצב שלכם.', tag: true, crumbs: ['ארכיון', 'נושאים', '7 באוקטובר'], nav: '/topic/october-7/' };
-    if (state.decade.length) return decadeHero(state.decade[0]);
+    if (state.decade.length === 1) return decadeHero(state.decade[0]); /* שני עשורים בלי יישוב: ממשיכים לחיפוש או להירו הכללי */
     if (state.q.trim() && !state.kind.length) return { title: 'תוצאות חיפוש', search: true, bg: 'hero/erez-1950-1.jpg', crumbs: ['ארכיון', 'תוצאות חיפוש'], nav: '/?s=' };
     return allHero();
   }
@@ -80,8 +82,9 @@
     /* נתוני BreadcrumbList (JSON-LD) כפי שגוגל ממליץ; באתר האמיתי נוצרים בצד השרת. הפריט האחרון בלי קישור, כמו בתצוגה */
     var ld = $('ld-crumbs'); if (!ld) { ld = document.createElement('script'); ld.type = 'application/ld+json'; ld.id = 'ld-crumbs'; document.head.appendChild(ld); }
     ld.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs.map(function (c, i) { var o = { '@type': 'ListItem', position: i + 1, name: c }; o.item = new URL(CU[c], location.href).href; return o; }) });
-    document.querySelectorAll('.site-header nav a[aria-current]').forEach(function (a) { a.removeAttribute('aria-current'); });
-    var navA = document.querySelector('.site-header nav a[data-nav="' + h.nav + '"]'); if (navA) navA.setAttribute('aria-current', 'page');
+    document.querySelectorAll('.site-header nav a[aria-current], .drawer a[aria-current]').forEach(function (a) { a.removeAttribute('aria-current'); });
+    document.querySelectorAll('.site-header nav a[data-nav="' + h.nav + '"], .drawer a[data-nav="' + h.nav + '"]').forEach(function (a) { a.setAttribute('aria-current', 'page'); });
+    if (state.place.length === 1) { var dp = document.querySelector('.drawer a[data-place="' + state.place[0] + '"]'); if (dp) dp.setAttribute('aria-current', 'page'); } /* 2.13: במגירה גם היישוב הנוכחי מסומן */
     document.title = h.title + ' · שער הארכיון (דוגמת תבנית)';
     var c = h.card;
     $('panel').classList.toggle('has-facts', !!c);
@@ -122,11 +125,16 @@
 
   /* ---------- תפריטים נפתחים (בחירה מרובה; המיון — בחירה יחידה) ---------- */
   var dds = [];
+  var NOUN = { place: 'יישובים', decade: 'עשורים', kind: 'סוגים' };
   function makeDD(key, label, options, cls, multi, one) {
     var root = document.createElement('div'); root.className = 'dd ' + (cls || '');
     var id = 'dd-' + key;
     root.innerHTML = '<button type="button" class="dd__btn" id="' + id + '" aria-haspopup="listbox" aria-expanded="false" aria-controls="' + id + '-m"><svg class="icon dd__ck" aria-hidden="true"><use href="#i-check"/></svg><span class="dd__k">' + label + '</span><span class="dd__v"></span><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></button><ul class="dd__menu" id="' + id + '-m" role="listbox"' + (multi && !one ? ' aria-multiselectable="true"' : '') + ' aria-labelledby="' + id + '" tabindex="-1" hidden></ul>';
     var btn = root.querySelector('button'), menu = root.querySelector('ul'), hl = -1;
+    /* 2.13: בטלפון (≤599) התפריט נפתח כגיליון תחתון (CSS); כפתור "סיום" סוגר אותו, וגם לחיצה על הרקע הכהה מעל הגיליון. הגלילה של העמוד נעולה כל עוד הגיליון פתוח */
+    var done = document.createElement('button'); done.type = 'button'; done.className = 'dd__done'; done.textContent = 'סיום'; done.hidden = true; root.appendChild(done);
+    var phone = window.matchMedia ? matchMedia('(max-width: 599px)') : { matches: false };
+    function sheet(open) { var on = open && phone.matches; done.hidden = !on; document.documentElement.classList.toggle('dd-open', on); }
     function sel(v) { return multi ? state[key].indexOf(String(v)) >= 0 : String(state[key]) === String(v); }
     function items() { return Array.prototype.slice.call(menu.children); }
     function draw() {
@@ -140,14 +148,17 @@
       menu.innerHTML = rows.map(function (r) { return r.html; }).join('');
       if (hl >= 0 && !menu.hidden) { var it = items(); if (it[hl]) { it[hl].classList.add('is-hl'); menu.setAttribute('aria-activedescendant', it[hl].id); } }
       var v = '', set = false;
-      if (multi) { var sv = state[key]; set = sv.length > 0; v = sv.length === 1 ? (key === 'place' ? PLACES[sv[0]] : sv[0]) : sv.length > 1 ? sv.length + ' נבחרו' : ''; }
+      if (multi) { var sv = state[key]; set = sv.length > 0; v = sv.length === 1 ? (key === 'place' ? PLACES[sv[0]] : sv[0]) : sv.length > 1 ? sv.length + ' ' + NOUN[key] : ''; }
       else { var cur = options.filter(function (o) { return String(state[key]) === String(o.v); })[0]; v = cur ? cur.t : ''; }
       root.querySelector('.dd__v').textContent = v;
       btn.classList.toggle('is-set', set);
     }
     function setHl(i) { var it = items(); if (!it.length) return; hl = (i + it.length) % it.length; it.forEach(function (x, n) { x.classList.toggle('is-hl', n === hl); }); menu.setAttribute('aria-activedescendant', it[hl].id); it[hl].scrollIntoView({ block: 'nearest' }); }
-    function open() { dds.forEach(function (d) { if (d !== api) d.close(); }); menu.hidden = false; btn.setAttribute('aria-expanded', 'true'); var s = items().findIndex(function (x) { return x.getAttribute('aria-selected') === 'true'; }); menu.focus(); setHl(s < 0 ? 0 : s); }
-    function close(refocus) { if (menu.hidden) return; menu.hidden = true; hl = -1; btn.setAttribute('aria-expanded', 'false'); menu.removeAttribute('aria-activedescendant'); if (refocus) btn.focus(); }
+    function open() { dds.forEach(function (d) { if (d !== api) d.close(); }); menu.hidden = false; btn.setAttribute('aria-expanded', 'true'); sheet(true); var s = items().findIndex(function (x) { return x.getAttribute('aria-selected') === 'true'; }); menu.focus(); setHl(s < 0 ? 0 : s); }
+    function close(refocus) { if (menu.hidden) return; menu.hidden = true; hl = -1; btn.setAttribute('aria-expanded', 'false'); menu.removeAttribute('aria-activedescendant'); sheet(false); if (refocus) btn.focus(); }
+    done.addEventListener('click', function () { close(true); });
+    done.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.preventDefault(); close(true); } });
+    if (phone.addEventListener) phone.addEventListener('change', function () { if (!menu.hidden) close(true); }); /* מעבר בין טלפון לטאבלט באמצע: סוגרים כדי לא להשאיר גיליון בלי רקע */
     function pick(i) {
       var li = items()[i]; if (!li || li.getAttribute('aria-disabled') === 'true') return;
       var v = String(li.getAttribute('data-v'));
@@ -169,18 +180,21 @@
       else if (e.key === 'Escape') { e.preventDefault(); close(true); }
       else if (e.key === 'Tab') close(false);
     });
-    menu.addEventListener('click', function (e) { var li = e.target.closest('li'); if (li) pick(items().indexOf(li)); });
+    menu.addEventListener('click', function (e) {
+      var li = e.target.closest('li'); if (li) { pick(items().indexOf(li)); return; }
+      if (phone.matches && e.target === menu && e.clientY < menu.getBoundingClientRect().top) close(true); /* 2.13: לחיצה על הרקע הכהה (מעל הגיליון) סוגרת */
+    });
     var api = { root: root, draw: draw, close: close };
     dds.push(api); draw();
     return api;
   }
   var bar = $('bar');
-  bar.appendChild(makeDD('place', 'יישוב', [{ v: '', t: 'כל היישובים והמועצה' }].concat(Object.keys(PLACES).map(function (k) { return { v: k, t: PLACES[k] }; })), '', true, true).root);
-  bar.appendChild(makeDD('decade', 'עשור', [{ v: '', t: 'כל העשורים' }].concat(DECADES.map(function (d) { return { v: d, t: d }; })), '', true, true).root);
-  bar.appendChild(makeDD('kind', 'סוג פוסט', [{ v: '', t: 'כל הסוגים' }].concat(KINDS.map(function (k) { return { v: k, t: k }; })), '', true, true).root);
+  bar.appendChild(makeDD('place', 'יישוב', [{ v: '', t: 'כל היישובים והמועצה' }].concat(Object.keys(PLACES).map(function (k) { return { v: k, t: PLACES[k] }; })), '', true).root);
+  bar.appendChild(makeDD('decade', 'עשור', [{ v: '', t: 'כל העשורים' }].concat(DECADES.map(function (d) { return { v: d, t: d }; })), '', true).root);
+  bar.appendChild(makeDD('kind', 'סוג פוסט', [{ v: '', t: 'כל הסוגים' }].concat(KINDS.map(function (k) { return { v: k, t: k }; })), '', true).root);
   var clear = document.createElement('button'); clear.type = 'button'; clear.className = 'af__clear'; clear.textContent = 'איפוס סינון'; clear.hidden = true; bar.appendChild(clear);
   bar.appendChild(makeDD('sort', 'מיון:', [{ v: 'asc', t: 'שנים עולות' }, { v: 'desc', t: 'שנים יורדות' }, { v: 'alpha', t: 'אלפבתי' }], 'af__sort', false).root);
-  document.addEventListener('click', function (e) { if (!e.target.closest('.dd')) dds.forEach(function (d) { d.close(false); }); });
+  document.addEventListener('click', function (e) { if (e.target.isConnected && !e.target.closest('.dd')) dds.forEach(function (d) { d.close(false); }); }); /* 2.13 (תיקון): אחרי בחירה בתפריט הרשימה מצוירת מחדש והפריט שנלחץ כבר לא ב-DOM, ולכן closest החזיר null והתפריט נסגר אחרי כל בחירה (גם בדסקטופ); בבחירה מרובה הוא נשאר פתוח */
 
   /* ---------- רינדור ---------- */
   function card(p, i) {
