@@ -126,7 +126,7 @@ a { color: inherit; }
       <li class="stage stage--review"><h3>ממשק משתמש</h3><p>עיצוב ובניית Frontend</p><span class="pill pill--review"><span class="dot dot--review" aria-hidden="true"></span>ממתין</span></li>
       <li class="stage"><h3>ממשק ניהול</h3><p>עריכת תוכן ופרסומים</p></li>
       <li class="stage"><h3>הטמעה למערכת WordPress</h3><p>בניית האתר החי</p></li>
-      <li class="stage"><h3>בדיקות</h3><p>איכות ותיקונים</p></li>
+      <li class="stage"><h3>בדיקות QA</h3><p>איכות ותיקונים</p></li>
       <li class="stage"><h3>הגשה והדרכה</h3><p>מסירה והדרכת צוות</p></li>
       <li class="stage"><h3>פרסום</h3><p>השקת האתר</p></li>
     </ol>
@@ -140,16 +140,16 @@ a { color: inherit; }
   var NODES = [
     { id: 'root', pos: 'root', title: 'עמוד ראשי: מועצה', kind: 'לובי קיבוצים ויישובים', d: 'done', m: 'done',
       note: 'מחשב, טאבלט וטלפון בנויים ואושרו.', href: '1st/index.html', links: [] },
-    { id: 'a1', pos: 'a1', title: 'ארכיון מועצה, קיבוץ או יישוב', kind: 'Post archive', d: 'done', m: 'review',
+    { id: 'a1', pos: 'a1', title: 'ארכיון מועצה, קיבוץ או יישוב', kind: 'ארכיון פוסטים', d: 'done', m: 'review',
       note: 'סינון בבחירה מרובה (שני יישובים מציגים הירו "הארכיון"), יישובים לפי א-ב. טאבלט וטלפון נבנו, כולל גיליון סינון תחתון.', href: 'archive-page-v1/index.html?type=council', links: [['המועצה', 'archive-page-v1/index.html?type=council'], ['יישוב (דורות)', 'archive-page-v1/index.html?type=settlement'], ['שני יישובים', 'archive-page-v1/index.html?type=all&place=dorot,gvim']] },
-    { id: 'a2', pos: 'a2', title: 'ארכיון לפי שנה', kind: 'Post archive', d: 'done', m: 'review',
+    { id: 'a2', pos: 'a2', title: 'ארכיון לפי שנה', kind: 'ארכיון פוסטים', d: 'done', m: 'review',
       note: 'אותה תבנית ארכיון, עם הירו של עשור. טאבלט וטלפון נבנו.', href: 'archive-page-v1/index.html?type=decade', links: [] },
-    { id: 'a3', pos: 'a3', title: 'ארכיון תגיות', kind: 'Post archive', d: 'done', m: 'review',
+    { id: 'a3', pos: 'a3', title: 'ארכיון תגיות', kind: 'ארכיון פוסטים', d: 'done', m: 'review',
       note: 'אותה תבנית ארכיון, עם הירו של נושא (7 באוקטובר). טאבלט וטלפון נבנו.', href: 'archive-page-v1/index.html?type=tag', links: [] },
     { id: 'contact', pos: 'contact', title: 'יצירת קשר', kind: 'עמוד יצירת קשר והצעות תוכן', d: 'review', m: 'review', note: 'מחשב, טאבלט וטלפון נבנו. טופס עם בדיקת שדות ואישור שליחה; פרטי הקשר להשלמה על ידי המועצה. אליו מובילה הקריאה "הצעת תוכן לארכיון" בעמוד הכתבה.', href: 'archive-page-v1/contact.html', links: [] },
     { id: 'reg', pos: 'reg', title: 'עמוד רגיל', kind: 'עמוד תנאים ונגישות', d: 'review', m: 'review', note: 'נבנה עם תוכן לדוגמה (הצהרת נגישות). פרטי רכז הנגישות להשלמה על ידי המועצה.', href: 'archive-page-v1/page.html', links: [] },
     { id: 'e404', pos: '404', title: 'תבנית הודעה', kind: 'עמוד 404', d: 'review', m: 'review', note: 'לוח דיו וקישורים מהירים.', href: 'archive-page-v1/404.html', links: [] },
-    { id: 'post', pos: 'post', title: 'פרסום בודד', kind: 'Single post', d: 'done', m: 'review',
+    { id: 'post', pos: 'post', title: 'פרסום בודד', kind: 'עמוד פוסט', d: 'done', m: 'review',
       note: 'בלי תאריך בהירו, רצועת הצעות תוכן לפני "שווה צפייה". טאבלט וטלפון נבנו, כולל תוכן עניינים מתקפל. נפתח מכל ארכיון.', href: 'archive-page-v1/article.html', links: [] }
   ];
   var map = document.getElementById('map'), lines = document.getElementById('lines');
