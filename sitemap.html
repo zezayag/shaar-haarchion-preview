@@ -76,7 +76,7 @@ a { color: inherit; }
 .stage::before { content: counter(st); display: grid; place-items: center; width: 32px; height: 32px; margin-bottom: 6px; border-radius: 50%; background: var(--paper); color: var(--ink); font: 700 16px/1 var(--display); box-shadow: inset 0 0 0 1px var(--sand); }
 .stage--review::before { background: var(--blue); color: var(--white); box-shadow: none; }
 .stage h3 { margin: 0; font: 400 20px/1.2 var(--display); }
-.stage p { margin: 0; color: var(--ink-soft); font: 400 14px/1.4 var(--text); }
+.stage p { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink-soft); font: 400 14px/1.4 var(--text); }
 .stage .pill { align-self: flex-start; margin-top: auto; }
 @media (max-width: 1099px) { .stages ol { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 599px) { .stages ol { grid-template-columns: 1fr 1fr; } .stage { min-height: 0; } }
@@ -109,7 +109,7 @@ a { color: inherit; }
     <h1>מפת האתר</h1>
     <time id="today" class="today"></time>
   </header>
-  <div class="enter"><a class="enter__go" href="1st/index.html">כניסה לאתר<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a><a class="enter__sec" href="phone.html">הדמיית מכשירים</a><a class="enter__sec" href="index.html">סקיצות</a><ul class="legend" aria-label="מקרא">
+  <div class="enter"><a class="enter__go" href="1st/index.html">כניסה לאתר<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a><a class="enter__sec" href="phone.html">הדמיית מכשירים</a><ul class="legend" aria-label="מקרא">
       <li><span class="dot dot--done lg" aria-hidden="true"></span>אושר</li>
       <li><span class="dot dot--review lg" aria-hidden="true"></span>ממתין</li>
       <li><span class="dot dot--todo" aria-hidden="true"></span>לא נבנה</li>
@@ -123,12 +123,12 @@ a { color: inherit; }
   <section class="stages" aria-labelledby="stg-h">
     <h2 id="stg-h">שלבי הפרויקט</h2>
     <ol>
-      <li class="stage stage--review"><h3>ממשק משתמש</h3><p>Frontend</p><span class="pill pill--review"><span class="dot dot--review" aria-hidden="true"></span>ממתין</span></li>
-      <li class="stage"><h3>הטמעה</h3><p>WordPress</p></li>
+      <li class="stage stage--review"><h3>ממשק משתמש</h3><p>עיצוב ובניית Frontend</p><span class="pill pill--review"><span class="dot dot--review" aria-hidden="true"></span>ממתין</span></li>
+      <li class="stage"><h3>הטמעה</h3><p>בניית האתר ב-WordPress</p></li>
       <li class="stage"><h3>מודל השלמה</h3><p>חיפוש והשלמה אוטומטית</p></li>
-      <li class="stage"><h3>בדיקות</h3><p>QA</p></li>
-      <li class="stage"><h3>הגשה והדרכה</h3></li>
-      <li class="stage"><h3>פרסום</h3><p>השקה</p></li>
+      <li class="stage"><h3>בדיקות</h3><p>איכות ותיקונים</p></li>
+      <li class="stage"><h3>הגשה והדרכה</h3><p>מסירה והדרכת צוות</p></li>
+      <li class="stage"><h3>פרסום</h3><p>השקת האתר</p></li>
     </ol>
   </section>
 </div>
